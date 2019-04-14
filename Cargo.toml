@@ -1,0 +1,7 @@
+[package]
+name = "scrolling_hero"
+version = "0.1.0"
+authors = ["wolfgang <wolfgang@wolfgangdeutsch.work>"]
+edition = "2018"
+
+[dependencies]
