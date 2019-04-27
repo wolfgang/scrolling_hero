@@ -1,5 +1,5 @@
 use console::{Term};
-use sch::dungeon_renderer::render_dungeon2;
+use sch::dungeon_renderer::render_dungeon;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
@@ -12,7 +12,7 @@ fn main() -> std::io::Result<()> {
 
     term.write_line("        @")?;
 
-    render_dungeon2(&dungeon, &mut term)?;
+    render_dungeon(&dungeon, &mut term)?;
 
     Ok(())
 }
