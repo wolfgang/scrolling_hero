@@ -11,16 +11,15 @@ fn renders_dungeon_from_vectors() {
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
-    let player_pos = (4, 1);
 
     let mut writer = Cursor::new(Vec::new());
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon);
 
-    dungeon_renderer.render(player_pos, &mut writer).unwrap();
+    dungeon_renderer.render(&mut writer).unwrap();
 
     let reference = writer.get_ref();
     assert_eq!(
-        "####.####\n##..@.###\n####.#.##\n", 
+        "####.####\n##....###\n####.#.##\n", 
         str::from_utf8(reference).unwrap());
 }

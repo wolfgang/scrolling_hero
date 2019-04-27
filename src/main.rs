@@ -11,7 +11,7 @@ fn main() -> std::io::Result<()> {
     ];
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon);
-    dungeon_renderer.render((8, 0), &mut term)?;
+    dungeon_renderer.render(&mut term)?;
 
     Ok(())
 }
