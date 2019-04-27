@@ -14,7 +14,8 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
     ];
 
-    let dungeon_renderer = DungeonRenderer::new(&dungeon);
+    let player_pos = (8, 1);
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     dungeon_renderer.render(&mut term)?;
 

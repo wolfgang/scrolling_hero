@@ -14,12 +14,14 @@ fn renders_dungeon_from_vectors() {
 
     let mut writer = Cursor::new(Vec::new());
 
-    let dungeon_renderer = DungeonRenderer::new(&dungeon);
+    let player_pos = (4, 1);
+
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     dungeon_renderer.render(&mut writer).unwrap();
 
     let reference = writer.get_ref();
     assert_eq!(
-        "####.####\n##....###\n####.#.##\n", 
+        "####.####\n##..@.###\n####.#.##\n", 
         str::from_utf8(reference).unwrap());
 }
