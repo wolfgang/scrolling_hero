@@ -16,12 +16,7 @@ fn can_pass_term_and_cursor_to_same_function() {
     write(&mut buff, b"HELLO2").unwrap();
 
     let reference = buff.get_ref();
-
-    println!("{:?}", str::from_utf8(reference));
     assert_eq!("HELLO2", str::from_utf8(reference).unwrap());
-
-
-    assert_eq!(1, 1);
 }
 
 
