@@ -1,13 +1,14 @@
 use std::io::{Write};
+use std::rc::Rc;
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
-    player_pos: &'a (u32, u32)
+    player_pos: Rc<(u32, u32)>
 }
 
 impl<'a> DungeonRenderer<'a> {
-    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &'a (u32, u32)) -> DungeonRenderer<'a> {
-        DungeonRenderer {dungeon: dungeon, player_pos: player_pos}
+    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &Rc<(u32, u32)>) -> DungeonRenderer<'a> {
+        DungeonRenderer {dungeon: dungeon, player_pos: Rc::clone(player_pos)}
     }
     pub fn render(&self, writer: &mut Write) -> std::io::Result<()> {
         for (y, row) in self.dungeon.iter().enumerate() {

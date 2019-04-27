@@ -1,5 +1,6 @@
 use std::io::{Cursor};
 use std::str;
+use std::rc::Rc;
 
 use sch::dungeon_renderer::{DungeonRenderer};
 
@@ -14,7 +15,7 @@ fn renders_dungeon_from_vectors() {
 
     let mut writer = Cursor::new(Vec::new());
 
-    let player_pos = (4, 1);
+    let  player_pos = Rc::new((4, 1));
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
@@ -24,4 +25,16 @@ fn renders_dungeon_from_vectors() {
     assert_eq!(
         "####.####\n##..@.###\n####.#.##\n", 
         str::from_utf8(reference).unwrap());
+
+    // player_pos.0 = 5;
+
+    // writer.set_position(0);
+
+    // dungeon_renderer.render(&mut writer).unwrap();
+
+    // let reference2 = writer.get_ref();
+    // assert_eq!(
+    //     "####.####\n##...@###\n####.#.##\n", 
+    //     str::from_utf8(reference2).unwrap());
+
 }
