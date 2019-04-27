@@ -1,7 +1,7 @@
 use std::io::{Cursor};
 use std::str;
 
-use sh::dungeon_renderer::render_dungeon;
+use sch::dungeon_renderer::render_dungeon;
 
 #[test]
 fn renders_dungeon() {

@@ -1,5 +1,5 @@
 use console::{Term};
-use sh::dungeon_renderer::render_dungeon;
+use sch::dungeon_renderer::render_dungeon;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
