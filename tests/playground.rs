@@ -1,8 +1,5 @@
 use rand::{thread_rng, Rng};
 
-
-
-
 fn generate_wall(length: usize) -> String {
     let mut result = String::from("");
     let mut rng = thread_rng();
@@ -16,7 +13,6 @@ fn generate_wall(length: usize) -> String {
 
 
     result
-
 }
 
 #[test]
