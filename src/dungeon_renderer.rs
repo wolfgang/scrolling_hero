@@ -24,7 +24,3 @@ impl DungeonRenderer {
         Ok(())
     }
 }
-
-pub fn render_dungeon(dungeon: &Vec<Vec<u16>>, player_pos: (u32, u32), writer: &mut Write) -> std::io::Result<()> {
-    DungeonRenderer::new().render(dungeon, player_pos, writer)
-}
