@@ -1,3 +1,54 @@
+# Build Order 
+
+Generate the dungeon
+```
+        @
+########.##########
+###.......#########
+######.......######
+###....####..######
+######.####......##
+######..####.######
+####....###..######
+####....###..######
+#....D............#
+```
+
+Move through the dungeon
+
+Go to next dungeon when door (D) is reached
+
+Manipulate dungeon generator by hacking terminals
+
+Constrain movement and penalties
+
+Fight guards/dev team
+
+Pickup items
+
+
+
+
+
+# Dungeon Generator in the game
+
+- Terminals are scattered throughout the dungeon
+- Can be hacked to change certain properties (based on D20 + hacking ability)
+    - Guard strength
+    - Item quality
+    - Bigger holes in walls (less horizontal movement needed)
+- Trapped project managers can be freed, they will run off and slow down development for subsequent levels
+- QA managers can be killed, keeping bugs in the generator
+    - A guard could randomly turn into an item
+    - An item could randomly turn into a guard
+    - a G could really be an item and vice versa (rendering glitch)
+    - a wall tile could really be a hole, and vice versa
+- QA maangers could also detect hacks
+- Or maybe security consultants, so they can be killed too
+- All "monsters" are really the dev team; killing/freeing them has influence on the level generator
+- It's also about preventing new "Features" like .. traps, monsters, .... so not only manipulate current foes, prevent new foes for a while
+
+
 
 # Example dungeon
 ```
