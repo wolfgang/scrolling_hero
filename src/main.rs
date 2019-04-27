@@ -10,8 +10,8 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
     ];
 
-    let dungeon_renderer = DungeonRenderer::new();
-    dungeon_renderer.render(&dungeon, (8, 0), &mut term)?;
+    let dungeon_renderer = DungeonRenderer::new(&dungeon);
+    dungeon_renderer.render((8, 0), &mut term)?;
 
     Ok(())
 }

@@ -15,9 +15,9 @@ fn renders_dungeon_from_vectors() {
 
     let mut writer = Cursor::new(Vec::new());
 
-    let dungeon_renderer = DungeonRenderer::new();
+    let dungeon_renderer = DungeonRenderer::new(&dungeon);
 
-    dungeon_renderer.render(&dungeon, player_pos, &mut writer).unwrap();
+    dungeon_renderer.render(player_pos, &mut writer).unwrap();
 
     let reference = writer.get_ref();
     assert_eq!(
