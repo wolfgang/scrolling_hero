@@ -1,5 +1,6 @@
 use std::io::Write;
 use std::rc::Rc;
+use std::cell::{RefCell};
 use console::{Term};
 use crossterm_cursor::{cursor};
 
@@ -16,7 +17,7 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
     ];
 
-    let player_pos = Rc::new((8, 1));
+    let player_pos = Rc::new(RefCell::new((8, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     dungeon_renderer.render(&mut term)?;

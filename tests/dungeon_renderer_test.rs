@@ -1,6 +1,7 @@
 use std::io::{Cursor};
 use std::str;
 use std::rc::Rc;
+use std::cell::{RefCell};
 
 use sch::dungeon_renderer::{DungeonRenderer};
 
@@ -15,7 +16,7 @@ fn renders_dungeon_from_vectors() {
 
     let mut writer = Cursor::new(Vec::new());
 
-    let  player_pos = Rc::new((4, 1));
+    let  player_pos = Rc::new(RefCell::new((4, 1)));
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
