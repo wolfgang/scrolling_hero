@@ -27,15 +27,15 @@ fn renders_dungeon_from_vectors() {
         "####.####\n##..@.###\n####.#.##\n", 
         str::from_utf8(reference).unwrap());
 
-    // player_pos.0 = 5;
+    player_pos.borrow_mut().0 = 5;
 
-    // writer.set_position(0);
+    writer.set_position(0);
 
-    // dungeon_renderer.render(&mut writer).unwrap();
+    dungeon_renderer.render(&mut writer).unwrap();
 
-    // let reference2 = writer.get_ref();
-    // assert_eq!(
-    //     "####.####\n##...@###\n####.#.##\n", 
-    //     str::from_utf8(reference2).unwrap());
+    let reference2 = writer.get_ref();
+    assert_eq!(
+        "####.####\n##...@###\n####.#.##\n", 
+        str::from_utf8(reference2).unwrap());
 
 }
