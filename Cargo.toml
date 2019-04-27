@@ -1,5 +1,5 @@
 [package]
-name = "scrolling_hero"
+name = "sh"
 version = "0.1.0"
 authors = ["wolfgang <wolfgang@wolfgangdeutsch.work>"]
 edition = "2018"
