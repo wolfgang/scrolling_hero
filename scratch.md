@@ -1,5 +1,7 @@
 # Build Order 
 
+Output the dungeon
+
 Move through the dungeon (not generated yet)
 
 Generate the dungeon
