@@ -1,5 +1,5 @@
 use console::{Term};
-use sch::dungeon_renderer::render_dungeon;
+use sch::dungeon_renderer::DungeonRenderer;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
@@ -10,7 +10,8 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
     ];
 
-    render_dungeon(&dungeon, (8, 0), &mut term)?;
+    let dungeon_renderer = DungeonRenderer::new();
+    dungeon_renderer.render(&dungeon, (8, 0), &mut term)?;
 
     Ok(())
 }

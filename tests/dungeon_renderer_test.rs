@@ -1,7 +1,7 @@
 use std::io::{Cursor};
 use std::str;
 
-use sch::dungeon_renderer::{DungeonRenderer, render_dungeon};
+use sch::dungeon_renderer::{DungeonRenderer};
 
 #[test]
 fn renders_dungeon_from_vectors() {
