@@ -1,19 +1,19 @@
 use console::{Term};
-use std::io::Write;
+use sh::dungeon_renderer::render_dungeon;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
-    write(&mut term, b"        @\n")?;
-    write(&mut term, b"########.##########\n")?;
-    write(&mut term, b"###.......#########\n")?;
-    write(&mut term, b"######.......######\n")?;
+
+    let dungeon = vec![
+        "########.##########",
+        "###.......#########",
+        "######.......######"
+    ];
+
+    term.write_line("        @")?;
+
+    render_dungeon(&dungeon, &mut term)?;
 
     Ok(())
 }
-
-fn write<W: Write>(writer: &mut W, buf: &[u8]) -> std::io::Result<()> {
-    writer.write(buf)?;
-    Ok(())
-}
-
     
