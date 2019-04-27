@@ -1,5 +1,7 @@
 # Build Order 
 
+Move through the dungeon (not generated yet)
+
 Generate the dungeon
 ```
         @
@@ -14,7 +16,6 @@ Generate the dungeon
 #....D............#
 ```
 
-Move through the dungeon
 
 Go to next dungeon when door (D) is reached
 
