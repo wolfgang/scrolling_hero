@@ -21,8 +21,7 @@ fn renders_dungeon() {
 
 fn render_dungeon(dungeon: &Vec<&str>, writer: &mut Write) -> std::io::Result<()> {
     for line in dungeon {
-        writer.write(line.as_bytes())?;
-        writer.write(b"\n")?;
+        writer.write_fmt(format_args!("{}\n", line))?;
     }
 
     Ok(())
