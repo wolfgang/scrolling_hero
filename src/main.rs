@@ -10,9 +10,7 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
     ];
 
-    term.write_line("        @")?;
-
-    render_dungeon(&dungeon, &mut term)?;
+    render_dungeon(&dungeon, (8, 0), &mut term)?;
 
     Ok(())
 }

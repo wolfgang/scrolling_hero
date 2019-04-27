@@ -1,12 +1,15 @@
 use std::io::{Write};
-use std::str;
 
-pub fn render_dungeon(dungeon: &Vec<Vec<u16>>, writer: &mut Write) -> std::io::Result<()> {
-    for row in dungeon {
+
+pub fn render_dungeon(dungeon: &Vec<Vec<u16>>, player_pos: (u32, u32), writer: &mut Write) -> std::io::Result<()> {
+    for (y, row) in dungeon.iter().enumerate() {
         let mut row_str = String::with_capacity(row.len());
-        for cell in row {
-            if *cell == 0 { row_str.push('.')}
-            if *cell == 1 { row_str.push('#')}
+        for (x, cell) in row.iter().enumerate() {
+            if (x as u32, y as u32) == player_pos { row_str.push('@') }
+            else {
+                if *cell == 0 { row_str.push('.')}
+                if *cell == 1 { row_str.push('#')}                
+            }
         }
 
         writer.write_fmt(format_args!("{}\n", &row_str))?;
