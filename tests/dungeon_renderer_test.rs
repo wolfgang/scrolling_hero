@@ -30,6 +30,9 @@ fn renders_dungeon_from_vectors() {
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
+    assert_eq!(1, dungeon[1][1]);
+    assert_eq!(0, dungeon[2][4]);
+
     let mut writer = Cursor::new(Vec::new());
     render_dungeon2(&dungeon, &mut writer).unwrap();
 
@@ -41,7 +44,7 @@ fn renders_dungeon_from_vectors() {
 
 fn render_dungeon2(dungeon: &Vec<Vec<u16>>, writer: &mut Write) -> std::io::Result<()> {
     for row in dungeon {
-        let mut row_str = String::new();
+        let mut row_str = String::with_capacity(row.len());
         for cell in row {
             if *cell == 0 { row_str.push('.')}
             if *cell == 1 { row_str.push('#')}
