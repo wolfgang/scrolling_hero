@@ -13,29 +13,20 @@ fn renders_dungeon_from_vectors() {
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
-
-    let mut writer = Cursor::new(Vec::new());
-
     let  player_pos = Rc::new(RefCell::new((4, 1)));
-
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
+    let mut buffer = Cursor::new(Vec::new());
 
-    dungeon_renderer.render(&mut writer).unwrap();
-
-    let reference = writer.get_ref();
-    assert_eq!(
-        "####.####\n##..@.###\n####.#.##\n", 
-        str::from_utf8(reference).unwrap());
+    dungeon_renderer.render(&mut buffer).unwrap();
+    assert_written_to(&buffer, "####.####\n##..@.###\n####.#.##\n");
 
     player_pos.borrow_mut().0 = 5;
+    buffer.set_position(0);
+    dungeon_renderer.render(&mut buffer).unwrap();
+    assert_written_to(&buffer, "####.####\n##...@###\n####.#.##\n");
+}
 
-    writer.set_position(0);
-
-    dungeon_renderer.render(&mut writer).unwrap();
-
-    let reference2 = writer.get_ref();
-    assert_eq!(
-        "####.####\n##...@###\n####.#.##\n", 
-        str::from_utf8(reference2).unwrap());
-
+fn assert_written_to(buffer: &Cursor<Vec<u8>>, written: &str) {
+    let reference = buffer.get_ref();
+    assert_eq!(written, str::from_utf8(reference).unwrap());
 }
