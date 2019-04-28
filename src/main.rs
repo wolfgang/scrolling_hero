@@ -18,7 +18,7 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
     ];
 
-    let player_pos = Rc::new(RefCell::new((8, 4)));
+    let player_pos = Rc::new(RefCell::new((8, 0)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     let mut visible_lines = 5;
@@ -27,7 +27,7 @@ fn main() -> std::io::Result<()> {
 
     loop {
         term.clear_last_lines(visible_lines)?;
-        dungeon_renderer.render(&mut term, player_pos.borrow().1-2, visible_lines as u32)?;
+        dungeon_renderer.render(&mut term, player_pos.borrow().1 as i32 - 2, visible_lines as u32)?;
         let key = term.read_key().unwrap();
 
 
