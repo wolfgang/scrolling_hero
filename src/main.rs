@@ -1,7 +1,7 @@
 
 use std::rc::Rc;
 use std::cell::{RefCell};
-use console::{Key, Term};
+use console::{Term};
 use sch::dungeon_renderer::DungeonRenderer;
 use sch::player_controller::PlayerController;
 

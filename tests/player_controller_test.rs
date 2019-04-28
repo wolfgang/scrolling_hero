@@ -25,6 +25,17 @@ fn arrow_left_moves_player_left() {
 }
 
 #[test]
+fn arrow_left_does_not_move_beyond_zero() {
+    let player_pos = make_player_pos(1, 0);
+    let player_controller = PlayerController::new(&player_pos, 10);
+    player_controller.on_key(Key::ArrowLeft);
+    assert_player_pos(&player_pos, 0, 0);
+    player_controller.on_key(Key::ArrowLeft);
+    assert_player_pos(&player_pos, 0, 0);
+
+}
+
+#[test]
 fn arrow_right_moves_player_right() {
     let player_pos = make_player_pos(8, 0);
     let player_controller = PlayerController::new(&player_pos, 10);

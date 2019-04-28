@@ -20,7 +20,9 @@ impl PlayerController {
         match key {
             Key::Escape => { return false }
             Key::ArrowLeft => {
-                self.player_pos.borrow_mut().0 -= 1;
+                if self.player_pos.borrow().0 > 0 {
+                    self.player_pos.borrow_mut().0 -= 1;
+                }
             }
             Key::ArrowRight => {
                 self.player_pos.borrow_mut().0 += 1;
