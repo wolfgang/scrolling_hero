@@ -16,7 +16,7 @@ fn main() -> std::io::Result<()> {
     let player_pos = Rc::new(RefCell::new((8, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
-    dungeon_renderer.render(&mut term)?;
+    dungeon_renderer.render(&mut term, 0, 3)?;
 
     loop {
         let key = term.read_key().unwrap();
@@ -30,7 +30,7 @@ fn main() -> std::io::Result<()> {
         }
 
         term.clear_last_lines(3)?;
-        dungeon_renderer.render(&mut term)?;
+        dungeon_renderer.render(&mut term, 0, 3)?;
     }
     
 }

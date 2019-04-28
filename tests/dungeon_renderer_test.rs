@@ -18,8 +18,8 @@ fn renders_dungeon_from_vectors() {
     let mut buffer = Cursor::new(Vec::new());
     player_pos.borrow_mut().0 = 5;
 
-    dungeon_renderer.render(&mut buffer).unwrap();
-    assert_written_to(&buffer, "####.####\n##...@###\n####.#.##\n");
+    dungeon_renderer.render(&mut buffer, 1, 2).unwrap();
+    assert_written_to(&buffer, "##...@###\n####.#.##\n");
 }
 
 fn assert_written_to(buffer: &Cursor<Vec<u8>>, written: &str) {
