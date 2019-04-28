@@ -21,11 +21,13 @@ fn main() -> std::io::Result<()> {
     let player_pos = Rc::new(RefCell::new((8, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
-    let mut moved = true;
+    let mut visible_lines = 3;
+
+    term.move_cursor_down(visible_lines)?;
+
     loop {
-        if moved {
-            dungeon_renderer.render(&mut term, player_pos.borrow().1, 3)?;
-        }
+        term.clear_last_lines(visible_lines)?;
+        dungeon_renderer.render(&mut term, player_pos.borrow().1, visible_lines as u32)?;
         let key = term.read_key().unwrap();
 
 
@@ -40,15 +42,12 @@ fn main() -> std::io::Result<()> {
                     player_pos.borrow_mut().1 += 1 
                 }
                 else {
-                    moved = false;
+                    visible_lines = 1;
                 }
             }
             _ => {}
         }
 
-        if moved {
-            term.clear_last_lines(3)?;
-        }
     }
     
 }
