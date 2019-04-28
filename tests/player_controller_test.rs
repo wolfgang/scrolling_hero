@@ -2,42 +2,7 @@ use console::{Key};
 use std::rc::Rc;
 use std::cell::{RefCell};
 
-struct PlayerController {
-    player_pos: Rc<RefCell<(u32, u32)>>,
-    max_y: u32
-}
-
-impl PlayerController {
-    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>, max_y: u32) -> PlayerController {
-        PlayerController {
-            player_pos: Rc::clone(player_pos),
-            max_y: max_y
-
-        }
-    }
-
-    pub fn on_key(&self, key: Key) -> bool {
-        match key {
-            Key::Escape => { return false }
-            Key::ArrowLeft => {
-                self.player_pos.borrow_mut().0 -= 1;
-            }
-            Key::ArrowRight => {
-                self.player_pos.borrow_mut().0 += 1;
-            }
-            Key::ArrowDown => {
-                if self.player_pos.borrow().1 < self.max_y {
-                    self.player_pos.borrow_mut().1 += 1;
-                }
-            }
-
-            _ => { }
-        }
-
-        return true;
-
-    }
-}
+use sch::player_controller::{PlayerController};
 
 #[test]
 fn on_key_returns_false_for_escape_and_true_for_any_other_key() {
@@ -87,9 +52,7 @@ fn arrow_down_does_not_move_beyond_give_max_y() {
     assert_player_pos(&player_pos, 8, 10);
     player_controller.on_key(Key::ArrowDown);
     assert_player_pos(&player_pos, 8, 10);    
-
 }
-
 
 fn make_player_pos(x: u32, y: u32) -> Rc<RefCell<(u32, u32)>> {
     Rc::new(RefCell::new((x, y)))
