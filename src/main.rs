@@ -30,7 +30,10 @@ fn main() -> std::io::Result<()> {
 
     let player_pos = Rc::new(RefCell::new((8, 0)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
-    let player_controller = PlayerController::new(&player_pos, dungeon.len() as u32 -1);
+    let max_x = dungeon[0].len() as u32 -1;
+    let max_y = dungeon.len() as u32 -1;
+
+    let player_controller = PlayerController::new(&player_pos, max_x, max_y);
 
     let camera_offset = 2;
 

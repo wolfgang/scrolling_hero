@@ -4,15 +4,16 @@ use std::cell::{RefCell};
 
 pub struct PlayerController {
     player_pos: Rc<RefCell<(u32, u32)>>,
+    max_x: u32,
     max_y: u32
 }
 
 impl PlayerController {
-    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>, max_y: u32) -> PlayerController {
+    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>, max_x: u32, max_y: u32) -> PlayerController {
         PlayerController {
             player_pos: Rc::clone(player_pos),
+            max_x: max_x,
             max_y: max_y
-
         }
     }
 
@@ -25,7 +26,9 @@ impl PlayerController {
                 }
             }
             Key::ArrowRight => {
-                self.player_pos.borrow_mut().0 += 1;
+                if self.player_pos.borrow().0 < self.max_x {
+                    self.player_pos.borrow_mut().0 += 1;
+                }
             }
             Key::ArrowDown => {
                 if self.player_pos.borrow().1 < self.max_y {

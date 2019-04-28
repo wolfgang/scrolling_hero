@@ -6,6 +6,7 @@ use sch::player_controller::{PlayerController};
 
 type PlayerPos = Rc<RefCell<(u32, u32)>>;
 
+const MAX_X: u32 = 20;
 const MAX_Y: u32 = 10;
 
 #[test]
@@ -46,6 +47,15 @@ fn arrow_right_moves_player_right() {
 }
 
 #[test]
+fn arrow_right_does_not_move_beyond_given_max_x() {
+    let (player_pos, player_controller) = setup_with_player_pos(MAX_X - 1, 0);
+    player_controller.on_key(Key::ArrowRight);
+    assert_player_pos(&player_pos, MAX_X, 0);
+    player_controller.on_key(Key::ArrowRight);
+    assert_player_pos(&player_pos, MAX_X, 0);
+}
+
+#[test]
 fn arrow_down_moves_player_down() {
     let (player_pos, player_controller) = setup_with_player_pos(8, 0);
     player_controller.on_key(Key::ArrowDown);
@@ -55,7 +65,7 @@ fn arrow_down_moves_player_down() {
 }
 
 #[test]
-fn arrow_down_does_not_move_beyond_give_max_y() {
+fn arrow_down_does_not_move_beyond_given_max_y() {
     let (player_pos, player_controller) = setup_with_player_pos(8, MAX_Y - 1);
     player_controller.on_key(Key::ArrowDown);
     assert_player_pos(&player_pos, 8, MAX_Y);
@@ -65,7 +75,7 @@ fn arrow_down_does_not_move_beyond_give_max_y() {
 
 fn setup_with_player_pos(player_x: u32, player_y: u32) -> (PlayerPos, PlayerController) {
     let player_pos = make_player_pos(player_x, player_y);
-    let player_controller = PlayerController::new(&player_pos, MAX_Y);
+    let player_controller = PlayerController::new(&player_pos, MAX_X, MAX_Y);
     (player_pos, player_controller)
 }
 
