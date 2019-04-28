@@ -1,10 +1,8 @@
 use console::{Key};
-use std::rc::Rc;
-use std::cell::{RefCell};
 
 use sch::player_controller::{PlayerController};
-
-type PlayerPos = Rc<RefCell<(u32, u32)>>;
+use sch::player_pos;
+use sch::player_pos::{PlayerPos};
 
 const MAX_X: u32 = 20;
 const MAX_Y: u32 = 10;
@@ -74,13 +72,9 @@ fn arrow_down_does_not_move_beyond_given_max_y() {
 }
 
 fn setup_with_player_pos(player_x: u32, player_y: u32) -> (PlayerPos, PlayerController) {
-    let player_pos = make_player_pos(player_x, player_y);
+    let player_pos = player_pos::new(player_x, player_y);
     let player_controller = PlayerController::new(&player_pos, MAX_X, MAX_Y);
     (player_pos, player_controller)
-}
-
-fn make_player_pos(x: u32, y: u32) -> PlayerPos {
-    Rc::new(RefCell::new((x, y)))
 }
 
 fn assert_player_pos(player_pos: &PlayerPos, x: u32, y: u32) {
