@@ -33,7 +33,7 @@ fn main() -> std::io::Result<()> {
     let mut rendered_lines = camera_offset + 1;
     let mut visible_lines = 2*camera_offset + 1;
 
-    term.move_cursor_down(visible_lines)?;
+    term.move_cursor_down(rendered_lines)?;
 
     loop {
         term.clear_last_lines(rendered_lines)?;
