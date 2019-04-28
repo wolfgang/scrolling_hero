@@ -21,13 +21,18 @@ fn main() -> std::io::Result<()> {
     let player_pos = Rc::new(RefCell::new((8, 0)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
-    let mut visible_lines = 5;
+    let camera_offset = 2;
+    let mut visible_lines = 2*camera_offset + 1;
 
     term.move_cursor_down(visible_lines)?;
 
     loop {
         term.clear_last_lines(visible_lines)?;
-        dungeon_renderer.render(&mut term, player_pos.borrow().1 as i32 - 2, visible_lines as u32)?;
+        dungeon_renderer.render(
+            &mut term, 
+            player_pos.borrow().1 as i32 - camera_offset as i32, 
+            visible_lines as u32)?;
+        
         let key = term.read_key().unwrap();
 
 
@@ -42,7 +47,7 @@ fn main() -> std::io::Result<()> {
                     player_pos.borrow_mut().1 += 1 
                 }
                 else {
-                    visible_lines = 3;
+                    visible_lines = camera_offset + 1;
                 }
             }
             _ => {}
