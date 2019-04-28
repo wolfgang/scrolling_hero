@@ -10,15 +10,19 @@ fn main() -> std::io::Result<()> {
     let dungeon = vec![
         vec![1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1],
         vec![1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
-        vec![1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1]
+        vec![1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
     ];
 
     let player_pos = Rc::new(RefCell::new((8, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
-    dungeon_renderer.render(&mut term, 0, 3)?;
-
     loop {
+        dungeon_renderer.render(&mut term, player_pos.borrow().1, 3)?;
         let key = term.read_key().unwrap();
 
         match key {
@@ -30,7 +34,6 @@ fn main() -> std::io::Result<()> {
         }
 
         term.clear_last_lines(3)?;
-        dungeon_renderer.render(&mut term, 0, 3)?;
     }
     
 }
