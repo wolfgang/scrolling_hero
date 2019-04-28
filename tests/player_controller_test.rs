@@ -3,13 +3,16 @@ use std::rc::Rc;
 use std::cell::{RefCell};
 
 struct PlayerController {
-    player_pos: Rc<RefCell<(u32, u32)>>
+    player_pos: Rc<RefCell<(u32, u32)>>,
+    max_y: u32
 }
 
 impl PlayerController {
-    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>) -> PlayerController {
+    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>, max_y: u32) -> PlayerController {
         PlayerController {
-            player_pos: Rc::clone(player_pos)
+            player_pos: Rc::clone(player_pos),
+            max_y: max_y
+
         }
     }
 
@@ -21,6 +24,11 @@ impl PlayerController {
             }
             Key::ArrowRight => {
                 self.player_pos.borrow_mut().0 += 1;
+            }
+            Key::ArrowDown => {
+                if self.player_pos.borrow().1 < self.max_y {
+                    self.player_pos.borrow_mut().1 += 1;
+                }
             }
 
             _ => { }
@@ -34,7 +42,7 @@ impl PlayerController {
 #[test]
 fn on_key_returns_false_for_escape_and_true_for_any_other_key() {
     let player_pos = make_player_pos(1, 0);
-    let player_controller = PlayerController::new(&player_pos);
+    let player_controller = PlayerController::new(&player_pos, 10);
     assert_eq!(false, player_controller.on_key(Key::Escape));
     assert_eq!(true, player_controller.on_key(Key::ArrowLeft));
     assert_eq!(true, player_controller.on_key(Key::ArrowRight));
@@ -44,7 +52,7 @@ fn on_key_returns_false_for_escape_and_true_for_any_other_key() {
 #[test]
 fn arrow_left_moves_player_left() {
     let player_pos = make_player_pos(8, 0);
-    let player_controller = PlayerController::new(&player_pos);
+    let player_controller = PlayerController::new(&player_pos, 10);
     player_controller.on_key(Key::ArrowLeft);
     assert_player_pos(&player_pos, 7, 0);
     player_controller.on_key(Key::ArrowLeft);
@@ -54,11 +62,32 @@ fn arrow_left_moves_player_left() {
 #[test]
 fn arrow_right_moves_player_right() {
     let player_pos = make_player_pos(8, 0);
-    let player_controller = PlayerController::new(&player_pos);
+    let player_controller = PlayerController::new(&player_pos, 10);
     player_controller.on_key(Key::ArrowRight);
     assert_player_pos(&player_pos, 9, 0);
     player_controller.on_key(Key::ArrowRight);
     assert_player_pos(&player_pos, 10, 0);
+}
+
+#[test]
+fn arrow_down_moves_player_down() {
+    let player_pos = make_player_pos(8, 0);
+    let player_controller = PlayerController::new(&player_pos, 10);
+    player_controller.on_key(Key::ArrowDown);
+    assert_player_pos(&player_pos, 8, 1);
+    player_controller.on_key(Key::ArrowDown);
+    assert_player_pos(&player_pos, 8, 2);    
+}
+
+#[test]
+fn arrow_down_does_not_move_beyond_give_max_y() {
+    let player_pos = make_player_pos(8, 9);
+    let player_controller = PlayerController::new(&player_pos, 10);
+    player_controller.on_key(Key::ArrowDown);
+    assert_player_pos(&player_pos, 8, 10);
+    player_controller.on_key(Key::ArrowDown);
+    assert_player_pos(&player_pos, 8, 10);    
+
 }
 
 
