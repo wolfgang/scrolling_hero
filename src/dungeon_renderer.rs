@@ -12,7 +12,7 @@ impl<'a> DungeonRenderer<'a> {
     pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &Rc<RefCell<(u32, u32)>>) -> DungeonRenderer<'a> {
         DungeonRenderer {dungeon: dungeon, player_pos: Rc::clone(player_pos)}
     }
-    pub fn render(&self, writer: &mut Write, from: i32, count: u32) -> std::io::Result<()> {
+    pub fn render(&self, writer: &mut Write, from: i32, count: u32) -> std::io::Result<usize> {
         let end_row = min(self.dungeon.len(), (from  + count as i32) as usize);
         let start_row = max(from, 0) as usize;
         for (y, row) in self.dungeon[start_row..end_row].iter().enumerate() {
@@ -30,6 +30,6 @@ impl<'a> DungeonRenderer<'a> {
             writer.write_fmt(format_args!("{}\n", &row_str))?;
         }
 
-        Ok(())
+        Ok(end_row - start_row)
     }
 }

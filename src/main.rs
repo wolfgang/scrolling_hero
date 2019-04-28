@@ -13,6 +13,14 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1],
         vec![1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1],
         vec![1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,0,1,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1],
+        vec![1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1],
+        vec![1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1],
         vec![1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1],
         vec![1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1],
         vec![1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
@@ -22,16 +30,17 @@ fn main() -> std::io::Result<()> {
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     let camera_offset = 2;
+    let mut rendered_lines = camera_offset + 1;
     let mut visible_lines = 2*camera_offset + 1;
 
     term.move_cursor_down(visible_lines)?;
 
     loop {
-        term.clear_last_lines(visible_lines)?;
-        dungeon_renderer.render(
+        term.clear_last_lines(rendered_lines)?;
+        rendered_lines = dungeon_renderer.render(
             &mut term, 
             player_pos.borrow().1 as i32 - camera_offset as i32, 
-            visible_lines as u32)?;
+            visible_lines as u32).unwrap();
         
         let key = term.read_key().unwrap();
 
