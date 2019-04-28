@@ -1,15 +1,16 @@
 use console::{Key};
 use std::rc::Rc;
-use std::cell::{RefCell};
+
+use crate::player_pos::{PlayerPos};
 
 pub struct PlayerController {
-    player_pos: Rc<RefCell<(u32, u32)>>,
+    player_pos: PlayerPos,
     max_x: u32,
     max_y: u32
 }
 
 impl PlayerController {
-    pub fn new(player_pos: &Rc<RefCell<(u32, u32)>>, max_x: u32, max_y: u32) -> PlayerController {
+    pub fn new(player_pos: &PlayerPos, max_x: u32, max_y: u32) -> PlayerController {
         PlayerController {
             player_pos: Rc::clone(player_pos),
             max_x: max_x,

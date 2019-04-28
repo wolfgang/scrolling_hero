@@ -1,15 +1,15 @@
 use std::io::{Write};
 use std::rc::Rc;
-use std::cell::{RefCell};
 use std::cmp::{min, max};
+use crate::player_pos::{PlayerPos};
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
-    player_pos: Rc<RefCell<(u32, u32)>>
+    player_pos: PlayerPos
 }
 
 impl<'a> DungeonRenderer<'a> {
-    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &Rc<RefCell<(u32, u32)>>) -> DungeonRenderer<'a> {
+    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &PlayerPos) -> DungeonRenderer<'a> {
         DungeonRenderer {dungeon: dungeon, player_pos: Rc::clone(player_pos)}
     }
     pub fn render(&self, writer: &mut Write, from: i32, to: u32) -> std::io::Result<usize> {

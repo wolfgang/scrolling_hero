@@ -1,10 +1,8 @@
 
-use std::rc::Rc;
-use std::cell::{RefCell};
 use console::{Term};
-
 use sch::dungeon_renderer::DungeonRenderer;
 use sch::player_controller::PlayerController;
+use sch::player_pos;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
@@ -28,7 +26,7 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
     ];
 
-    let player_pos = Rc::new(RefCell::new((8, 0)));
+    let player_pos = player_pos::new(8, 0);
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
     let max_x = dungeon[0].len() as u32 -1;
     let max_y = dungeon.len() as u32 -1;
