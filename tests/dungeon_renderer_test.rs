@@ -36,7 +36,7 @@ fn renders_dungeon_not_beyond_end() {
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
     let mut buffer = Cursor::new(Vec::new());
 
-    let num_lines = dungeon_renderer.render(&mut buffer, 2, 3).unwrap();
+    let num_lines = dungeon_renderer.render(&mut buffer, 2, 5).unwrap();
     assert_eq!(2, num_lines);
     assert_written_to(&buffer, "#.#\n..#\n");
 }
@@ -55,8 +55,8 @@ fn renders_dungeon_not_beyond_beginning() {
     let mut buffer = Cursor::new(Vec::new());
 
     let num_lines = dungeon_renderer.render(&mut buffer, -1, 3).unwrap();
-    assert_eq!(2, num_lines);
-    assert_written_to(&buffer, "###\n#..\n");
+    assert_eq!(4, num_lines);
+    assert_written_to(&buffer, "###\n#..\n#.#\n..#\n");
 }
 
 

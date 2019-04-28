@@ -30,13 +30,13 @@ fn main() -> std::io::Result<()> {
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
     let camera_offset = 2;
-    let wanted_lines = 2*camera_offset + 1;
 
     loop {
         let rendered_lines = dungeon_renderer.render(
             &mut term, 
-            player_pos.borrow().1 as i32 - camera_offset as i32, 
-            wanted_lines as u32).unwrap();
+            player_pos.borrow().1 as i32 - camera_offset as i32,
+            player_pos.borrow().1 + camera_offset 
+            ).unwrap();
         
         let key = term.read_key().unwrap();
 
