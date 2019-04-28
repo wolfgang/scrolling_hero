@@ -21,19 +21,34 @@ fn main() -> std::io::Result<()> {
     let player_pos = Rc::new(RefCell::new((8, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
 
+    let mut moved = true;
     loop {
-        dungeon_renderer.render(&mut term, player_pos.borrow().1, 3)?;
+        if moved {
+            dungeon_renderer.render(&mut term, player_pos.borrow().1, 3)?;
+        }
         let key = term.read_key().unwrap();
+
 
         match key {
             Key::Escape => { return Ok(()) }
             Key::ArrowLeft => { player_pos.borrow_mut().0 -= 1 }
-            Key::ArrowRight => { player_pos.borrow_mut().0 += 1 }
-            Key::ArrowDown => { player_pos.borrow_mut().1 += 1 }
+            Key::ArrowRight => { 
+                player_pos.borrow_mut().0 += 1 
+            }
+            Key::ArrowDown => { 
+                if player_pos.borrow().1 < dungeon.len() as u32 - 1 {
+                    player_pos.borrow_mut().1 += 1 
+                }
+                else {
+                    moved = false;
+                }
+            }
             _ => {}
         }
 
-        term.clear_last_lines(3)?;
+        if moved {
+            term.clear_last_lines(3)?;
+        }
     }
     
 }
