@@ -16,12 +16,8 @@ fn renders_dungeon_from_vectors() {
     let  player_pos = Rc::new(RefCell::new((4, 1)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
     let mut buffer = Cursor::new(Vec::new());
-
-    dungeon_renderer.render(&mut buffer).unwrap();
-    assert_written_to(&buffer, "####.####\n##..@.###\n####.#.##\n");
-
     player_pos.borrow_mut().0 = 5;
-    buffer.set_position(0);
+
     dungeon_renderer.render(&mut buffer).unwrap();
     assert_written_to(&buffer, "####.####\n##...@###\n####.#.##\n");
 }
