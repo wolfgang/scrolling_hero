@@ -3,6 +3,7 @@ use std::rc::Rc;
 use std::cell::{RefCell};
 use console::{Key, Term};
 use sch::dungeon_renderer::DungeonRenderer;
+use sch::player_controller::PlayerController;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
@@ -28,6 +29,7 @@ fn main() -> std::io::Result<()> {
 
     let player_pos = Rc::new(RefCell::new((8, 0)));
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
+    let player_controller = PlayerController::new(&player_pos, dungeon.len() as u32 -1);
 
     let camera_offset = 2;
 
@@ -40,20 +42,7 @@ fn main() -> std::io::Result<()> {
         
         let key = term.read_key().unwrap();
 
-
-        match key {
-            Key::Escape => { return Ok(()) }
-            Key::ArrowLeft => { player_pos.borrow_mut().0 -= 1 }
-            Key::ArrowRight => { 
-                player_pos.borrow_mut().0 += 1 
-            }
-            Key::ArrowDown => { 
-                if player_pos.borrow().1 < dungeon.len() as u32 - 1 {
-                    player_pos.borrow_mut().1 += 1 
-                }
-            }
-            _ => {}
-        }
+        if !player_controller.on_key(key) { return Ok(()) }
 
         term.clear_last_lines(rendered_lines)?;
     }
