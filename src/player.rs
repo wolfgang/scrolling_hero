@@ -32,18 +32,14 @@ impl PlayerMovePredicate {
 
 pub struct Player {
     position: RefCell<(u32, u32)>,
-    max_x: u32,
-    max_y: u32,
-    move_predicate: PlayerMovePredicate,
+    move_predicate: PlayerMovePredicate
 }
 
 impl Player {
     pub fn new(x: u32, y: u32, max_x: u32, max_y: u32) -> Player {
         Player {
             position: RefCell::new((x, y)),
-            move_predicate: PlayerMovePredicate::new(max_x, max_y),
-            max_x,
-            max_y,
+            move_predicate: PlayerMovePredicate::new(max_x, max_y)
         }
     }
 
