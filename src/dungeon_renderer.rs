@@ -1,15 +1,15 @@
 use std::io::{Write};
 use std::rc::Rc;
 use std::cmp::{min, max};
-use crate::player_pos::{PlayerPos};
+use crate::player_pos::{MutablePosition};
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
-    player_pos: PlayerPos
+    player_pos: MutablePosition
 }
 
 impl<'a> DungeonRenderer<'a> {
-    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &PlayerPos) -> DungeonRenderer<'a> {
+    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &MutablePosition) -> DungeonRenderer<'a> {
         DungeonRenderer {dungeon: dungeon, player_pos: Rc::clone(player_pos)}
     }
     pub fn render(&self, writer: &mut Write, from: i32, to: u32) -> std::io::Result<usize> {

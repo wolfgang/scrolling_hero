@@ -1,16 +1,16 @@
 use console::{Key};
 use std::rc::Rc;
 
-use crate::player_pos::{PlayerPos};
+use crate::player_pos::{MutablePosition};
 
 pub struct PlayerController {
-    player_pos: PlayerPos,
+    player_pos: MutablePosition,
     max_x: u32,
     max_y: u32
 }
 
 impl PlayerController {
-    pub fn new(player_pos: &PlayerPos, max_x: u32, max_y: u32) -> PlayerController {
+    pub fn new(player_pos: &MutablePosition, max_x: u32, max_y: u32) -> PlayerController {
         PlayerController {
             player_pos: Rc::clone(player_pos),
             max_x: max_x,
