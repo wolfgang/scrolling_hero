@@ -31,7 +31,7 @@ impl<'a> PlayerController<'a> {
 
 #[test]
 fn move_left() {
-    let player = Player::new(10, 0, 100, 200);
+    let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowLeft);
     assert_eq!((9, 0), *player.position());
@@ -39,7 +39,7 @@ fn move_left() {
 
 #[test]
 fn move_right() {
-    let player = Player::new(10, 0, 100, 200);
+    let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowRight);
     assert_eq!((11, 0), *player.position());
@@ -47,8 +47,12 @@ fn move_right() {
 
 #[test]
 fn move_down() {
-    let player = Player::new(10, 0, 100, 200);
+    let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowDown);
     assert_eq!((10, 1), *player.position());
+}
+
+fn player_at(x: u32, y: u32) -> Player {
+    Player::new(x, y, 100, 200)
 }
