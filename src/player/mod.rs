@@ -47,3 +47,46 @@ impl Player {
         }
     }
 }
+
+
+pub struct Player2<'a> {
+    position: RefCell<(u32, u32)>,
+    move_predicate: &'a MovePredicate,
+}
+
+impl<'a> WithPosition for Player2<'a> {
+    fn position(&self) -> (u32, u32) {
+        self.position()
+    }
+}
+
+impl<'a> Player2<'a> {
+    pub fn new(x: u32, y: u32, move_predicate: &'a MovePredicate) -> Player2<'a> {
+        Player2 {
+            position: RefCell::new((x, y)),
+            move_predicate,
+        }
+    }
+
+    pub fn position(&self) -> (u32, u32) {
+        *self.position.borrow()
+    }
+
+    pub fn move_left(&self) {
+        if self.move_predicate.can_move_left(self) {
+            self.position.borrow_mut().0 -= 1;
+        }
+    }
+
+    pub fn move_right(&self) {
+        if self.move_predicate.can_move_right(self) {
+            self.position.borrow_mut().0 += 1;
+        }
+    }
+
+    pub fn move_down(&self) {
+        if self.move_predicate.can_move_down(self) {
+            self.position.borrow_mut().1 += 1;
+        }
+    }
+}
