@@ -49,20 +49,20 @@ impl Player0 {
 }
 
 
-pub struct Player2<'a> {
+pub struct Player<'a> {
     position: RefCell<(u32, u32)>,
     move_predicate: &'a MovePredicate,
 }
 
-impl<'a> WithPosition for Player2<'a> {
+impl<'a> WithPosition for Player<'a> {
     fn position(&self) -> (u32, u32) {
         self.position()
     }
 }
 
-impl<'a> Player2<'a> {
-    pub fn new(x: u32, y: u32, move_predicate: &'a MovePredicate) -> Player2<'a> {
-        Player2 {
+impl<'a> Player<'a> {
+    pub fn new(x: u32, y: u32, move_predicate: &'a MovePredicate) -> Player<'a> {
+        Player {
             position: RefCell::new((x, y)),
             move_predicate,
         }

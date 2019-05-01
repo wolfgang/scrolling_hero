@@ -1,4 +1,4 @@
-use sch::player::{Player0, Player2};
+use sch::player::{Player, Player0};
 use sch::player::move_predicates::NonCollidingPlayerMovePredicate;
 
 const MAX_X: u32 = 10;
@@ -7,7 +7,7 @@ const MAX_Y: u32 = 20;
 #[test]
 fn player2_has_initial_position() {
     let predicate = NonCollidingPlayerMovePredicate::new(MAX_X, MAX_Y);
-    let player = Player2::new(10, 20, &predicate);
+    let player = Player::new(10, 20, &predicate);
     assert_eq!((10, 20), player.position());
 }
 
@@ -15,7 +15,7 @@ fn player2_has_initial_position() {
 #[test]
 fn player2_move_left_until_zero_x() {
     let predicate = NonCollidingPlayerMovePredicate::new(MAX_X, MAX_Y);
-    let player = Player2::new(2, 0, &predicate);
+    let player = Player::new(2, 0, &predicate);
     player.move_left();
     assert_eq!((1, 0), player.position());
     player.move_left();
