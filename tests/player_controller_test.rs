@@ -1,6 +1,6 @@
 use console::Key;
 
-use sch::player::Player;
+use sch::player::Player0;
 use sch::player_controller::PlayerController;
 
 #[test]
@@ -38,6 +38,6 @@ fn on_key_returns_false_for_escape_and_true_for_any_other_key() {
 }
 
 
-fn player_at(x: u32, y: u32) -> Player {
-    Player::new(x, y, 100, 200)
+fn player_at(x: u32, y: u32) -> Player0 {
+    Player0::new(x, y, 100, 200)
 }

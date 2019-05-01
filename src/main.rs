@@ -1,7 +1,7 @@
 use console::Term;
 
 use sch::dungeon_renderer::DungeonRenderer;
-use sch::player::Player;
+use sch::player::Player0;
 use sch::player_controller::PlayerController;
 
 fn main() -> std::io::Result<()> {
@@ -28,7 +28,7 @@ fn main() -> std::io::Result<()> {
 
     let max_x = dungeon[0].len() as u32 - 1;
     let max_y = dungeon.len() as u32 - 1;
-    let player = Player::new(8, 0, max_x, max_y);
+    let player = Player0::new(8, 0, max_x, max_y);
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
 
     let player_controller = PlayerController::new(&player);

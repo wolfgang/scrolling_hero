@@ -2,7 +2,7 @@ use std::io::Cursor;
 use std::str;
 
 use sch::dungeon_renderer::DungeonRenderer;
-use sch::player::Player;
+use sch::player::Player0;
 
 #[test]
 fn renders_dungeon_from_vectors() {
@@ -12,7 +12,7 @@ fn renders_dungeon_from_vectors() {
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
-    let player = Player::new(4, 1, 100, 100);
+    let player = Player0::new(4, 1, 100, 100);
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
     player.move_right();
@@ -31,7 +31,7 @@ fn renders_dungeon_not_beyond_end() {
         vec![0, 0, 1]
     ];
 
-    let player = Player::new(0, 0, 100, 100);
+    let player = Player0::new(0, 0, 100, 100);
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
@@ -50,7 +50,7 @@ fn renders_dungeon_not_beyond_beginning() {
         vec![0, 0, 1]
     ];
 
-    let player = Player::new(3, 3, 100, 100);
+    let player = Player0::new(3, 3, 100, 100);
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
 

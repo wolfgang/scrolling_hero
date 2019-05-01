@@ -6,20 +6,20 @@ use crate::move_predicate::{MovePredicate, WithPosition};
 
 pub mod move_predicates;
 
-pub struct Player {
+pub struct Player0 {
     position: RefCell<(u32, u32)>,
     move_predicate: Box<dyn MovePredicate>,
 }
 
-impl WithPosition for Player {
+impl WithPosition for Player0 {
     fn position(&self) -> (u32, u32) {
         self.position()
     }
 }
 
-impl Player {
-    pub fn new(x: u32, y: u32, max_x: u32, max_y: u32) -> Player {
-        Player {
+impl Player0 {
+    pub fn new(x: u32, y: u32, max_x: u32, max_y: u32) -> Player0 {
+        Player0 {
             position: RefCell::new((x, y)),
             move_predicate: Box::from(NonCollidingPlayerMovePredicate::new(max_x, max_y)),
         }
