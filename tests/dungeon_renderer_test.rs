@@ -1,11 +1,14 @@
 use std::io::Cursor;
 use std::str;
 
+use speculate::speculate;
+
 use sch::dungeon_renderer::DungeonRenderer;
 use sch::player::Player0;
 
-#[test]
-fn renders_dungeon_from_vectors() {
+speculate! {
+
+it "renders_dungeon_from_vectors" {
     let dungeon = vec![
         vec![1, 1, 1, 1, 0, 1, 1, 1, 1],
         vec![1, 1, 0, 0, 0, 0, 1, 1, 1],
@@ -22,8 +25,7 @@ fn renders_dungeon_from_vectors() {
     assert_written_to(&buffer, "##...@###\n####.#.##\n");
 }
 
-#[test]
-fn renders_dungeon_not_beyond_end() {
+it "renders_dungeon_not_beyond_end" {
     let dungeon = vec![
         vec![1, 1, 1],
         vec![1, 0, 0],
@@ -41,8 +43,7 @@ fn renders_dungeon_not_beyond_end() {
     assert_written_to(&buffer, "#.#\n..#\n");
 }
 
-#[test]
-fn renders_dungeon_not_beyond_beginning() {
+it "renders_dungeon_not_beyond_beginning" {
     let dungeon = vec![
         vec![1, 1, 1],
         vec![1, 0, 0],
@@ -63,4 +64,6 @@ fn renders_dungeon_not_beyond_beginning() {
 fn assert_written_to(buffer: &Cursor<Vec<u8>>, written: &str) {
     let reference = buffer.get_ref();
     assert_eq!(written, str::from_utf8(reference).unwrap());
+}
+
 }
