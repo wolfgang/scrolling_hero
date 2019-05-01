@@ -1,9 +1,9 @@
 use std::cell::{Ref, RefCell};
 
 trait MovePredicate {
-    fn can_move_left(&self, mover: &Player);
-    fn can_move_right(&self, mover: &Player);
-    fn can_move_down(&self, mover: &Player);
+    fn can_move_left(&self, mover: &Player) -> bool;
+    fn can_move_right(&self, mover: &Player) -> bool;
+    fn can_move_down(&self, mover: &Player) -> bool;
 }
 
 struct PlayerMovePredicate {
@@ -11,24 +11,19 @@ struct PlayerMovePredicate {
     max_y: u32,
 }
 
-//impl MovePredicate for PlayerMovePredicate {
-//    pub fn can_move_left(&self, mover: &Player) -> bool {
-//        mover.position().0 > 0
-//    }
-//
-//    pub fn can_move_right(&self, mover: &Player) -> bool {
-//        mover.position().0 < self.max_x
-//    }
-//
-//    pub fn can_move_up(&self, mover: &Player) -> bool {
-//        mover.position().1 > 0
-//    }
-//
-//    pub fn can_move_down(&self, mover: &Player) -> bool {
-//        mover.position().1 < self.max_y
-//    }
-//
-//}
+impl MovePredicate for PlayerMovePredicate {
+    fn can_move_left(&self, mover: &Player) -> bool {
+        mover.position().0 > 0
+    }
+
+    fn can_move_right(&self, mover: &Player) -> bool {
+        mover.position().0 < self.max_x
+    }
+
+    fn can_move_down(&self, mover: &Player) -> bool {
+        mover.position().1 < self.max_y
+    }
+}
 
 impl PlayerMovePredicate {
     pub fn new(max_x: u32, max_y: u32) -> PlayerMovePredicate {
@@ -37,30 +32,18 @@ impl PlayerMovePredicate {
             max_y,
         }
     }
-
-    pub fn can_move_left(&self, mover: &Player) -> bool {
-        mover.position().0 > 0
-    }
-
-    pub fn can_move_right(&self, mover: &Player) -> bool {
-        mover.position().0 < self.max_x
-    }
-
-    pub fn can_move_down(&self, mover: &Player) -> bool {
-        mover.position().1 < self.max_y
-    }
 }
 
 pub struct Player {
     position: RefCell<(u32, u32)>,
-    move_predicate: PlayerMovePredicate,
+    move_predicate: Box<dyn MovePredicate>,
 }
 
 impl Player {
     pub fn new(x: u32, y: u32, max_x: u32, max_y: u32) -> Player {
         Player {
             position: RefCell::new((x, y)),
-            move_predicate: PlayerMovePredicate::new(max_x, max_y),
+            move_predicate: Box::from(PlayerMovePredicate::new(max_x, max_y)),
         }
     }
 
