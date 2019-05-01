@@ -1,4 +1,3 @@
-use sch::player::Player2;
 
 mod player_factory;
 
@@ -8,7 +7,7 @@ const MAX_Y: u32 = 20;
 
 #[test]
 fn player2_has_initial_position() {
-    let player = Player2::new_default(10, 20, 100, 200);
+    let player = player_factory::without_bounds(10, 20);
     assert_eq!((10, 20), player.position());
 }
 
