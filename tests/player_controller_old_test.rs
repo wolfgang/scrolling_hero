@@ -2,7 +2,7 @@ use console::Key;
 
 use sch::mutable_position;
 use sch::mutable_position::MutablePosition;
-use sch::player_controller::PlayerController;
+use sch::player_controller_old::PlayerControllerOld;
 
 const MAX_X: u32 = 20;
 const MAX_Y: u32 = 10;
@@ -70,9 +70,9 @@ fn arrow_down_does_not_move_beyond_given_max_y() {
     assert_player_pos(&player_pos, 8, MAX_Y);
 }
 
-fn setup_with_player_pos(player_x: u32, player_y: u32) -> (MutablePosition, PlayerController) {
+fn setup_with_player_pos(player_x: u32, player_y: u32) -> (MutablePosition, PlayerControllerOld) {
     let player_pos = mutable_position::new(player_x, player_y);
-    let player_controller = PlayerController::new(&player_pos, MAX_X, MAX_Y);
+    let player_controller = PlayerControllerOld::new(&player_pos, MAX_X, MAX_Y);
     (player_pos, player_controller)
 }
 

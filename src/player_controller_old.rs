@@ -4,15 +4,15 @@ use console::Key;
 
 use crate::mutable_position::MutablePosition;
 
-pub struct PlayerController {
+pub struct PlayerControllerOld {
     player_pos: MutablePosition,
     max_x: u32,
     max_y: u32,
 }
 
-impl PlayerController {
-    pub fn new(player_pos: &MutablePosition, max_x: u32, max_y: u32) -> PlayerController {
-        PlayerController { player_pos: Rc::clone(player_pos), max_x, max_y }
+impl PlayerControllerOld {
+    pub fn new(player_pos: &MutablePosition, max_x: u32, max_y: u32) -> PlayerControllerOld {
+        PlayerControllerOld { player_pos: Rc::clone(player_pos), max_x, max_y }
     }
 
     pub fn on_key(&self, key: Key) -> bool {

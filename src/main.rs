@@ -2,7 +2,7 @@ use console::Term;
 
 use sch::dungeon_renderer::DungeonRenderer;
 use sch::mutable_position;
-use sch::player_controller::PlayerController;
+use sch::player_controller_old::PlayerControllerOld;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
@@ -31,7 +31,7 @@ fn main() -> std::io::Result<()> {
     let max_x = dungeon[0].len() as u32 -1;
     let max_y = dungeon.len() as u32 -1;
 
-    let player_controller = PlayerController::new(&player_pos, max_x, max_y);
+    let player_controller = PlayerControllerOld::new(&player_pos, max_x, max_y);
 
     let camera_offset = 2;
 
