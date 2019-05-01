@@ -2,7 +2,7 @@ use std::io::Cursor;
 use std::str;
 
 use sch::dungeon_renderer::DungeonRenderer;
-use sch::mutable_position;
+use sch::player::Player;
 
 #[test]
 fn renders_dungeon_from_vectors() {
@@ -12,10 +12,10 @@ fn renders_dungeon_from_vectors() {
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
-    let player_pos = mutable_position::new(4, 1);
-    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
+    let player = Player::new(4, 1, 100, 100);
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
-    player_pos.borrow_mut().0 = 5;
+    player.move_right();
 
     let num_lines = dungeon_renderer.render(&mut buffer, 1, 2).unwrap();
     assert_eq!(2, num_lines);
@@ -31,8 +31,9 @@ fn renders_dungeon_not_beyond_end() {
         vec![0, 0, 1]
     ];
 
-    let player_pos = mutable_position::new(0, 0);
-    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
+    let player = Player::new(0, 0, 100, 100);
+
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
 
     let num_lines = dungeon_renderer.render(&mut buffer, 2, 5).unwrap();
@@ -49,8 +50,8 @@ fn renders_dungeon_not_beyond_beginning() {
         vec![0, 0, 1]
     ];
 
-    let player_pos = mutable_position::new(3, 3);
-    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
+    let player = Player::new(3, 3, 100, 100);
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
 
     let num_lines = dungeon_renderer.render(&mut buffer, -1, 3).unwrap();

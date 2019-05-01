@@ -1,17 +1,20 @@
 use std::cmp::{max, min};
 use std::io::Write;
-use std::rc::Rc;
 
-use crate::mutable_position::MutablePosition;
+use crate::player::Player;
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
-    player_pos: MutablePosition
+    player: &'a Player
 }
 
 impl<'a> DungeonRenderer<'a> {
-    pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &MutablePosition) -> DungeonRenderer<'a> {
-        DungeonRenderer { dungeon, player_pos: Rc::clone(player_pos) }
+    pub fn new(
+        dungeon: &'a Vec<Vec<u16>>,
+        player: &'a Player,
+    ) -> DungeonRenderer<'a>
+    {
+        DungeonRenderer { dungeon, player }
     }
     pub fn render(&self, writer: &mut Write, from: i32, to: u32) -> std::io::Result<usize> {
         let start_row = max(from, 0) as usize;
@@ -19,7 +22,7 @@ impl<'a> DungeonRenderer<'a> {
         for (y, row) in self.dungeon[start_row..end_row + 1].iter().enumerate() {
             let mut row_str = String::with_capacity(row.len());
             for (x, cell) in row.iter().enumerate() {
-                if (x as u32, y as u32 + start_row as u32) == *self.player_pos.borrow() {
+                if (x as u32, y as u32 + start_row as u32) == *self.player.position() {
                     row_str.push('@');
                 }
                 else {

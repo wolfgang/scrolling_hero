@@ -2,6 +2,7 @@ use console::Term;
 
 use sch::dungeon_renderer::DungeonRenderer;
 use sch::mutable_position;
+use sch::player::Player;
 use sch::player_controller_old::PlayerControllerOld;
 
 fn main() -> std::io::Result<()> {
@@ -26,10 +27,11 @@ fn main() -> std::io::Result<()> {
         vec![1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
     ];
 
+    let max_x = dungeon[0].len() as u32 - 1;
+    let max_y = dungeon.len() as u32 - 1;
     let player_pos = mutable_position::new(8, 0);
-    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player_pos);
-    let max_x = dungeon[0].len() as u32 -1;
-    let max_y = dungeon.len() as u32 -1;
+    let player = Player::new(8, 0, max_x, max_y);
+    let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
 
     let player_controller = PlayerControllerOld::new(&player_pos, max_x, max_y);
 
