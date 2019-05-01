@@ -11,7 +11,7 @@ pub struct DungeonRenderer<'a> {
 
 impl<'a> DungeonRenderer<'a> {
     pub fn new(dungeon: &'a Vec<Vec<u16>>, player_pos: &MutablePosition) -> DungeonRenderer<'a> {
-        DungeonRenderer {dungeon: dungeon, player_pos: Rc::clone(player_pos)}
+        DungeonRenderer { dungeon, player_pos: Rc::clone(player_pos) }
     }
     pub fn render(&self, writer: &mut Write, from: i32, to: u32) -> std::io::Result<usize> {
         let start_row = max(from, 0) as usize;
