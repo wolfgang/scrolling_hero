@@ -1,4 +1,3 @@
-
 mod player_factory;
 
 const MAX_X: u32 = 10;
@@ -35,3 +34,16 @@ fn move_right_until_max_x() {
     player.move_right();
     assert_eq!((MAX_X, 0), player.position());
 }
+
+#[test]
+fn move_down_until_max_y() {
+    let player = player_factory::with_bounds(0, MAX_Y - 2, MAX_X, MAX_Y);
+    player.move_down();
+    assert_eq!((0, MAX_Y - 1), player.position());
+    player.move_down();
+    assert_eq!((0, MAX_Y), player.position());
+    player.move_down();
+    player.move_down();
+    assert_eq!((0, MAX_Y), player.position());
+}
+
