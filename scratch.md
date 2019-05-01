@@ -1,8 +1,10 @@
 # Build Order 
 
-Output the dungeon
+[X] Output the dungeon
 
-Move through the dungeon (not generated yet)
+[X] Move through the dungeon (not generated yet)
+
+[ ] Stop movement at walls
 
 Generate the dungeon
 ```
