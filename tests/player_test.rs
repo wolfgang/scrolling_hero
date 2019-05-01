@@ -34,18 +34,6 @@ fn move_right_until_max_x() {
 }
 
 #[test]
-fn move_up_until_zero_y() {
-    let player = Player::new(0, 2, MAX_X, MAX_Y);
-    player.move_up();
-    assert_eq!((0, 1), *player.position());
-    player.move_up();
-    assert_eq!((0, 0), *player.position());
-    player.move_up();
-    player.move_up();
-    assert_eq!((0, 0), *player.position());
-}
-
-#[test]
 fn move_down_until_max_y() {
     let player = Player::new(0, MAX_Y - 2, MAX_X, MAX_Y);
     player.move_down();
