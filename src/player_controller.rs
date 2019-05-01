@@ -1,7 +1,8 @@
-use console::{Key};
 use std::rc::Rc;
 
-use crate::player_pos::{MutablePosition};
+use console::Key;
+
+use crate::mutable_position::MutablePosition;
 
 pub struct PlayerController {
     player_pos: MutablePosition,

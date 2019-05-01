@@ -1,8 +1,8 @@
-use sch::player_pos;
+use sch::mutable_position;
 
 #[test]
 fn new_creates_rc_with_refcell() {
-    let player_pos = player_pos::new(1, 2);
+    let player_pos = mutable_position::new(1, 2);
 
     assert_eq!(1, player_pos.borrow().0);
     assert_eq!(2, player_pos.borrow().1);

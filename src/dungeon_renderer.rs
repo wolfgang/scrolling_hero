@@ -1,7 +1,8 @@
-use std::io::{Write};
+use std::cmp::{max, min};
+use std::io::Write;
 use std::rc::Rc;
-use std::cmp::{min, max};
-use crate::player_pos::{MutablePosition};
+
+use crate::mutable_position::MutablePosition;
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
