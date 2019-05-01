@@ -42,8 +42,8 @@ impl Player {
         }
     }
 
-    pub fn position(&self) -> Ref<(u32, u32)> {
-        self.position.borrow()
+    pub fn position(&self) -> (u32, u32) {
+        *self.position.borrow()
     }
 
     pub fn move_left(&self) {

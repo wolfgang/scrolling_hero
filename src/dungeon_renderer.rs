@@ -22,7 +22,7 @@ impl<'a> DungeonRenderer<'a> {
         for (y, row) in self.dungeon[start_row..end_row + 1].iter().enumerate() {
             let mut row_str = String::with_capacity(row.len());
             for (x, cell) in row.iter().enumerate() {
-                if (x as u32, y as u32 + start_row as u32) == *self.player.position() {
+                if (x as u32, y as u32 + start_row as u32) == self.player.position() {
                     row_str.push('@');
                 }
                 else {

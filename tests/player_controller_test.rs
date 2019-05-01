@@ -8,7 +8,7 @@ fn move_left() {
     let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowLeft);
-    assert_eq!((9, 0), *player.position());
+    assert_eq!((9, 0), player.position());
 }
 
 #[test]
@@ -16,7 +16,7 @@ fn move_right() {
     let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowRight);
-    assert_eq!((11, 0), *player.position());
+    assert_eq!((11, 0), player.position());
 }
 
 #[test]
@@ -24,7 +24,7 @@ fn move_down() {
     let player = player_at(10, 0);
     let player_controller = PlayerController::new(&player);
     player_controller.on_key(Key::ArrowDown);
-    assert_eq!((10, 1), *player.position());
+    assert_eq!((10, 1), player.position());
 }
 
 #[test]
