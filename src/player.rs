@@ -1,5 +1,6 @@
-use std::cell::{Ref, RefCell};
-use crate::move_predicate::MovePredicate;
+use std::cell::RefCell;
+
+use crate::move_predicate::{MovePredicate, WithPosition};
 
 struct NonCollidingPlayerMovePredicate {
     max_x: u32,
@@ -7,15 +8,16 @@ struct NonCollidingPlayerMovePredicate {
 }
 
 impl MovePredicate for NonCollidingPlayerMovePredicate {
-    fn can_move_left(&self, mover: &Player) -> bool {
+    fn can_move_left(&self, mover: &WithPosition) -> bool {
         mover.position().0 > 0
     }
 
-    fn can_move_right(&self, mover: &Player) -> bool {
+    fn can_move_right(&self, mover: &WithPosition) -> bool {
         mover.position().0 < self.max_x
     }
 
-    fn can_move_down(&self, mover: &Player) -> bool {
+    fn can_move_down(&self, mover: &WithPosition) -> bool {
+
         mover.position().1 < self.max_y
     }
 }
@@ -32,6 +34,12 @@ impl NonCollidingPlayerMovePredicate {
 pub struct Player {
     position: RefCell<(u32, u32)>,
     move_predicate: Box<dyn MovePredicate>,
+}
+
+impl WithPosition for Player {
+    fn position(&self) -> (u32, u32) {
+        self.position()
+    }
 }
 
 impl Player {
