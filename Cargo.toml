@@ -4,6 +4,9 @@ version = "0.1.0"
 authors = ["wolfgang <wolfgang@wolfgangdeutsch.work>"]
 edition = "2018"
 
+[dev-dependencies]
+speculate = "0.1"
+
 [dependencies]
 rand = "0.6.4"
 console = "0.7.5"
