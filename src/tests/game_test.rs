@@ -84,6 +84,42 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
 }
 
 #[test]
+fn player_collides_with_walls() {
+    let dungeon = make_dungeon(vec![
+        "#####",
+        "###.#",
+        "#####",
+    ]);
+    let (mut game, mut buffer) = setup(dungeon, (3, 1));
+    game.on_key(Key::ArrowLeft);
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#####",
+        "###@#",
+        "#####"
+    ]);
+
+
+    game.on_key(Key::ArrowRight);
+    buffer.set_position(0);
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#####",
+        "###@#",
+        "#####"
+    ]);
+
+    game.on_key(Key::ArrowDown);
+    buffer.set_position(0);
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#####",
+        "###@#",
+        "#####"
+    ]);
+}
+
+#[test]
 fn dont_try_to_render_dungeon_line_beyond_first() {
     let dungeon = make_dungeon(vec![
         "#....",

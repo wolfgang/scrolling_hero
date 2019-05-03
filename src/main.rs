@@ -13,7 +13,7 @@ fn main() -> std::io::Result<()> {
         vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
     ];
 
-    let mut game = Game::new(dungeon, (8, 0));
+    let mut game = Game::new(dungeon, (8, 1));
 
     loop {
         let num_lines = game.render(&mut term)?;

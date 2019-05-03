@@ -36,10 +36,24 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
+        let x = self.player_position.0 as usize;
+        let y = self.player_position.1 as usize;
         match key {
-            Key::ArrowDown => { self.player_position.1 += 1; }
-            Key::ArrowLeft => { self.player_position.0 -= 1; }
-            Key::ArrowRight => { self.player_position.0 += 1; }
+            Key::ArrowLeft => {
+                if self.dungeon[y][x - 1] == 0 {
+                    self.player_position.0 -= 1;
+                }
+            }
+            Key::ArrowRight => {
+                if self.dungeon[y][x + 1] == 0 {
+                    self.player_position.0 += 1;
+                }
+            }
+            Key::ArrowDown => {
+                if self.dungeon[y + 1][x] == 0 {
+                    self.player_position.1 += 1;
+                }
+            }
             _ => {}
         }
     }
