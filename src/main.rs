@@ -1,4 +1,4 @@
-use console::Term;
+use console::{Key, Term};
 
 use sch::game::Game;
 
@@ -26,11 +26,10 @@ fn main() -> std::io::Result<()> {
         let num_lines = game.render(&mut term)?;
 
         let key = term.read_key().unwrap();
+        if key == Key::Escape { return Ok(()) }
+
         game.on_key(key);
 
         term.clear_last_lines(num_lines as usize)?;
     }
-
-
-    Ok(())
 }

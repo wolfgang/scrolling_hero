@@ -16,9 +16,9 @@ impl Game {
 
 
     pub fn render(&self, writer: &mut Write) -> std::io::Result<(u32)> {
-        let start_y = max(0, self.player_position.1 as i32 - self.camera_offset) as usize;
-        let end_y = min(self.dungeon.len() - 1, self.player_position.1 as usize + self.camera_offset as usize);
-
+        let player_y = self.player_position.1;
+        let start_y = max(0, player_y as i32 - self.camera_offset) as usize;
+        let end_y = min(self.dungeon.len() - 1, player_y as usize + self.camera_offset as usize);
 
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
