@@ -1,3 +1,4 @@
+use std::cmp::{max, min};
 use std::io::Write;
 
 use console::Key;
@@ -14,8 +15,8 @@ impl Game {
 
 
     pub fn render(&self, writer: &mut Write) -> std::io::Result<()> {
-        let start_y = self.player_position.1 as usize - 1;
-        let end_y = self.player_position.1 as usize + 1;
+        let start_y = max(0, self.player_position.1 as i32 - 1) as usize;
+        let end_y = min(self.dungeon.len() - 1, self.player_position.1 as usize + 1);
 
 
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {

@@ -58,7 +58,6 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
 
 
     let mut game = Game::new(dungeon, (1, 1));
-
     let mut buffer = Cursor::new(Vec::new());
 
     game.render(&mut buffer).unwrap();
@@ -89,6 +88,42 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
     ]);
 }
 
+#[test]
+fn dont_try_to_render_dungeon_line_beyond_first() {
+    let dungeon = make_dungeon(vec![
+        "#....",
+        "#...#",
+        "#..##",
+    ]);
+
+    let mut game = Game::new(dungeon, (1, 0));
+    let mut buffer = Cursor::new(Vec::new());
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#@...",
+        "#...#",
+    ]);
+}
+
+#[test]
+fn dont_try_to_render_dungeon_line_beyond_last() {
+    let dungeon = make_dungeon(vec![
+        "#....",
+        "#...#",
+        "#..##",
+    ]);
+
+    let mut game = Game::new(dungeon, (1, 2));
+    let mut buffer = Cursor::new(Vec::new());
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#...#",
+        "#@.##",
+    ]);
+}
+
 
 fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
     let mut result = Vec::new();
@@ -103,7 +138,6 @@ fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
     }
     result
 }
-
 
 fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
     let expected_string = format!("{}\n", expected_lines.join("\n"));
