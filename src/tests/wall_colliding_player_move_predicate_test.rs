@@ -38,9 +38,7 @@ fn can_not_move_right_if_wall_is_to_the_right() {
         vec![0, 0, 0, 0],
         vec![0, 0, 1, 0]
     ];
-
-    let predicate: Rc<MovePredicate> = Rc::new(WallCollidingPlayerMovePredicate::new(Rc::new(dungeon)));
-    let player = Player::new(1, 1, &predicate);
+    let player = player_at(1, 1, dungeon);
 
     player.move_right();
     assert_eq!((1, 1), player.position());
@@ -52,9 +50,14 @@ fn can_move_right_if_no_wall_is_to_the_right() {
         vec![0, 0, 0, 0],
         vec![0, 0, 0, 0]
     ];
-    let predicate: Rc<MovePredicate> = Rc::new(WallCollidingPlayerMovePredicate::new(Rc::new(dungeon)));
-    let player = Player::new(1, 1, &predicate);
+    let player = player_at(1, 1, dungeon);
 
     player.move_right();
     assert_eq!((2, 1), player.position());
+}
+
+fn player_at(x: u32, y: u32, dungeon: Dungeon) -> Player {
+    let predicate = WallCollidingPlayerMovePredicate::new(Rc::new(dungeon));
+    let predicate_rc: Rc<MovePredicate> = Rc::new(predicate);
+    Player::new(1, 1, &predicate_rc)
 }
