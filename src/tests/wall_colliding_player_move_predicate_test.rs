@@ -11,8 +11,8 @@ struct WallCollidingPlayerMovePredicate {
 }
 
 impl<'a> WallCollidingPlayerMovePredicate {
-    pub fn new(dungeon: Rc<Dungeon>) -> WallCollidingPlayerMovePredicate {
-        WallCollidingPlayerMovePredicate { dungeon }
+    pub fn new(dungeon: &Rc<Dungeon>) -> WallCollidingPlayerMovePredicate {
+        WallCollidingPlayerMovePredicate { dungeon: Rc::clone(dungeon) }
     }
 }
 
@@ -57,7 +57,7 @@ fn can_move_right_if_no_wall_is_to_the_right() {
 }
 
 fn player_at(x: u32, y: u32, dungeon: Dungeon) -> Player {
-    let predicate = WallCollidingPlayerMovePredicate::new(Rc::new(dungeon));
+    let predicate = WallCollidingPlayerMovePredicate::new(&Rc::new(dungeon));
     let predicate_rc: Rc<MovePredicate> = Rc::new(predicate);
     Player::new(1, 1, &predicate_rc)
 }
