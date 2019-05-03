@@ -59,3 +59,39 @@ impl MovePredicate for WallCollidingPlayerMovePredicate {
     }
 }
 
+pub struct CompositePlayerMovePredicate {
+    members: Vec<Rc<MovePredicate>>
+}
+
+impl CompositePlayerMovePredicate {
+    pub fn new() -> CompositePlayerMovePredicate {
+        CompositePlayerMovePredicate { members: Vec::new() }
+    }
+
+    pub fn add(&mut self, member: &Rc<MovePredicate>) {
+        self.members.push(Rc::clone(member));
+    }
+}
+
+impl MovePredicate for CompositePlayerMovePredicate {
+    fn can_move_left(&self, mover: &WithPosition) -> bool {
+        for m in &self.members {
+            if !m.can_move_left(mover) { return false; }
+        }
+        return true;
+    }
+
+    fn can_move_right(&self, mover: &WithPosition) -> bool {
+        for m in &self.members {
+            if !m.can_move_right(mover) { return false; }
+        }
+        return true;
+    }
+
+    fn can_move_down(&self, mover: &WithPosition) -> bool {
+        for m in &self.members {
+            if !m.can_move_down(mover) { return false; }
+        }
+        return true;
+    }
+}
