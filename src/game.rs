@@ -6,17 +6,18 @@ use console::Key;
 pub struct Game {
     dungeon: Vec<Vec<u16>>,
     player_position: (u32, u32),
+    camera_offset: i32
 }
 
 impl Game {
-    pub fn new(dungeon: Vec<Vec<u16>>, player_position: (u32, u32)) -> Game {
-        Game { dungeon, player_position }
+    pub fn new(dungeon: Vec<Vec<u16>>, player_position: (u32, u32), camera_offset: i32) -> Game {
+        Game { dungeon, player_position, camera_offset }
     }
 
 
     pub fn render(&self, writer: &mut Write) -> std::io::Result<(u32)> {
-        let start_y = max(0, self.player_position.1 as i32 - 1) as usize;
-        let end_y = min(self.dungeon.len() - 1, self.player_position.1 as usize + 1);
+        let start_y = max(0, self.player_position.1 as i32 - self.camera_offset) as usize;
+        let end_y = min(self.dungeon.len() - 1, self.player_position.1 as usize + self.camera_offset as usize);
 
 
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {

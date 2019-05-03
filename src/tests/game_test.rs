@@ -155,7 +155,7 @@ fn make_game(strings: Vec<&str>) -> Game {
         }
         result.push(result_row);
     }
-    Game::new(result, player_pos)
+    Game::new(result, player_pos, 1)
 }
 
 
