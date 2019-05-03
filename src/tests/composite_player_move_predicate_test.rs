@@ -38,25 +38,31 @@ fn always_true_for_empty_composite() {
 }
 
 #[test]
-fn returns_false_if_some_are_false() {
-    let mut composite = CompositePlayerMovePredicate::new();
-    let mock1: Rc<MovePredicate> = Rc::new(MockPredicate::new(true));
-    let mock2: Rc<MovePredicate> = Rc::new(MockPredicate::new(false));
-    composite.add(&mock1);
-    composite.add(&mock2);
-    let predicate: Rc<MovePredicate> = Rc::new(composite);
-    let player = Player::new(0, 0, &predicate);
-    assert_eq!(predicate.can_move_right(&player), false);
+fn returns_false_if_some_or_all_are_false() {
+    let (player1, predicate1) = with_mock_results(true, false);
+    assert_eq!(predicate1.can_move_right(&player1), false);
+    let (player2, predicate2) = with_mock_results(false, true);
+    assert_eq!(predicate2.can_move_right(&player2), false);
+    let (player3, predicate3) = with_mock_results(false, false);
+    assert_eq!(predicate3.can_move_right(&player3), false);
+
 }
 
 #[test]
 fn returns_true_if_all_are_true() {
+    let (player, predicate) = with_mock_results(true, true);
+    assert_eq!(predicate.can_move_right(&player), true);
+}
+
+fn with_mock_results(result1: bool, result2: bool) -> (Player, Rc<MovePredicate>) {
     let mut composite = CompositePlayerMovePredicate::new();
-    let mock1: Rc<MovePredicate> = Rc::new(MockPredicate::new(true));
-    let mock2: Rc<MovePredicate> = Rc::new(MockPredicate::new(true));
-    composite.add(&mock1);
-    composite.add(&mock2);
+    composite.add(&mock_predicate(result1));
+    composite.add(&mock_predicate(result2));
     let predicate: Rc<MovePredicate> = Rc::new(composite);
     let player = Player::new(0, 0, &predicate);
-    assert_eq!(predicate.can_move_right(&player), true);
+    (player, predicate)
+}
+
+fn mock_predicate(result: bool) -> Rc<MovePredicate> {
+    Rc::new(MockPredicate::new(result))
 }
