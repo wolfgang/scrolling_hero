@@ -1,10 +1,20 @@
-# Build Order 
+Render dungeon
+- Floor tile
+- Wall tile
+- Player
 
-[X] Output the dungeon
+Move player on cursor left/right/down
 
-[X] Move through the dungeon (not generated yet)
+Prevent player from moving over walls
 
-[ ] Stop movement at walls
+Prevent player from moving out of bounds of dungeon
+
+Show X lines of dungeon, keeping player in the center
+
+
+
+
+
 
 Generate the dungeon
 ```
