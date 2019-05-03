@@ -1,13 +1,13 @@
 use console::Key;
 
-use crate::player::Player;
+use crate::player::Player2;
 
 pub struct PlayerController<'a> {
-    player: &'a Player<'a>
+    player: &'a Player2
 }
 
 impl<'a> PlayerController<'a> {
-    pub fn new(player: &'a Player<'a>) -> PlayerController {
+    pub fn new(player: &'a Player2) -> PlayerController {
         PlayerController { player }
     }
 

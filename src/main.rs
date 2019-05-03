@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player2);
 
-    let player_controller = PlayerController::new(&player);
+    let player_controller = PlayerController::new(&player2);
 
     let camera_offset = 2;
 
