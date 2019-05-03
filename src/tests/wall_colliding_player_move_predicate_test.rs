@@ -71,10 +71,7 @@ fn can_not_move_down_if_no_wall_is_below() {
     assert_eq!((1, 1), player.position());
 }
 
-
-
 fn player_at(x: u32, y: u32, dungeon: Dungeon) -> Player {
     let predicate = WallCollidingPlayerMovePredicate::new(&Rc::new(dungeon));
-    let predicate_rc: Rc<MovePredicate> = Rc::new(predicate);
-    Player::new(x, y, &predicate_rc)
+    Player::new(x, y, &(Rc::new(predicate) as Rc<MovePredicate>))
 }
