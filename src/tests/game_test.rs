@@ -48,22 +48,24 @@ fn player_is_moved_left_right_by_cursor_keys() {
 
 
 #[test]
-fn player_is_moved_down_by_arrow_down_key() {
+fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
     let dungeon = vec![
         vec![1, 0, 0, 0, 0],
         vec![1, 0, 0, 0, 1],
         vec![1, 0, 0, 1, 1],
-        vec![0, 0, 0, 0, 0]
+        vec![0, 0, 1, 1, 1],
+        vec![0, 0, 0, 1, 1],
+        vec![0, 0, 0, 0, 1]
     ];
 
-    let mut game = Game::new(dungeon, (2, 1));
+    let mut game = Game::new(dungeon, (1, 1));
 
     let mut buffer = Cursor::new(Vec::new());
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
         "#....",
-        "#.@.#",
+        "#@..#",
         "#..##"
     ]);
 
@@ -73,29 +75,20 @@ fn player_is_moved_down_by_arrow_down_key() {
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
         "#...#",
-        "#.@##",
-        "....."
-    ]);
-
-    buffer.set_position(0);
-    game.on_key(Key::ArrowLeft);
-
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
-        "#...#",
         "#@.##",
-        "....."
+        "..###"
     ]);
 
     buffer.set_position(0);
-    game.on_key(Key::ArrowRight);
+    game.on_key(Key::ArrowDown);
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
-        "#...#",
-        "#.@##",
-        "....."
+        "#..##",
+        ".@###",
+        "...##"
     ]);
+
 }
 
 
