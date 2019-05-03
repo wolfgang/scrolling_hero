@@ -6,7 +6,49 @@ use console::Key;
 use crate::game::Game;
 
 #[test]
-fn player_is_moved_by_cursor_keys() {
+fn player_is_moved_left_right_by_cursor_keys() {
+    let dungeon = vec![
+        vec![1, 0, 0, 1],
+        vec![1, 0, 0, 1],
+        vec![1, 0, 0, 1],
+    ];
+
+    let mut game = Game::new(dungeon, (2, 1));
+
+    let mut buffer = Cursor::new(Vec::new());
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#..#",
+        "#.@#",
+        "#..#"
+    ]);
+
+    buffer.set_position(0);
+    game.on_key(Key::ArrowLeft);
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#..#",
+        "#@.#",
+        "#..#"
+    ]);
+
+    buffer.set_position(0);
+    game.on_key(Key::ArrowRight);
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#..#",
+        "#.@#",
+        "#..#"
+    ]);
+
+}
+
+
+#[test]
+fn player_is_moved_down_by_arrow_down_key() {
     let dungeon = vec![
         vec![1, 0, 0, 0, 0],
         vec![1, 0, 0, 0, 1],
@@ -23,7 +65,6 @@ fn player_is_moved_by_cursor_keys() {
         "#....",
         "#.@.#",
         "#..##"
-
     ]);
 
     buffer.set_position(0);
@@ -55,8 +96,8 @@ fn player_is_moved_by_cursor_keys() {
         "#.@##",
         "....."
     ]);
-
 }
+
 
 fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
     let expected_string = format!("{}\n", expected_lines.join("\n"));
