@@ -7,11 +7,11 @@ use crate::game::Game;
 
 #[test]
 fn player_is_moved_left_right_by_cursor_keys() {
-    let dungeon = vec![
-        vec![1, 0, 0, 1],
-        vec![1, 0, 0, 1],
-        vec![1, 0, 0, 1],
-    ];
+    let dungeon = make_dungeon(vec![
+        "#..#",
+        "#..#",
+        "#..#"
+    ]);
 
     let mut game = Game::new(dungeon, (2, 1));
 
@@ -43,20 +43,19 @@ fn player_is_moved_left_right_by_cursor_keys() {
         "#.@#",
         "#..#"
     ]);
-
 }
-
 
 #[test]
 fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
-    let dungeon = vec![
-        vec![1, 0, 0, 0, 0],
-        vec![1, 0, 0, 0, 1],
-        vec![1, 0, 0, 1, 1],
-        vec![0, 0, 1, 1, 1],
-        vec![0, 0, 0, 1, 1],
-        vec![0, 0, 0, 0, 1]
-    ];
+    let dungeon = make_dungeon(vec![
+        "#....",
+        "#...#",
+        "#..##",
+        "..###",
+        "...##",
+        "#....#"
+    ]);
+
 
     let mut game = Game::new(dungeon, (1, 1));
 
@@ -88,7 +87,21 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
         ".@###",
         "...##"
     ]);
+}
 
+
+fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
+    let mut result = Vec::new();
+
+    for row in strings.iter() {
+        let mut result_row = Vec::new();
+        for c in (*row).chars() {
+            if c == '.' { result_row.push(0) }
+            if c == '#' { result_row.push(1) }
+        }
+        result.push(result_row);
+    }
+    result
 }
 
 
