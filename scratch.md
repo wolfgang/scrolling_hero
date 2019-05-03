@@ -1,11 +1,8 @@
-Render dungeon
-- Floor tile
-- Wall tile
-- Player
+[X] Render dungeon
 
-Move player on cursor left/right/down
+[X] Move player on cursor left/right/down
 
-Show X lines of dungeon, keeping player in the center
+[ ] Show X lines of dungeon, keeping player in the center
 
 Prevent player from moving over walls
 

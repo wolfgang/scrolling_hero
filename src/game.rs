@@ -14,9 +14,13 @@ impl Game {
 
 
     pub fn render(&self, writer: &mut Write) -> std::io::Result<()> {
-        for (y, row) in self.dungeon.iter().enumerate() {
+        let start_y = self.player_position.1 as usize - 1;
+        let end_y = self.player_position.1 as usize + 1;
+
+
+        for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
-                if (x as u32, y as u32) == self.player_position {
+                if (x as u32, y as u32 + start_y as u32) == self.player_position {
                     writer.write(b"@")?;
                 } else {
                     if *col == 0 { writer.write(b".")?; }

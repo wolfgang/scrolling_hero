@@ -6,42 +6,24 @@ use console::Key;
 use crate::game::Game;
 
 #[test]
-fn renders_dungeon_and_player() {
-    let dungeon = vec![
-        vec![1, 0, 1, 1],
-        vec![1, 0, 0, 1],
-        vec![1, 1, 0, 1]
-    ];
-
-    let game = Game::new(dungeon, (2, 1));
-
-    let mut buffer = Cursor::new(Vec::new());
-    game.render(&mut buffer).unwrap();
-
-    assert_lines(&buffer, vec![
-        "#.##",
-        "#.@#",
-        "##.#"
-    ]);
-}
-
-#[test]
 fn player_is_moved_by_cursor_keys() {
     let dungeon = vec![
-        vec![1, 0, 0, 1],
-        vec![1, 0, 0, 1],
-        vec![1, 0, 0, 1]
+        vec![1, 0, 0, 0, 0],
+        vec![1, 0, 0, 0, 1],
+        vec![1, 0, 0, 1, 1],
+        vec![0, 0, 0, 0, 0]
     ];
 
-    let mut game = Game::new(dungeon, (2, 0));
+    let mut game = Game::new(dungeon, (2, 1));
 
     let mut buffer = Cursor::new(Vec::new());
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
-        "#.@#",
-        "#..#",
-        "#..#"
+        "#....",
+        "#.@.#",
+        "#..##"
+
     ]);
 
     buffer.set_position(0);
@@ -49,9 +31,9 @@ fn player_is_moved_by_cursor_keys() {
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
-        "#..#",
-        "#.@#",
-        "#..#"
+        "#...#",
+        "#.@##",
+        "....."
     ]);
 
     buffer.set_position(0);
@@ -59,9 +41,9 @@ fn player_is_moved_by_cursor_keys() {
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
-        "#..#",
-        "#@.#",
-        "#..#"
+        "#...#",
+        "#@.##",
+        "....."
     ]);
 
     buffer.set_position(0);
@@ -69,9 +51,9 @@ fn player_is_moved_by_cursor_keys() {
 
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, vec![
-        "#..#",
-        "#.@#",
-        "#..#"
+        "#...#",
+        "#.@##",
+        "....."
     ]);
 
 }

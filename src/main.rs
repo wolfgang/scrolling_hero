@@ -13,7 +13,7 @@ fn main() -> std::io::Result<()> {
         vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]
     ];
 
-    let mut game = Game::new(dungeon, (8, 0));
+    let mut game = Game::new(dungeon, (8, 1));
 
     loop {
         game.render(&mut term)?;
@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()> {
         let key = term.read_key().unwrap();
         game.on_key(key);
 
-        term.clear_last_lines(5)?;
+        term.clear_last_lines(3)?;
     }
 
 
