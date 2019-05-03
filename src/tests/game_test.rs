@@ -14,21 +14,21 @@ fn player_is_moved_left_right_by_cursor_keys() {
     ]);
     let (mut game, mut buffer) = setup(dungeon, (2, 1));
 
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#..#",
         "#.@#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#..#",
         "#@.#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -48,21 +48,21 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
 
     let (mut game, mut buffer) = setup(dungeon, (1, 1));
 
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#....",
         "#@..#",
         "#..##"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#...#",
         "#@.##",
         "..###"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#..##",
         ".@###",
         "...##"
@@ -79,7 +79,7 @@ fn player_collides_with_walls() {
     let (mut game, mut buffer) = setup(dungeon, (3, 1));
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#####",
         "###@#",
         "#####"
@@ -87,14 +87,14 @@ fn player_collides_with_walls() {
 
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#####",
         "###@#",
         "#####"
@@ -109,9 +109,9 @@ fn dont_try_to_render_dungeon_line_beyond_first() {
         "#..##",
     ]);
 
-    let (mut game, mut buffer) = setup(dungeon, (1, 0));
+    let (game, mut buffer) = setup(dungeon, (1, 0));
 
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#@...",
         "#...#",
     ]);
@@ -125,9 +125,9 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
         "#..##",
     ]);
 
-    let (mut game, mut buffer) = setup(dungeon, (1, 2));
+    let (game, mut buffer) = setup(dungeon, (1, 2));
 
-    verify_lines_rendered(&mut game, &mut buffer, vec![
+    verify_lines_rendered(&game, vec![
         "#...#",
         "#@.##",
     ]);
@@ -141,7 +141,9 @@ fn render_returns_number_of_lines_rendered() {
         "#..##",
     ]);
 
-    let (mut game, mut buffer) = setup(dungeon, (1, 0));
+    let (mut game, mut _buffer) = setup(dungeon, (1, 0));
+
+    let mut buffer = Cursor::new(Vec::new());
 
     assert_eq!(game.render(&mut buffer).unwrap(), 2);
     game.on_key(Key::ArrowDown);
@@ -169,8 +171,8 @@ fn setup(dungeon: Vec<Vec<u16>>, player_position: (u32, u32)) -> (Game, Cursor<V
     (game, buffer)
 }
 
-fn verify_lines_rendered(game: &mut Game, mut buffer: &mut Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
-    buffer.set_position(0);
+fn verify_lines_rendered(game: &Game, expected_lines: Vec<&str>) {
+    let mut buffer = Cursor::new(Vec::new());
     game.render(&mut buffer).unwrap();
     assert_lines(&buffer, expected_lines);
 }
