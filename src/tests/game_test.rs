@@ -14,28 +14,21 @@ fn player_is_moved_left_right_by_cursor_keys() {
     ]);
     let (mut game, mut buffer) = setup(dungeon, (2, 1));
 
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#..#",
         "#.@#",
         "#..#"
     ]);
 
-    buffer.set_position(0);
     game.on_key(Key::ArrowLeft);
-
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#..#",
         "#@.#",
         "#..#"
     ]);
 
-    buffer.set_position(0);
     game.on_key(Key::ArrowRight);
-
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -55,28 +48,21 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
 
     let (mut game, mut buffer) = setup(dungeon, (1, 1));
 
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#....",
         "#@..#",
         "#..##"
     ]);
 
-    buffer.set_position(0);
     game.on_key(Key::ArrowDown);
-
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#...#",
         "#@.##",
         "..###"
     ]);
 
-    buffer.set_position(0);
     game.on_key(Key::ArrowDown);
-
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#..##",
         ".@###",
         "...##"
@@ -91,9 +77,9 @@ fn player_collides_with_walls() {
         "#####",
     ]);
     let (mut game, mut buffer) = setup(dungeon, (3, 1));
+
     game.on_key(Key::ArrowLeft);
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#####",
         "###@#",
         "#####"
@@ -101,18 +87,14 @@ fn player_collides_with_walls() {
 
 
     game.on_key(Key::ArrowRight);
-    buffer.set_position(0);
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowDown);
-    buffer.set_position(0);
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#####",
         "###@#",
         "#####"
@@ -127,10 +109,9 @@ fn dont_try_to_render_dungeon_line_beyond_first() {
         "#..##",
     ]);
 
-    let (game, mut buffer) = setup(dungeon, (1, 0));
+    let (mut game, mut buffer) = setup(dungeon, (1, 0));
 
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#@...",
         "#...#",
     ]);
@@ -144,10 +125,9 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
         "#..##",
     ]);
 
-    let (game, mut buffer) = setup(dungeon, (1, 2));
+    let (mut game, mut buffer) = setup(dungeon, (1, 2));
 
-    game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, vec![
+    verify_lines_rendered(&mut game, &mut buffer, vec![
         "#...#",
         "#@.##",
     ]);
@@ -168,7 +148,6 @@ fn render_returns_number_of_lines_rendered() {
     assert_eq!(game.render(&mut buffer).unwrap(), 3);
 }
 
-
 fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
     let mut result = Vec::new();
 
@@ -183,10 +162,17 @@ fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
     result
 }
 
+
 fn setup(dungeon: Vec<Vec<u16>>, player_position: (u32, u32)) -> (Game, Cursor<Vec<u8>>) {
     let game = Game::new(dungeon, player_position);
     let buffer = Cursor::new(Vec::new());
     (game, buffer)
+}
+
+fn verify_lines_rendered(game: &mut Game, mut buffer: &mut Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
+    buffer.set_position(0);
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, expected_lines);
 }
 
 fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
