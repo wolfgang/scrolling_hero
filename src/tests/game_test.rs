@@ -45,7 +45,6 @@ fn player_is_moved_by_cursor_keys() {
     ]);
 
     buffer.set_position(0);
-
     game.on_key(Key::ArrowDown);
 
     game.render(&mut buffer).unwrap();
@@ -54,6 +53,27 @@ fn player_is_moved_by_cursor_keys() {
         "#.@#",
         "#..#"
     ]);
+
+    buffer.set_position(0);
+    game.on_key(Key::ArrowLeft);
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#..#",
+        "#@.#",
+        "#..#"
+    ]);
+
+    buffer.set_position(0);
+    game.on_key(Key::ArrowRight);
+
+    game.render(&mut buffer).unwrap();
+    assert_lines(&buffer, vec![
+        "#..#",
+        "#.@#",
+        "#..#"
+    ]);
+
 }
 
 fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {

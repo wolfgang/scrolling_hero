@@ -31,6 +31,11 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
-        self.player_position.1 += 1;
+        match key {
+            Key::ArrowDown => { self.player_position.1 += 1; }
+            Key::ArrowLeft => { self.player_position.0 -= 1; }
+            Key::ArrowRight => { self.player_position.0 += 1; }
+            _ => {}
+        }
     }
 }
