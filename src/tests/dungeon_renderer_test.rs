@@ -1,9 +1,8 @@
 use std::io::Cursor;
 use std::str;
 
-use sch::dungeon_renderer::DungeonRenderer;
-
-mod player_factory;
+use crate::dungeon_renderer::DungeonRenderer;
+use crate::tests::player_factory;
 
 #[test]
 fn renders_dungeon_from_vectors() {
