@@ -1,27 +1,19 @@
 use std::io::Cursor;
 use std::str;
 
-use speculate::speculate;
-
 use sch::dungeon_renderer::DungeonRenderer;
-use sch::player::Player;
-use sch::player::move_predicates::NonCollidingPlayerMovePredicate;
 
-speculate! {
+mod player_factory;
 
-before {
-    let predicate = NonCollidingPlayerMovePredicate::new(100, 100);
-
-}
-
-it "renders_dungeon_from_vectors" {
+#[test]
+fn renders_dungeon_from_vectors() {
     let dungeon = vec![
         vec![1, 1, 1, 1, 0, 1, 1, 1, 1],
         vec![1, 1, 0, 0, 0, 0, 1, 1, 1],
         vec![1, 1, 1, 1, 0, 1, 0, 1, 1]
     ];
 
-    let player = Player::new(4, 1, &predicate);
+    let player = player_factory::without_bounds(4, 1);
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
     player.move_right();
@@ -31,7 +23,9 @@ it "renders_dungeon_from_vectors" {
     assert_written_to(&buffer, "##...@###\n####.#.##\n");
 }
 
-it "renders_dungeon_not_beyond_end" {
+
+#[test]
+fn renders_dungeon_not_beyond_end() {
     let dungeon = vec![
         vec![1, 1, 1],
         vec![1, 0, 0],
@@ -39,7 +33,7 @@ it "renders_dungeon_not_beyond_end" {
         vec![0, 0, 1]
     ];
 
-    let player = Player::new(0, 0, &predicate);
+    let player = player_factory::without_bounds(0, 0);
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
@@ -49,7 +43,8 @@ it "renders_dungeon_not_beyond_end" {
     assert_written_to(&buffer, "#.#\n..#\n");
 }
 
-it "renders_dungeon_not_beyond_beginning" {
+#[test]
+fn renders_dungeon_not_beyond_beginning() {
     let dungeon = vec![
         vec![1, 1, 1],
         vec![1, 0, 0],
@@ -57,7 +52,8 @@ it "renders_dungeon_not_beyond_beginning" {
         vec![0, 0, 1]
     ];
 
-    let player = Player::new(3, 3, &predicate);
+    let player = player_factory::without_bounds(3, 3);
+
 
     let dungeon_renderer = DungeonRenderer::new(&dungeon, &player);
     let mut buffer = Cursor::new(Vec::new());
@@ -71,6 +67,4 @@ it "renders_dungeon_not_beyond_beginning" {
 fn assert_written_to(buffer: &Cursor<Vec<u8>>, written: &str) {
     let reference = buffer.get_ref();
     assert_eq!(written, str::from_utf8(reference).unwrap());
-}
-
 }
