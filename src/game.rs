@@ -14,7 +14,7 @@ impl Game {
     }
 
 
-    pub fn render(&self, writer: &mut Write) -> std::io::Result<()> {
+    pub fn render(&self, writer: &mut Write) -> std::io::Result<(u32)> {
         let start_y = max(0, self.player_position.1 as i32 - 1) as usize;
         let end_y = min(self.dungeon.len() - 1, self.player_position.1 as usize + 1);
 
@@ -32,7 +32,7 @@ impl Game {
             writer.write(b"\n")?;
         }
 
-        Ok(())
+        Ok(end_y as u32 - start_y as u32 + 1)
     }
 
     pub fn on_key(&mut self, key: Key) {

@@ -117,6 +117,22 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
     ]);
 }
 
+#[test]
+fn render_returns_number_of_lines_rendered() {
+    let dungeon = make_dungeon(vec![
+        "#....",
+        "#...#",
+        "#..##",
+    ]);
+
+    let (mut game, mut buffer) = setup(dungeon, (1, 0));
+
+    assert_eq!(game.render(&mut buffer).unwrap(), 2);
+    game.on_key(Key::ArrowDown);
+    assert_eq!(game.render(&mut buffer).unwrap(), 3);
+}
+
+
 fn make_dungeon(strings: Vec<&str>) -> Vec<Vec<u16>> {
     let mut result = Vec::new();
 
