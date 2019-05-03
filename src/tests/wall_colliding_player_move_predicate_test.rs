@@ -2,9 +2,7 @@ use std::rc::Rc;
 
 use crate::move_predicate::{MovePredicate, WithPosition};
 use crate::player::Player;
-
-type Dungeon = Vec<Vec<u16>>;
-
+use crate::types::Dungeon;
 
 struct WallCollidingPlayerMovePredicate {
     dungeon: Rc<Dungeon>
