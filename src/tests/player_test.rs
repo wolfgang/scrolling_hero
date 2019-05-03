@@ -5,7 +5,7 @@ const MAX_Y: u32 = 20;
 
 
 #[test]
-fn player2_has_initial_position() {
+fn has_initial_position() {
     let player = player_factory::without_bounds(10, 20);
     assert_eq!((10, 20), player.position());
 }
