@@ -1,8 +1,7 @@
 use console::Key;
 
-use sch::player_controller::PlayerController;
-
-mod player_factory;
+use crate::player_controller::PlayerController;
+use crate::tests::player_factory;
 
 #[test]
 fn move_left() {

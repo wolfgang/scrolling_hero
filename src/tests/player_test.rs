@@ -1,4 +1,4 @@
-mod player_factory;
+use crate::tests::player_factory;
 
 const MAX_X: u32 = 10;
 const MAX_Y: u32 = 20;
