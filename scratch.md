@@ -5,11 +5,12 @@ Render dungeon
 
 Move player on cursor left/right/down
 
+Show X lines of dungeon, keeping player in the center
+
 Prevent player from moving over walls
 
 Prevent player from moving out of bounds of dungeon
 
-Show X lines of dungeon, keeping player in the center
 
 
 

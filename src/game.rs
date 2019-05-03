@@ -1,5 +1,7 @@
 use std::io::Write;
 
+use console::Key;
+
 pub struct Game {
     dungeon: Vec<Vec<u16>>,
     player_position: (u32, u32),
@@ -26,5 +28,9 @@ impl Game {
         }
 
         Ok(())
+    }
+
+    pub fn on_key(&mut self, key: Key) {
+        self.player_position.1 += 1;
     }
 }
