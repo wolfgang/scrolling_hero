@@ -16,12 +16,12 @@ fn main() -> std::io::Result<()> {
     let mut game = Game::new(dungeon, (8, 0));
 
     loop {
-        game.render(&mut term)?;
+        let num_lines = game.render(&mut term)?;
 
         let key = term.read_key().unwrap();
         game.on_key(key);
 
-        term.clear_last_lines(3)?;
+        term.clear_last_lines(num_lines as usize)?;
     }
 
 
