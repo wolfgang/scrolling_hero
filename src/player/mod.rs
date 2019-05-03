@@ -5,14 +5,14 @@ use crate::move_predicate::{MovePredicate, WithPosition};
 
 pub mod move_predicates;
 
-pub struct Player2 {
+pub struct Player {
     position: RefCell<(u32, u32)>,
     move_predicate: Rc<MovePredicate>,
 }
 
-impl Player2 {
-    pub fn new(x: u32, y: u32, move_predicate: &Rc<MovePredicate>) -> Player2 {
-        Player2 {
+impl Player {
+    pub fn new(x: u32, y: u32, move_predicate: &Rc<MovePredicate>) -> Player {
+        Player {
             position: RefCell::new((x, y)),
             move_predicate: Rc::clone(move_predicate),
         }
@@ -41,7 +41,7 @@ impl Player2 {
     }
 }
 
-impl WithPosition for Player2 {
+impl WithPosition for Player {
     fn position(&self) -> (u32, u32) {
         self.position()
     }

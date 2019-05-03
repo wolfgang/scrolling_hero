@@ -1,17 +1,17 @@
 use std::cmp::{max, min};
 use std::io::Write;
 
-use crate::player::Player2;
+use crate::player::Player;
 
 pub struct DungeonRenderer<'a> {
     dungeon: &'a Vec<Vec<u16>>,
-    player: &'a Player2
+    player: &'a Player
 }
 
 impl<'a> DungeonRenderer<'a> {
     pub fn new(
         dungeon: &'a Vec<Vec<u16>>,
-        player: &'a Player2,
+        player: &'a Player,
     ) -> DungeonRenderer<'a>
     {
         DungeonRenderer { dungeon, player }
