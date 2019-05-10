@@ -4,15 +4,16 @@ use std::io::Write;
 use console::Key;
 
 use crate::dungeon_provider::DungeonProvider;
+use crate::types::Dungeon;
 
 pub struct Game {
-    dungeon: Vec<Vec<u16>>,
+    dungeon: Dungeon,
     player_position: (u32, u32),
     camera_offset: i32
 }
 
 impl Game {
-    pub fn new(dungeon: Vec<Vec<u16>>, player_position: (u32, u32), camera_offset: i32) -> Game {
+    pub fn new(dungeon: Dungeon, player_position: (u32, u32), camera_offset: i32) -> Game {
         Game { dungeon, player_position, camera_offset }
     }
 
