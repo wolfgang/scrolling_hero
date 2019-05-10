@@ -1,6 +1,6 @@
-use crate::types::{Dungeon, Position};
+use crate::types::{DungeonLayout, Position};
 
-pub fn make_dungeon(strings: Vec<&str>) -> (Dungeon, Position) {
+pub fn make_dungeon(strings: Vec<&str>) -> (DungeonLayout, Position) {
     let mut result = Vec::new();
     let mut player_pos = (0, 0);
 

@@ -6,10 +6,10 @@ use std::rc::Rc;
 use console::Key;
 
 use crate::dungeon_provider::DungeonProvider;
-use crate::types::{Dungeon, Position};
+use crate::types::{DungeonLayout, Position};
 
 pub struct Game {
-    dungeon: Dungeon,
+    dungeon: DungeonLayout,
     player_position: Position,
     camera_offset: i32
 }
