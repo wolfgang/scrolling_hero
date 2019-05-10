@@ -21,9 +21,9 @@ fn main() -> std::io::Result<()> {
         vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ];
 
-    let dungeon_provider = SingleDungeonProvider::new(dungeon);
+    let mut dungeon_provider = SingleDungeonProvider::new(dungeon);
 
-    let mut game = Game::with_dungeon_provider(&dungeon_provider, (8, 0), 2);
+    let mut game = Game::with_dungeon_provider(&mut dungeon_provider, (8, 0), 2);
 
     loop {
         let num_lines = game.render(&mut term)?;

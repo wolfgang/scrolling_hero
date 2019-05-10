@@ -15,9 +15,9 @@ fn game_can_be_constructed_with_dungeon_provider() {
         "#..#"
     ]);
 
-    let provider = SingleDungeonProvider::new(dungeon);
+    let mut provider = SingleDungeonProvider::new(dungeon);
 
-    let game = Game::with_dungeon_provider(&provider, player_pos, 1);
+    let game = Game::with_dungeon_provider(&mut provider, player_pos, 1);
 
     verify_lines_rendered(&game, vec![
         "#..#",
