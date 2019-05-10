@@ -37,6 +37,11 @@ impl MultiDungeonProvider {
     pub fn new(dungeons: Vec<Dungeon>) -> MultiDungeonProvider {
         MultiDungeonProvider { current_index: 0, dungeons }
     }
+
+    pub fn shared(dungeons: Vec<Dungeon>) -> Rc<RefCell<DungeonProvider>> {
+        Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as Rc<RefCell<DungeonProvider>>
+    }
+
 }
 
 impl Iterator for MultiDungeonProvider {

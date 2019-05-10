@@ -26,3 +26,11 @@ fn multi_dungeon_provider_provides_multiple_dungeons() {
     assert_eq!(dungeon2, provider.next().unwrap());
     assert_eq!(dungeon3, provider.next().unwrap());
 }
+
+#[test]
+fn multi_dungeon_provider_can_be_constructed_as_rc_refcell() {
+    let (dungeon1, _) = make_dungeon(vec!["#.."]);
+
+    let provider = MultiDungeonProvider::shared(vec![dungeon1.clone()]);
+    assert_eq!(dungeon1, provider.borrow_mut().next().unwrap());
+}
