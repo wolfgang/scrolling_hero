@@ -24,7 +24,7 @@ fn main() -> std::io::Result<()> {
 
     let dungeon_provider = SingleDungeonProvider::shared(dungeon);
 
-    let mut game = Game::with_dungeon_provider(&dungeon_provider, (8, 0), 2);
+    let mut game = Game::new(&dungeon_provider, (8, 0), 2);
 
     loop {
         let num_lines = game.render(&mut term)?;

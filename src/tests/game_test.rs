@@ -17,7 +17,7 @@ fn game_can_be_constructed_with_dungeon_provider() {
 
     let provider = SingleDungeonProvider::shared(dungeon);
 
-    let game = Game::with_dungeon_provider(&provider, player_pos, 1);
+    let game = Game::new(&provider, player_pos, 1);
 
     verify_lines_rendered(&game, vec![
         "#..#",
@@ -163,7 +163,7 @@ fn render_returns_number_of_lines_rendered() {
 fn make_game(strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
 
-    Game::new(dungeon, player_pos, 1)
+    Game::new(&SingleDungeonProvider::shared(dungeon), player_pos, 1)
 }
 
 

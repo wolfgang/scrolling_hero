@@ -5,6 +5,7 @@ use std::rc::Rc;
 
 use console::Key;
 
+use crate::dungeon_provider::DungeonProvider;
 use crate::types::{Dungeon, Position};
 
 pub struct Game {
@@ -14,12 +15,8 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(dungeon: Dungeon, player_position: Position, camera_offset: i32) -> Game {
-        Game { dungeon, player_position, camera_offset }
-    }
-
-    pub fn with_dungeon_provider(
-        provider: &Rc<RefCell<dyn Iterator<Item=Dungeon>>>,
+    pub fn new(
+        provider: &Rc<RefCell<DungeonProvider>>,
         player_position: Position,
         camera_offset: i32) -> Game
     {
