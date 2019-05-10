@@ -2,9 +2,9 @@
 
 [X] Move player on cursor left/right/down
 
-[ ] Show X lines of dungeon, keeping player in the center
+[X] Show X lines of dungeon, keeping player in the center
 
-Prevent player from moving over walls
+[X] Prevent player from moving over walls
 
 Prevent player from moving out of bounds of dungeon
 
@@ -61,21 +61,6 @@ Pickup items
 - All "monsters" are really the dev team; killing/freeing them has influence on the level generator
 - It's also about preventing new "Features" like .. traps, monsters, .... so not only manipulate current foes, prevent new foes for a while
 
-
-
-# Example dungeon
-```
-        @
-########.##########
-###.......#########
-######.......######
-###.$..####GG######
-######.####..T...##
-######..####.######
-####....###..######
-####....###..######
-#....D............#
-```
 
 # Gameplay/Brainstorm
 
