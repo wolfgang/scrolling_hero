@@ -20,7 +20,8 @@ impl Game {
         player_position: Position,
         camera_offset: i32) -> Game
     {
-        Game { dungeon: Rc::clone(provider).borrow_mut().next().unwrap(), player_position, camera_offset }
+        let (dungeon, _) = Rc::clone(provider).borrow_mut().next().unwrap();
+        Game { dungeon, player_position, camera_offset }
     }
 
 

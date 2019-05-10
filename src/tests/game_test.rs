@@ -8,6 +8,9 @@ use crate::game::Game;
 use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
+fn if_player_steps_on_exit_goto_next_dungeon() {}
+
+#[test]
 fn player_is_moved_left_right_by_cursor_keys() {
     let mut game = make_game(vec![
         "#..#",
