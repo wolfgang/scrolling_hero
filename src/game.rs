@@ -22,7 +22,7 @@ impl Game {
         player_position: Position,
         camera_offset: i32) -> Game
     {
-        Game { dungeon: provider.next().clone(), player_position, camera_offset }
+        Game { dungeon: provider.next(), player_position, camera_offset }
     }
 
 

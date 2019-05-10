@@ -1,7 +1,7 @@
 use crate::types::Dungeon;
 
 pub trait DungeonProvider {
-    fn next(&mut self) -> &Dungeon;
+    fn next(&mut self) -> Dungeon;
 }
 
 
@@ -16,8 +16,8 @@ impl SingleDungeonProvider {
 }
 
 impl DungeonProvider for SingleDungeonProvider {
-    fn next(&mut self) -> &Dungeon {
-        &self.dungeon
+    fn next(&mut self) -> Dungeon {
+        self.dungeon.clone()
     }
 }
 
@@ -33,9 +33,9 @@ impl MultiDungeonProvider {
 }
 
 impl DungeonProvider for MultiDungeonProvider {
-    fn next(&mut self) -> &Dungeon {
+    fn next(&mut self) -> Dungeon {
         let index = self.current_index;
         self.current_index += 1;
-        &self.dungeons[index]
+        self.dungeons[index].clone()
     }
 }
