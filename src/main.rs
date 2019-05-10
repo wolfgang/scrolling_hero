@@ -1,5 +1,6 @@
 use console::{Key, Term};
 
+use sch::dungeon_provider::SingleDungeonProvider;
 use sch::game::Game;
 
 fn main() -> std::io::Result<()> {
@@ -20,7 +21,9 @@ fn main() -> std::io::Result<()> {
         vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ];
 
-    let mut game = Game::new(dungeon, (8, 0), 2);
+    let dungeon_provider = SingleDungeonProvider::new(dungeon);
+
+    let mut game = Game::with_dungeon_provider(&dungeon_provider, (8, 0), 2);
 
     loop {
         let num_lines = game.render(&mut term)?;
