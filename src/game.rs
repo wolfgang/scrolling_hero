@@ -45,7 +45,7 @@ impl Game {
             buffer.write(b"\n")?;
         }
 
-        writer.write(buffer.get_ref());
+        writer.write(buffer.get_ref()).unwrap();
         Ok(end_y as u32 - start_y as u32 + 1)
     }
 
