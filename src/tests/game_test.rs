@@ -9,7 +9,25 @@ use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
 
 #[test]
-fn prints_number_of_steps_taken() {
+fn reset_number_of_steps_when_entering_new_dungeon() {
+    let mut game = make_game(vec![
+        "#.@#",
+        "#E.#"
+    ]);
+
+    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 0"]);
+
+    game.on_key(Key::ArrowDown);
+    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 1"]);
+
+    game.on_key(Key::ArrowLeft);
+    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 0"]);
+}
+
+
+
+#[test]
+fn increases_number_of_steps_with_each_move() {
     let mut game = make_game(vec![
         "#.@#",
         "#.E#"

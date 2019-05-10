@@ -121,6 +121,7 @@ impl Game {
             Some((next_dungeon, next_player_pos)) => {
                 self.dungeon = next_dungeon;
                 self.player_position = next_player_pos;
+                self.steps = 0;
             }
             None => { self.is_running = false; }
         }
