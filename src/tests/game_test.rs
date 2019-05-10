@@ -5,7 +5,7 @@ use console::Key;
 
 use crate::dungeon_provider::SingleDungeonProvider;
 use crate::game::Game;
-use crate::types::Dungeon;
+use crate::types::{Dungeon, Position};
 
 #[test]
 fn game_can_be_constructed_with_dungeon_provider() {
@@ -165,7 +165,7 @@ fn make_game(strings: Vec<&str>) -> Game {
     Game::new(dungeon, player_pos, 1)
 }
 
-fn make_dungeon(strings: Vec<&str>) -> (Dungeon, (u32, u32)) {
+fn make_dungeon(strings: Vec<&str>) -> (Dungeon, Position) {
     let mut result = Vec::new();
     let mut player_pos = (0, 0);
 

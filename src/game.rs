@@ -4,22 +4,22 @@ use std::io::Write;
 use console::Key;
 
 use crate::dungeon_provider::DungeonProvider;
-use crate::types::Dungeon;
+use crate::types::{Dungeon, Position};
 
 pub struct Game {
     dungeon: Dungeon,
-    player_position: (u32, u32),
+    player_position: Position,
     camera_offset: i32
 }
 
 impl Game {
-    pub fn new(dungeon: Dungeon, player_position: (u32, u32), camera_offset: i32) -> Game {
+    pub fn new(dungeon: Dungeon, player_position: Position, camera_offset: i32) -> Game {
         Game { dungeon, player_position, camera_offset }
     }
 
     pub fn with_dungeon_provider(
         provider: &impl DungeonProvider,
-        player_position: (u32, u32),
+        player_position: Position,
         camera_offset: i32) -> Game
     {
         Game { dungeon: provider.next().clone(), player_position, camera_offset }
