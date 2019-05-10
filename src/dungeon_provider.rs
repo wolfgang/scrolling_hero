@@ -15,8 +15,8 @@ impl SingleDungeonProvider {
         SingleDungeonProvider { dungeon, player_position }
     }
 
-    pub fn shared(dungeon: Dungeon) -> Rc<RefCell<DungeonProvider>> {
-        Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon, (0, 0)))) as Rc<RefCell<DungeonProvider>>
+    pub fn shared(dungeon: Dungeon, player_position: Position) -> Rc<RefCell<DungeonProvider>> {
+        Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon, player_position))) as Rc<RefCell<DungeonProvider>>
     }
 
 }

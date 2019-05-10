@@ -147,7 +147,7 @@ fn render_returns_number_of_lines_rendered() {
 fn make_game(strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
 
-    Game::new(&SingleDungeonProvider::shared(dungeon), player_pos, 1)
+    Game::new(&SingleDungeonProvider::shared(dungeon, player_pos), player_pos, 1)
 }
 
 
