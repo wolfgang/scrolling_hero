@@ -1,3 +1,6 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::types::Dungeon;
 
 pub type DungeonProvider = Iterator<Item=Dungeon>;
@@ -10,6 +13,11 @@ impl SingleDungeonProvider {
     pub fn new(dungeon: Dungeon) -> SingleDungeonProvider {
         SingleDungeonProvider { dungeon }
     }
+
+    pub fn shared(dungeon: Dungeon) -> Rc<RefCell<DungeonProvider>> {
+        Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon))) as Rc<RefCell<DungeonProvider>>
+    }
+
 }
 
 impl Iterator for SingleDungeonProvider {

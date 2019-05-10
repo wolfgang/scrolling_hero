@@ -1,11 +1,9 @@
-use std::cell::RefCell;
 use std::io::Cursor;
-use std::rc::Rc;
 use std::str;
 
 use console::Key;
 
-use crate::dungeon_provider::{DungeonProvider, SingleDungeonProvider};
+use crate::dungeon_provider::SingleDungeonProvider;
 use crate::game::Game;
 use crate::tests::dungeon_helpers::make_dungeon;
 
@@ -17,9 +15,9 @@ fn game_can_be_constructed_with_dungeon_provider() {
         "#..#"
     ]);
 
-    let provider = Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon)));
+    let provider = SingleDungeonProvider::shared(dungeon);
 
-    let game = Game::with_dungeon_provider(&(provider as Rc<RefCell<DungeonProvider>>), player_pos, 1);
+    let game = Game::with_dungeon_provider(&provider, player_pos, 1);
 
     verify_lines_rendered(&game, vec![
         "#..#",

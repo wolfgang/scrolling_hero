@@ -5,7 +5,6 @@ use std::rc::Rc;
 
 use console::Key;
 
-use crate::dungeon_provider::DungeonProvider;
 use crate::types::{Dungeon, Position};
 
 pub struct Game {

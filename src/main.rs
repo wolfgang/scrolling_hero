@@ -1,9 +1,6 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-
 use console::{Key, Term};
 
-use sch::dungeon_provider::{DungeonProvider, SingleDungeonProvider};
+use sch::dungeon_provider::SingleDungeonProvider;
 use sch::game::Game;
 
 fn main() -> std::io::Result<()> {
@@ -25,9 +22,9 @@ fn main() -> std::io::Result<()> {
     ];
 
 
-    let dungeon_provider = Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon)));
+    let dungeon_provider = SingleDungeonProvider::shared(dungeon);
 
-    let mut game = Game::with_dungeon_provider(&(dungeon_provider as Rc<RefCell<DungeonProvider>>), (8, 0), 2);
+    let mut game = Game::with_dungeon_provider(&dungeon_provider, (8, 0), 2);
 
     loop {
         let num_lines = game.render(&mut term)?;
