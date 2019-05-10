@@ -8,6 +8,24 @@ use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
 
 #[test]
+fn is_running_is_true_until_escape_key() {
+    let mut game = make_game(vec![
+        "#.@#",
+        "#..#"
+    ]);
+
+    assert_eq!(true, game.is_running());
+
+    game.on_key(Key::ArrowDown);
+    game.on_key(Key::ArrowLeft);
+    game.on_key(Key::ArrowRight);
+    assert_eq!(true, game.is_running());
+
+    game.on_key(Key::Escape);
+    assert_eq!(false, game.is_running());
+}
+
+#[test]
 fn renders_exit() {
     let mut game = make_game(vec![
         "#.@#",

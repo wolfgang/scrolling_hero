@@ -1,4 +1,4 @@
-use console::{Key, Term};
+use console::Term;
 
 use sch::dungeon_helpers::make_dungeon;
 use sch::dungeon_provider::MultiDungeonProvider;
@@ -12,16 +12,13 @@ fn main() -> std::io::Result<()> {
 
     let mut game = Game::new(&dungeon_provider, 2);
 
-    loop {
+    while game.is_running() {
         let num_lines = game.render(&mut term)?;
-
-        let key = term.read_key().unwrap();
-        if key == Key::Escape { return Ok(()); }
-
-        game.on_key(key);
-
+        game.on_key(term.read_key().unwrap());
         term.clear_last_lines(num_lines as usize)?;
     }
+
+    Ok(())
 }
 
 fn dungeon1() -> DungeonDefinition {

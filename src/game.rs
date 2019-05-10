@@ -13,7 +13,8 @@ pub struct Game {
     player_position: Position,
     camera_offset: i32,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
-    render_buffer: Cursor<Vec<u8>>
+    render_buffer: Cursor<Vec<u8>>,
+    is_running: bool
 }
 
 impl Game {
@@ -30,7 +31,12 @@ impl Game {
             camera_offset,
             dungeon_provider,
             render_buffer: Cursor::new(Vec::with_capacity(512)),
+            is_running: true
         }
+    }
+
+    pub fn is_running(&self) -> bool {
+        self.is_running
     }
 
 
@@ -82,6 +88,9 @@ impl Game {
                 if self.relative_to_player(0, 1) != 1 {
                     self.player_position.1 += 1;
                 }
+            }
+            Key::Escape => {
+                self.is_running = false;
             }
             _ => {}
         }

@@ -8,12 +8,7 @@
 
 [X] Go to next dungeon when exit (E) is reached
 
-[ ] Hide cursor
 [ ] "Game over" after last dungeon was exited
-
-
-
-
 
 
 
