@@ -8,6 +8,21 @@ use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
 
 #[test]
+fn prints_number_of_turns() {
+    let mut game = make_game(vec![
+        "#.@#",
+        "#..#"
+    ]);
+
+    let mut buffer = Cursor::new(Vec::new());
+    game.render(&mut buffer).unwrap();
+    let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
+    let lines: Vec<&str> = actual_string.split("\n").collect();
+
+    assert_ne!(None, lines[0].find("Steps: 0"));
+}
+
+#[test]
 fn is_running_is_false_after_last_dungeon_is_exited() {
     let (dungeon1, player_pos1) = make_dungeon(vec![
         "#.@#",
@@ -47,7 +62,7 @@ fn renders_exit() {
         "#.E#"
     ]);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#.@#",
         "#.E#"
     ]);
@@ -72,7 +87,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
     ]);
 
     let mut game = Game::new(&provider, 1);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#..#",
         "#.@#",
         "#.E#"
@@ -80,7 +95,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
 
     game.on_key(Key::ArrowDown);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "##@#",
         "#E.#"
     ]);
@@ -95,21 +110,21 @@ fn player_is_moved_left_right_by_cursor_keys() {
         "#..#"
     ]);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#..#",
         "#.@#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#..#",
         "#@.#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -127,21 +142,21 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
         "#....#"
     ]);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#....",
         "#@..#",
         "#..##"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#...#",
         "#@.##",
         "..###"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#..##",
         ".@###",
         "...##"
@@ -157,21 +172,21 @@ fn player_collides_with_walls() {
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#####",
         "###@#",
         "#####"
@@ -186,7 +201,7 @@ fn dont_try_to_render_dungeon_line_beyond_first() {
         "#..##",
     ]);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#@...",
         "#...#",
     ]);
@@ -200,7 +215,7 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
         "#@.##",
     ]);
 
-    verify_lines_rendered(&mut game, vec![
+    verify_lines_rendered_start_with(&mut game, vec![
         "#...#",
         "#@.##",
     ]);
@@ -227,14 +242,14 @@ fn make_game(strings: Vec<&str>) -> Game {
 }
 
 
-fn verify_lines_rendered(game: &mut Game, expected_lines: Vec<&str>) {
+fn verify_lines_rendered_start_with(game: &mut Game, expected_lines: Vec<&str>) {
     let mut buffer = Cursor::new(Vec::new());
     game.render(&mut buffer).unwrap();
-    assert_lines(&buffer, expected_lines);
+    assert_lines_start_with(&buffer, expected_lines);
 }
 
 
-fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
+fn assert_lines_start_with(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
     let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
     let lines: Vec<&str> = actual_string.split("\n").collect();
 
