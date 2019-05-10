@@ -234,6 +234,8 @@ fn verify_lines_rendered(game: &mut Game, expected_lines: Vec<&str>) {
 }
 
 fn assert_lines(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
-    let expected_string = format!("{}\n", expected_lines.join("\n"));
-    assert_eq!(str::from_utf8(buffer.get_ref()).unwrap(), expected_string);
+    let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
+    let mut actual_lines: Vec<&str> = actual_string.split("\n").collect();
+    actual_lines.pop();
+    assert_eq!(expected_lines, actual_lines);
 }
