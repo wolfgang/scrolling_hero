@@ -8,25 +8,6 @@ use crate::game::Game;
 use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
-fn game_can_be_constructed_with_dungeon_provider() {
-    let (dungeon, player_pos) = make_dungeon(vec![
-        "#..#",
-        "#.@#",
-        "#..#"
-    ]);
-
-    let provider = SingleDungeonProvider::shared(dungeon);
-
-    let game = Game::new(&provider, player_pos, 1);
-
-    verify_lines_rendered(&game, vec![
-        "#..#",
-        "#.@#",
-        "#..#"
-    ]);
-}
-
-#[test]
 fn player_is_moved_left_right_by_cursor_keys() {
     let mut game = make_game(vec![
         "#..#",
