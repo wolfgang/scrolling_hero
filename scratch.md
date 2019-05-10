@@ -6,7 +6,10 @@
 
 [X] Prevent player from moving over walls
 
+[X] Go to next dungeon when exit (E) is reached
 
+[ ] Hide cursor
+[ ] "Game over" after last dungeon was exited
 
 
 
@@ -29,7 +32,6 @@ Generate the dungeon
 ```
 
 
-Go to next dungeon when exit (E) is reached
 
 Manipulate dungeon generator by hacking terminals
 
