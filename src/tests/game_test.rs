@@ -140,6 +140,11 @@ fn render_returns_number_of_lines_rendered() {
 }
 
 fn make_game(strings: Vec<&str>) -> Game {
+    let (dungeon, player_pos) = make_dungeon(strings);
+    Game::new(dungeon, player_pos, 1)
+}
+
+fn make_dungeon(strings: Vec<&str>) -> (Vec<Vec<u16>>, (u32, u32)) {
     let mut result = Vec::new();
     let mut player_pos = (0, 0);
 
@@ -155,8 +160,9 @@ fn make_game(strings: Vec<&str>) -> Game {
         }
         result.push(result_row);
     }
-    Game::new(result, player_pos, 1)
+    (result, player_pos)
 }
+
 
 
 fn verify_lines_rendered(game: &Game, expected_lines: Vec<&str>) {

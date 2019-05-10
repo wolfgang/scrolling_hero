@@ -6,7 +6,7 @@
 
 [X] Prevent player from moving over walls
 
-Prevent player from moving out of bounds of dungeon
+
 
 
 
@@ -29,7 +29,7 @@ Generate the dungeon
 ```
 
 
-Go to next dungeon when door (D) is reached
+Go to next dungeon when exit (E) is reached
 
 Manipulate dungeon generator by hacking terminals
 
@@ -56,7 +56,7 @@ Pickup items
     - An item could randomly turn into a guard
     - a G could really be an item and vice versa (rendering glitch)
     - a wall tile could really be a hole, and vice versa
-- QA maangers could also detect hacks
+- QA managers could also detect hacks
 - Or maybe security consultants, so they can be killed too
 - All "monsters" are really the dev team; killing/freeing them has influence on the level generator
 - It's also about preventing new "Features" like .. traps, monsters, .... so not only manipulate current foes, prevent new foes for a while
@@ -67,7 +67,7 @@ Pickup items
 - Hero can go left and right certain amount of steps
 - If horizontal steps are exhausted, lose health with every other step
 - Can only go down through holes/empty tiles (dots)
-- Door (D) -> to the next floor
+- Exit (E) -> to the next floor
 - Empty tiles can contain things: 
     - Coin ($)
     - Guards -> they are blocking, must be fought/killed
