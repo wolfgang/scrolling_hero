@@ -11,7 +11,8 @@ use crate::types::{DungeonLayout, Position};
 pub struct Game {
     dungeon: DungeonLayout,
     player_position: Position,
-    camera_offset: i32
+    camera_offset: i32,
+    dungeon_provider: Rc<RefCell<DungeonProvider>>
 }
 
 impl Game {
@@ -20,7 +21,7 @@ impl Game {
         camera_offset: i32) -> Game
     {
         let (dungeon, player_position) = Rc::clone(provider).borrow_mut().next().unwrap();
-        Game { dungeon, player_position, camera_offset }
+        Game { dungeon, player_position, camera_offset, dungeon_provider: Rc::clone(provider) }
     }
 
 
@@ -51,21 +52,27 @@ impl Game {
         let y = self.player_position.1 as usize;
         match key {
             Key::ArrowLeft => {
-                if self.dungeon[y][x - 1] == 0 {
+                if self.dungeon[y][x - 1] != 1 {
                     self.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
-                if self.dungeon[y][x + 1] == 0 {
+                if self.dungeon[y][x + 1] != 1 {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
-                if self.dungeon[y + 1][x] == 0 {
+                if self.dungeon[y + 1][x] != 1 {
                     self.player_position.1 += 1;
                 }
             }
             _ => {}
+        }
+
+        if self.dungeon[self.player_position.1 as usize][self.player_position.0 as usize] == 2 {
+            let (next_dungeon, next_player_pos) = self.dungeon_provider.borrow_mut().next().unwrap();
+            self.dungeon = next_dungeon;
+            self.player_position = next_player_pos;
         }
     }
 }

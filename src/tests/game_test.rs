@@ -20,7 +20,6 @@ fn renders_exit() {
     ]);
 }
 
-#[ignore]
 #[test]
 fn if_player_steps_on_exit_goto_next_dungeon() {
     let (dungeon1, player_pos1) = make_dungeon(vec![
@@ -34,7 +33,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
         "#E.#",
     ]);
 
-    let mut provider = MultiDungeonProvider::shared(vec![
+    let provider = MultiDungeonProvider::shared(vec![
         (dungeon1.clone(), player_pos1),
         (dungeon2.clone(), player_pos2),
     ]);
@@ -45,6 +44,14 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
         "#.@#",
         "#.E#"
     ]);
+
+    game.on_key(Key::ArrowDown);
+
+    verify_lines_rendered(&game, vec![
+        "##@#",
+        "#E.#"
+    ]);
+
 }
 
 #[test]
