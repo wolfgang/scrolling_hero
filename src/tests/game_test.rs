@@ -3,7 +3,27 @@ use std::str;
 
 use console::Key;
 
+use crate::dungeon_provider::SingleDungeonProvider;
 use crate::game::Game;
+
+#[test]
+fn game_can_be_constructed_with_dungeon_provider() {
+    let (dungeon, _) = make_dungeon(vec![
+        "#..#",
+        "#.@#",
+        "#..#"
+    ]);
+
+    let provider = SingleDungeonProvider::new(dungeon);
+
+    let game = Game::with_dungeon_provider(&provider);
+
+    verify_lines_rendered(&game, vec![
+        "#..#",
+        "#.@#",
+        "#..#"
+    ]);
+}
 
 #[test]
 fn player_is_moved_left_right_by_cursor_keys() {
