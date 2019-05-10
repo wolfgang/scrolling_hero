@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp::{max, min};
-use std::io::Write;
+use std::io::{Cursor, Write};
 use std::rc::Rc;
 
 use console::Key;
@@ -30,20 +30,22 @@ impl Game {
         let start_y = max(0, player_y as i32 - self.camera_offset) as usize;
         let end_y = min(self.dungeon.len() - 1, player_y as usize + self.camera_offset as usize);
 
+        let mut buffer = Cursor::new(Vec::new());
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
                 if (x as u32, y as u32 + start_y as u32) == self.player_position {
-                    writer.write(b"@")?;
+                    buffer.write(b"@")?;
                 } else {
-                    if *col == 0 { writer.write(b".")?; }
-                    if *col == 1 { writer.write(b"#")?; }
-                    if *col == 2 { writer.write(b"E")?; }
+                    if *col == 0 { buffer.write(b".")?; }
+                    if *col == 1 { buffer.write(b"#")?; }
+                    if *col == 2 { buffer.write(b"E")?; }
                 }
             }
 
-            writer.write(b"\n")?;
+            buffer.write(b"\n")?;
         }
 
+        writer.write(buffer.get_ref());
         Ok(end_y as u32 - start_y as u32 + 1)
     }
 
