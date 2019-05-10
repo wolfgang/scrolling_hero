@@ -36,6 +36,7 @@ impl Game {
                 } else {
                     if *col == 0 { writer.write(b".")?; }
                     if *col == 1 { writer.write(b"#")?; }
+                    if *col == 2 { writer.write(b"E")?; }
                 }
             }
 

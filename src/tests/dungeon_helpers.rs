@@ -13,6 +13,7 @@ pub fn make_dungeon(strings: Vec<&str>) -> DungeonDefinition {
             }
             if c == '.' { result_row.push(0) }
             if c == '#' { result_row.push(1) }
+            if c == 'E' { result_row.push(2) }
         }
         result.push(result_row);
     }

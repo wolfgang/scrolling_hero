@@ -3,12 +3,49 @@ use std::str;
 
 use console::Key;
 
-use crate::dungeon_provider::SingleDungeonProvider;
+use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
 use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
-fn if_player_steps_on_exit_goto_next_dungeon() {}
+fn renders_exit() {
+    let game = make_game(vec![
+        "#.@#",
+        "#.E#"
+    ]);
+
+    verify_lines_rendered(&game, vec![
+        "#.@#",
+        "#.E#"
+    ]);
+}
+
+#[ignore]
+#[test]
+fn if_player_steps_on_exit_goto_next_dungeon() {
+    let (dungeon1, player_pos1) = make_dungeon(vec![
+        "#..#",
+        "#.@#",
+        "#.E#"
+    ]);
+
+    let (dungeon2, player_pos2) = make_dungeon(vec![
+        "##@#",
+        "#E.#",
+    ]);
+
+    let mut provider = MultiDungeonProvider::shared(vec![
+        (dungeon1.clone(), player_pos1),
+        (dungeon2.clone(), player_pos2),
+    ]);
+
+    let mut game = Game::new(&provider, 1);
+    verify_lines_rendered(&game, vec![
+        "#..#",
+        "#.@#",
+        "#.E#"
+    ]);
+}
 
 #[test]
 fn player_is_moved_left_right_by_cursor_keys() {
