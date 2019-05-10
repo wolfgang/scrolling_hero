@@ -58,9 +58,9 @@ impl Game {
                 }
             }
 
-//            if y == 0 {
-//                self.render_buffer.write(b"   Steps: 0");
-//            }
+            if y == 0 {
+                self.render_buffer.write(b"   Steps: 0")?;
+            }
 
             self.render_buffer.write(b"\n")?;
         }
