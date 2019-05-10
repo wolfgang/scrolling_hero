@@ -1,6 +1,9 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use console::{Key, Term};
 
-use sch::dungeon_provider::SingleDungeonProvider;
+use sch::dungeon_provider::{DungeonProvider, SingleDungeonProvider};
 use sch::game::Game;
 
 fn main() -> std::io::Result<()> {
@@ -21,9 +24,10 @@ fn main() -> std::io::Result<()> {
         vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ];
 
-    let mut dungeon_provider = SingleDungeonProvider::new(dungeon);
 
-    let mut game = Game::with_dungeon_provider(&mut dungeon_provider, (8, 0), 2);
+    let dungeon_provider = Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon)));
+
+    let mut game = Game::with_dungeon_provider(&(dungeon_provider as Rc<RefCell<DungeonProvider>>), (8, 0), 2);
 
     loop {
         let num_lines = game.render(&mut term)?;

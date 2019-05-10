@@ -1,5 +1,7 @@
+use std::cell::RefCell;
 use std::cmp::{max, min};
 use std::io::Write;
+use std::rc::Rc;
 
 use console::Key;
 
@@ -18,11 +20,11 @@ impl Game {
     }
 
     pub fn with_dungeon_provider(
-        provider: &mut DungeonProvider,
+        provider: &Rc<RefCell<dyn Iterator<Item=Dungeon>>>,
         player_position: Position,
         camera_offset: i32) -> Game
     {
-        Game { dungeon: provider.next().unwrap(), player_position, camera_offset }
+        Game { dungeon: Rc::clone(provider).borrow_mut().next().unwrap(), player_position, camera_offset }
     }
 
 
