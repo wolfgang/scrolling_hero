@@ -1,9 +1,6 @@
 use crate::types::Dungeon;
 
-pub trait DungeonProvider {
-    fn next(&mut self) -> Dungeon;
-}
-
+pub type DungeonProvider = Iterator<Item=Dungeon>;
 
 pub struct SingleDungeonProvider {
     dungeon: Dungeon

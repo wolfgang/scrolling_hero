@@ -1,4 +1,4 @@
-use crate::dungeon_provider::{DungeonProvider, MultiDungeonProvider, SingleDungeonProvider};
+use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
