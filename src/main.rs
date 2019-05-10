@@ -1,28 +1,27 @@
 use console::{Key, Term};
 
+use sch::dungeon_helpers::make_dungeon;
 use sch::dungeon_provider::SingleDungeonProvider;
 use sch::game::Game;
 
 fn main() -> std::io::Result<()> {
     let mut term = Term::stdout();
 
-    let dungeon = vec![
-        vec![1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-        vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ];
+    let (dungeon, player_pos) = make_dungeon(vec![
+        "######################.@.################",
+        "######################......#############",
+        "####################........#############",
+        "#####################.......#############",
+        "##########...............##.#############",
+        "############.............##....##########",
+        "###############..........#####.##########",
+        "#################.####...#####.##########",
+        "#################.......###.....#########",
+        "######################E.....#############",
+    ]);
 
 
-    let dungeon_provider = SingleDungeonProvider::shared(dungeon, (8, 0));
+    let dungeon_provider = SingleDungeonProvider::shared(dungeon, player_pos);
 
     let mut game = Game::new(&dungeon_provider, 2);
 
@@ -30,7 +29,7 @@ fn main() -> std::io::Result<()> {
         let num_lines = game.render(&mut term)?;
 
         let key = term.read_key().unwrap();
-        if key == Key::Escape { return Ok(()) }
+        if key == Key::Escape { return Ok(()); }
 
         game.on_key(key);
 
