@@ -32,10 +32,12 @@ impl MultiDungeonProvider {
     }
 }
 
-impl DungeonProvider for MultiDungeonProvider {
-    fn next(&mut self) -> Dungeon {
+impl Iterator for MultiDungeonProvider {
+    type Item = Dungeon;
+
+    fn next(&mut self) -> Option<Dungeon> {
         let index = self.current_index;
         self.current_index += 1;
-        self.dungeons[index].clone()
+        Some(self.dungeons[index].clone())
     }
 }

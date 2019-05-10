@@ -22,7 +22,7 @@ fn multi_dungeon_provider_provides_multiple_dungeons() {
 
     let mut provider = MultiDungeonProvider::new(vec![dungeon1.clone(), dungeon2.clone(), dungeon3.clone()]);
 
-    assert_eq!(dungeon1, provider.next());
-    assert_eq!(dungeon2, provider.next());
-    assert_eq!(dungeon3, provider.next());
+    assert_eq!(dungeon1, provider.next().unwrap());
+    assert_eq!(dungeon2, provider.next().unwrap());
+    assert_eq!(dungeon3, provider.next().unwrap());
 }
