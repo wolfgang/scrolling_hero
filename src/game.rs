@@ -15,6 +15,7 @@ pub struct Game {
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     render_buffer: Cursor<Vec<u8>>,
     is_running: bool,
+    steps: u32,
 }
 
 impl Game {
@@ -32,6 +33,7 @@ impl Game {
             dungeon_provider,
             render_buffer: Cursor::new(Vec::with_capacity(512)),
             is_running: true,
+            steps: 0,
         }
     }
 
@@ -59,7 +61,7 @@ impl Game {
             }
 
             if y == 0 {
-                self.render_buffer.write(b"  Steps: 0")?;
+                self.render_buffer.write(format!("  Steps: {}", self.steps).as_bytes())?;
             }
 
             self.render_buffer.write(b"\n")?;
@@ -77,6 +79,7 @@ impl Game {
 
 
     pub fn on_key(&mut self, key: Key) {
+        let prev_position = self.player_position;
         match key {
             Key::ArrowLeft => {
                 if self.relative_to_player(-1, 0) != 1 {
@@ -99,6 +102,7 @@ impl Game {
             _ => {}
         }
 
+        if prev_position != self.player_position { self.steps += 1; }
         if self.under_player() == 2 { self.goto_next_dungeon(); }
     }
 
