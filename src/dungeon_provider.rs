@@ -15,9 +15,11 @@ impl SingleDungeonProvider {
     }
 }
 
-impl DungeonProvider for SingleDungeonProvider {
-    fn next(&mut self) -> Dungeon {
-        self.dungeon.clone()
+impl Iterator for SingleDungeonProvider {
+    type Item = Dungeon;
+
+    fn next(&mut self) -> Option<Dungeon> {
+        Some(self.dungeon.clone())
     }
 }
 

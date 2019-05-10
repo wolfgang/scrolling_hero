@@ -18,11 +18,11 @@ impl Game {
     }
 
     pub fn with_dungeon_provider(
-        provider: &mut impl DungeonProvider,
+        provider: &mut impl Iterator<Item=Dungeon>,
         player_position: Position,
         camera_offset: i32) -> Game
     {
-        Game { dungeon: provider.next(), player_position, camera_offset }
+        Game { dungeon: provider.next().unwrap(), player_position, camera_offset }
     }
 
 
