@@ -12,7 +12,7 @@ pub struct Game {
     dungeon: DungeonLayout,
     player_position: Position,
     camera_offset: i32,
-    dungeon_provider: Rc<RefCell<DungeonProvider>>
+    dungeon_provider: Rc<RefCell<DungeonProvider>>,
 }
 
 impl Game {
@@ -48,31 +48,41 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
-        let x = self.player_position.0 as usize;
-        let y = self.player_position.1 as usize;
         match key {
             Key::ArrowLeft => {
-                if self.dungeon[y][x - 1] != 1 {
+                if self.relative_to_player(-1, 0) != 1 {
                     self.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
-                if self.dungeon[y][x + 1] != 1 {
+                if self.relative_to_player(1, 0) != 1 {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
-                if self.dungeon[y + 1][x] != 1 {
+                if self.relative_to_player(0, 1) != 1 {
                     self.player_position.1 += 1;
                 }
             }
             _ => {}
         }
 
-        if self.dungeon[self.player_position.1 as usize][self.player_position.0 as usize] == 2 {
-            let (next_dungeon, next_player_pos) = self.dungeon_provider.borrow_mut().next().unwrap();
-            self.dungeon = next_dungeon;
-            self.player_position = next_player_pos;
-        }
+        if self.under_player() == 2 { self.goto_next_dungeon(); }
+    }
+
+    fn under_player(&self) -> u16 {
+        self.relative_to_player(0, 0)
+    }
+
+    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> u16 {
+        let x = self.player_position.0 as i32;
+        let y = self.player_position.1 as i32;
+        self.dungeon[(y + y_offset) as usize][(x + x_offset) as usize]
+    }
+
+    fn goto_next_dungeon(&mut self) {
+        let (next_dungeon, next_player_pos) = self.dungeon_provider.borrow_mut().next().unwrap();
+        self.dungeon = next_dungeon;
+        self.player_position = next_player_pos;
     }
 }
