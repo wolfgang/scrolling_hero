@@ -17,10 +17,9 @@ pub struct Game {
 impl Game {
     pub fn new(
         provider: &Rc<RefCell<DungeonProvider>>,
-        player_position: Position,
         camera_offset: i32) -> Game
     {
-        let (dungeon, _) = Rc::clone(provider).borrow_mut().next().unwrap();
+        let (dungeon, player_position) = Rc::clone(provider).borrow_mut().next().unwrap();
         Game { dungeon, player_position, camera_offset }
     }
 
