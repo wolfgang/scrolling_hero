@@ -29,28 +29,27 @@ impl Iterator for SingleDungeonProvider {
     }
 }
 
-//pub struct MultiDungeonProvider {
-//    current_index: usize,
-//    dungeons: Vec<Dungeon>,
-//}
-//
-//impl MultiDungeonProvider {
-//    pub fn new(dungeons: Vec<Dungeon>) -> MultiDungeonProvider {
-//        MultiDungeonProvider { current_index: 0, dungeons }
-//    }
-//
-//    pub fn shared(dungeons: Vec<Dungeon>) -> Rc<RefCell<DungeonProvider>> {
-//        Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as Rc<RefCell<DungeonProvider>>
-//    }
-//
-//}
-//
-//impl Iterator for MultiDungeonProvider {
-//    type Item = Dungeon;
-//
-//    fn next(&mut self) -> Option<Dungeon> {
-//        let index = self.current_index;
-//        self.current_index += 1;
-//        Some(self.dungeons[index].clone())
-//    }
-//}
+pub struct MultiDungeonProvider {
+    current_index: usize,
+    dungeons: Vec<(Dungeon, Position)>,
+}
+
+impl MultiDungeonProvider {
+    pub fn new(dungeons: Vec<(Dungeon, Position)>) -> MultiDungeonProvider {
+        MultiDungeonProvider { current_index: 0, dungeons }
+    }
+
+    pub fn shared(dungeons: Vec<(Dungeon, Position)>) -> Rc<RefCell<DungeonProvider>> {
+        Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as Rc<RefCell<DungeonProvider>>
+    }
+}
+
+impl Iterator for MultiDungeonProvider {
+    type Item = (Dungeon, Position);
+
+    fn next(&mut self) -> Option<(Dungeon, Position)> {
+        let index = self.current_index;
+        self.current_index += 1;
+        Some(self.dungeons[index].clone())
+    }
+}
