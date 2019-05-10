@@ -2,6 +2,7 @@ use std::io::Cursor;
 use std::str;
 
 use console::Key;
+use regex::Regex;
 
 use crate::dungeon_helpers::make_dungeon;
 use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
@@ -11,15 +12,12 @@ use crate::game::Game;
 fn prints_number_of_turns() {
     let mut game = make_game(vec![
         "#.@#",
-        "#..#"
+        "#.E#"
     ]);
 
-    let mut buffer = Cursor::new(Vec::new());
-    game.render(&mut buffer).unwrap();
-    let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
-    let lines: Vec<&str> = actual_string.split("\n").collect();
-
-    assert_ne!(None, lines[0].find("Steps: 0"));
+    verify_lines_rendered_match(&mut game, vec![
+        r"\s+Steps: 0"
+    ]);
 }
 
 #[test]
@@ -248,6 +246,12 @@ fn verify_lines_rendered_start_with(game: &mut Game, expected_lines: Vec<&str>) 
     assert_lines_start_with(&buffer, expected_lines);
 }
 
+fn verify_lines_rendered_match(game: &mut Game, expected_lines: Vec<&str>) {
+    let mut buffer = Cursor::new(Vec::new());
+    game.render(&mut buffer).unwrap();
+    assert_lines_match(&buffer, expected_lines);
+}
+
 
 fn assert_lines_start_with(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
     let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
@@ -260,4 +264,16 @@ fn assert_lines_start_with(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) 
         .collect();
 
     assert_eq!(expected_lines, actual_lines);
+}
+
+fn assert_lines_match(buffer: &Cursor<Vec<u8>>, expected_lines: Vec<&str>) {
+    let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
+    let actual_lines: Vec<&str> = actual_string.split("\n").collect();
+
+    for (i, line) in expected_lines.iter().enumerate() {
+        let re = Regex::new(line).unwrap();
+        assert!(
+            re.is_match(actual_lines[i]),
+            format!("Expected {} to match {}", actual_lines[i], line));
+    }
 }
