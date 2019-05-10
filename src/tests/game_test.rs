@@ -8,6 +8,21 @@ use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
 
 #[test]
+fn is_running_is_false_after_last_dungeon_is_exited() {
+    let (dungeon1, player_pos1) = make_dungeon(vec![
+        "#.@#",
+        "#.E#"
+    ]);
+
+    let provider = MultiDungeonProvider::shared(vec![(dungeon1.clone(), player_pos1)]);
+
+    let mut game = Game::new(&provider, 1);
+
+    game.on_key(Key::ArrowDown);
+    assert_eq!(false, game.is_running());
+}
+
+#[test]
 fn is_running_is_true_until_escape_key() {
     let mut game = make_game(vec![
         "#.@#",

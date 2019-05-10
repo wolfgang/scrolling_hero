@@ -37,3 +37,13 @@ fn multi_dungeon_provider_can_be_constructed_as_rc_refcell() {
     let provider = MultiDungeonProvider::shared(vec![(dungeon1.clone(), player_pos1)]);
     assert_eq!((dungeon1, player_pos1), provider.borrow_mut().next().unwrap());
 }
+
+#[test]
+fn multi_dungeon_provider_returns_none_after_last_dungeon() {
+    let (dungeon1, player_pos1) = make_dungeon(vec!["#.."]);
+
+    let mut provider = MultiDungeonProvider::new(vec![(dungeon1.clone(), player_pos1)]);
+
+    assert_eq!((dungeon1, player_pos1), provider.next().unwrap());
+    assert_eq!(None, provider.next());
+}

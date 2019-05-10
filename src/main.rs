@@ -18,6 +18,8 @@ fn main() -> std::io::Result<()> {
         term.clear_last_lines(num_lines as usize)?;
     }
 
+    term.write_line("Thanks for playing!")?;
+
     Ok(())
 }
 

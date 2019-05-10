@@ -7,7 +7,7 @@ pub type DungeonProvider = Iterator<Item=DungeonDefinition>;
 
 pub struct SingleDungeonProvider {
     dungeon: DungeonLayout,
-    player_position: Position
+    player_position: Position,
 }
 
 impl SingleDungeonProvider {
@@ -18,7 +18,6 @@ impl SingleDungeonProvider {
     pub fn shared(dungeon: DungeonLayout, player_position: Position) -> Rc<RefCell<DungeonProvider>> {
         Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon, player_position))) as Rc<RefCell<DungeonProvider>>
     }
-
 }
 
 impl Iterator for SingleDungeonProvider {
@@ -48,6 +47,7 @@ impl Iterator for MultiDungeonProvider {
     type Item = DungeonDefinition;
 
     fn next(&mut self) -> Option<DungeonDefinition> {
+        if self.current_index == self.dungeons.len() { return None; }
         let index = self.current_index;
         self.current_index += 1;
         Some(self.dungeons[index].clone())

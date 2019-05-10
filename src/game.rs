@@ -14,7 +14,7 @@ pub struct Game {
     camera_offset: i32,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     render_buffer: Cursor<Vec<u8>>,
-    is_running: bool
+    is_running: bool,
 }
 
 impl Game {
@@ -31,7 +31,7 @@ impl Game {
             camera_offset,
             dungeon_provider,
             render_buffer: Cursor::new(Vec::with_capacity(512)),
-            is_running: true
+            is_running: true,
         }
     }
 
@@ -109,8 +109,12 @@ impl Game {
     }
 
     fn goto_next_dungeon(&mut self) {
-        let (next_dungeon, next_player_pos) = self.dungeon_provider.borrow_mut().next().unwrap();
-        self.dungeon = next_dungeon;
-        self.player_position = next_player_pos;
+        match self.dungeon_provider.borrow_mut().next() {
+            Some((next_dungeon, next_player_pos)) => {
+                self.dungeon = next_dungeon;
+                self.player_position = next_player_pos;
+            }
+            None => { self.is_running = false; }
+        }
     }
 }
