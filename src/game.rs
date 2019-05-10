@@ -16,8 +16,12 @@ impl Game {
         Game { dungeon, player_position, camera_offset }
     }
 
-    pub fn with_dungeon_provider(provider: &impl DungeonProvider) -> Game {
-        Game { dungeon: provider.next().clone(), player_position: (2, 1), camera_offset: 1 }
+    pub fn with_dungeon_provider(
+        provider: &impl DungeonProvider,
+        player_position: (u32, u32),
+        camera_offset: i32) -> Game
+    {
+        Game { dungeon: provider.next().clone(), player_position, camera_offset }
     }
 
 

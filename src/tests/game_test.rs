@@ -8,7 +8,7 @@ use crate::game::Game;
 
 #[test]
 fn game_can_be_constructed_with_dungeon_provider() {
-    let (dungeon, _) = make_dungeon(vec![
+    let (dungeon, player_pos) = make_dungeon(vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -16,7 +16,7 @@ fn game_can_be_constructed_with_dungeon_provider() {
 
     let provider = SingleDungeonProvider::new(dungeon);
 
-    let game = Game::with_dungeon_provider(&provider);
+    let game = Game::with_dungeon_provider(&provider, player_pos, 1);
 
     verify_lines_rendered(&game, vec![
         "#..#",
