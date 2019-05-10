@@ -21,12 +21,14 @@ impl Game {
         provider: &Rc<RefCell<DungeonProvider>>,
         camera_offset: i32) -> Game
     {
-        let (dungeon, player_position) = Rc::clone(provider).borrow_mut().next().unwrap();
+        let dungeon_provider = Rc::clone(provider);
+
+        let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
             dungeon,
             player_position,
             camera_offset,
-            dungeon_provider: Rc::clone(provider),
+            dungeon_provider,
             render_buffer: Cursor::new(Vec::with_capacity(512)),
         }
     }
@@ -37,7 +39,7 @@ impl Game {
         let start_y = max(0, player_y as i32 - self.camera_offset) as usize;
         let end_y = min(self.dungeon.len() - 1, player_y as usize + self.camera_offset as usize);
 
-        self.clear_render_buffer();
+        self.clear_render_buffer()?;
 
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
             for (x, col) in row.iter().enumerate() {
@@ -53,14 +55,16 @@ impl Game {
             self.render_buffer.write(b"\n")?;
         }
 
-        writer.write(self.render_buffer.get_ref()).unwrap();
+        writer.write(self.render_buffer.get_ref())?;
         Ok(end_y as u32 - start_y as u32 + 1)
     }
 
-    fn clear_render_buffer(&mut self) {
+    fn clear_render_buffer(&mut self) -> std::io::Result<()> {
         self.render_buffer.get_mut().clear();
-        self.render_buffer.seek(SeekFrom::Start(0)).unwrap();
+        self.render_buffer.seek(SeekFrom::Start(0))?;
+        Ok(())
     }
+
 
     pub fn on_key(&mut self, key: Key) {
         match key {
