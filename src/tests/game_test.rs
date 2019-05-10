@@ -3,9 +3,9 @@ use std::str;
 
 use console::Key;
 
+use crate::dungeon_helpers::make_dungeon;
 use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::Game;
-use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
 fn renders_exit() {

@@ -1,5 +1,5 @@
+use crate::dungeon_helpers::make_dungeon;
 use crate::dungeon_provider::{MultiDungeonProvider, SingleDungeonProvider};
-use crate::tests::dungeon_helpers::make_dungeon;
 
 #[test]
 fn single_dungeon_provider_provides_same_dungeon_every_time() {
