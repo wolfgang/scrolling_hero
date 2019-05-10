@@ -1,4 +1,5 @@
 use console::{Key, Term};
+use crossterm_cursor::cursor;
 
 use sch::dungeon_helpers::make_dungeon;
 use sch::dungeon_provider::MultiDungeonProvider;
@@ -6,6 +7,8 @@ use sch::game::Game;
 use sch::types::DungeonDefinition;
 
 fn main() -> std::io::Result<()> {
+    let mut cursor = cursor();
+    cursor.hide();
     let mut term = Term::stdout();
 
     let dungeon_provider = MultiDungeonProvider::shared(vec![dungeon1(), dungeon2()]);
