@@ -1,9 +1,9 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::types::{DungeonLayout, Position};
+use crate::types::{DungeonDefinition, DungeonLayout, Position};
 
-pub type DungeonProvider = Iterator<Item=(DungeonLayout, Position)>;
+pub type DungeonProvider = Iterator<Item=DungeonDefinition>;
 
 pub struct SingleDungeonProvider {
     dungeon: DungeonLayout,
@@ -22,32 +22,32 @@ impl SingleDungeonProvider {
 }
 
 impl Iterator for SingleDungeonProvider {
-    type Item = (DungeonLayout, Position);
+    type Item = DungeonDefinition;
 
-    fn next(&mut self) -> Option<(DungeonLayout, Position)> {
+    fn next(&mut self) -> Option<DungeonDefinition> {
         Some((self.dungeon.clone(), self.player_position))
     }
 }
 
 pub struct MultiDungeonProvider {
     current_index: usize,
-    dungeons: Vec<(DungeonLayout, Position)>,
+    dungeons: Vec<DungeonDefinition>,
 }
 
 impl MultiDungeonProvider {
-    pub fn new(dungeons: Vec<(DungeonLayout, Position)>) -> MultiDungeonProvider {
+    pub fn new(dungeons: Vec<DungeonDefinition>) -> MultiDungeonProvider {
         MultiDungeonProvider { current_index: 0, dungeons }
     }
 
-    pub fn shared(dungeons: Vec<(DungeonLayout, Position)>) -> Rc<RefCell<DungeonProvider>> {
+    pub fn shared(dungeons: Vec<DungeonDefinition>) -> Rc<RefCell<DungeonProvider>> {
         Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as Rc<RefCell<DungeonProvider>>
     }
 }
 
 impl Iterator for MultiDungeonProvider {
-    type Item = (DungeonLayout, Position);
+    type Item = DungeonDefinition;
 
-    fn next(&mut self) -> Option<(DungeonLayout, Position)> {
+    fn next(&mut self) -> Option<DungeonDefinition> {
         let index = self.current_index;
         self.current_index += 1;
         Some(self.dungeons[index].clone())
