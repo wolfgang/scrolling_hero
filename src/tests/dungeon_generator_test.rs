@@ -17,6 +17,19 @@ fn generate_dungeon(length: u32) -> Vec<String> {
 }
 
 #[test]
+fn how_to_detect_consecutive_floor_tiles() {
+    let str1 = String::from("###...####");
+
+    let first = str1.find('.').unwrap();
+    let last = str1.rfind('.').unwrap();
+    assert_eq!(3, first);
+    assert_eq!(5, last);
+    assert_eq!(Some("..."), str1.get(first..last + 1));
+
+    assert_eq!(Some(".".repeat(last - first + 1).as_str()), str1.get(first..last + 1));
+}
+
+#[test]
 fn second_line_contains_consecutive_floor_tiles_under_entrance() {
     let dungeon = generate_dungeon(16);
     assert_eq!(2, dungeon.len());
