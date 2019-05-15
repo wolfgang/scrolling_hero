@@ -54,9 +54,7 @@ impl Game {
                 if (x as u32, y as u32 + start_y as u32) == self.player_position {
                     self.render_buffer.write(b"@")?;
                 } else {
-                    if *col == '.' { self.render_buffer.write(b".")?; }
-                    if *col == '#' { self.render_buffer.write(b"#")?; }
-                    if *col == 'E' { self.render_buffer.write(b"E")?; }
+                    self.render_buffer.write_fmt(format_args!("{}", *col))?;
                 }
             }
 
