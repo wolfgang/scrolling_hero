@@ -33,8 +33,8 @@ fn how_to_detect_consecutive_floor_tiles() {
 fn second_line_contains_consecutive_floor_tiles_under_entrance() {
     let dungeon = generate_dungeon(16);
     assert_eq!(2, dungeon.len());
-    let entrance_x = dungeon[0].find('.').unwrap();
-    assert_eq!(Some(entrance_x), dungeon[1].find('.'));
+    let entrance_x = index_of_first('.', &dungeon[0]);
+    assert_eq!('.', char_at(entrance_x, &dungeon[1]));
 }
 
 proptest! {
@@ -52,17 +52,28 @@ proptest! {
         let dungeon3 = generate_dungeon(width);
         let dungeon4 = generate_dungeon(width);
         let dungeon5 = generate_dungeon(width);
-        let hole1 = dungeon1[0].find('.').unwrap();
+        let hole1 = index_of_first('.', &dungeon1[0]);
 
         let holes = vec![
-            dungeon1[0].find('.').unwrap(),
-            dungeon2[0].find('.').unwrap(),
-            dungeon3[0].find('.').unwrap(),
-            dungeon4[0].find('.').unwrap(),
-            dungeon5[0].find('.').unwrap()
+            index_of_first('.', &dungeon1[0]),
+            index_of_first('.', &dungeon2[0]),
+            index_of_first('.', &dungeon3[0]),
+            index_of_first('.', &dungeon4[0]),
+            index_of_first('.', &dungeon5[0]),
             ];
-        let iter = holes.into_iter().filter(|x| *x != hole1);
-        prop_assert!(iter.count() > 0);
+        let positions_different_from_first = holes.into_iter().filter(|x| *x != hole1);
+        prop_assert!(positions_different_from_first.count() > 0);
     }
+}
+
+fn index_of_first(c: char, s: &str) -> usize {
+    let result = s.find(c);
+    assert_ne!(None, result);
+    result.unwrap()
+}
+
+fn char_at(index: usize, s: &str) -> char {
+    let chars: Vec<char> = s.chars().collect();
+    chars[index]
 }
 
