@@ -11,7 +11,9 @@ fn generate_dungeon(length: u32) -> Vec<String> {
         if i == entrance_x { line1.push('.') } else { line1.push('#') }
     }
 
-    let line2 = line1.clone();
+    let mut line2 = line1.clone();
+    line2.replace_range(entrance_x as usize..entrance_x as usize + 1, "..");
+
 
     vec![line1, line2]
 }
@@ -35,6 +37,13 @@ fn second_line_contains_consecutive_floor_tiles_under_entrance() {
     assert_eq!(2, dungeon.len());
     let entrance_x = index_of_first('.', &dungeon[0]);
     assert_eq!('.', char_at(entrance_x, &dungeon[1]));
+
+    let first_floor_tile = index_of_first('.', &dungeon[1]);
+    let last_floor_tile = index_of_last('.', &dungeon[1]);
+    assert!(last_floor_tile > first_floor_tile, "Expected more than one floor tile");
+    let floor_tiles = ".".repeat(last_floor_tile - first_floor_tile + 1);
+    assert_eq!(Some(floor_tiles.as_str()), dungeon[1].get(first_floor_tile..last_floor_tile + 1));
+
 }
 
 proptest! {
@@ -68,6 +77,12 @@ proptest! {
 
 fn index_of_first(c: char, s: &str) -> usize {
     let result = s.find(c);
+    assert_ne!(None, result);
+    result.unwrap()
+}
+
+fn index_of_last(c: char, s: &str) -> usize {
+    let result = s.rfind(c);
     assert_ne!(None, result);
     result.unwrap()
 }
