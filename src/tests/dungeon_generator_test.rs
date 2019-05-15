@@ -37,12 +37,24 @@ fn assert_consecutive_floor_tiles(row: &str) {
 }
 
 
-#[ignore]
 #[test]
 fn two_dungeons_have_different_number_of_floor_tiles_in_second_row() {
-    let dungeon1 = generate_dungeon(16);
-    let dungeon2 = generate_dungeon(16);
-    assert_ne!(dungeon1[1], dungeon2[1]);
+    let second_rows: Vec<String> = (1..10).map(|_| {
+        let dungeon = generate_dungeon(16);
+        dungeon[1].to_string()
+    }).collect();
+
+    assert!(has_enough_unique_values(&second_rows));
+}
+
+#[test]
+fn different_dungeons_have_mostly_different_entrance_positions() {
+    let entrance_positions = (1..10).map(|_| {
+        let dungeon = generate_dungeon(16);
+        index_of_first('.', &dungeon[0])
+    }).collect();
+
+    assert!(has_enough_unique_values(&entrance_positions));
 }
 
 
@@ -54,31 +66,12 @@ proptest! {
         prop_assert_eq!(1, dungeon[0].matches(".").count());
     }
 
-    #[test]
-    fn different_dungeons_have_mostly_different_entrance_positions(width in 10u32 .. 80) {
-        let dungeon1 = generate_dungeon(width);
-        let dungeon2 = generate_dungeon(width);
-        let dungeon3 = generate_dungeon(width);
-        let dungeon4 = generate_dungeon(width);
-        let dungeon5 = generate_dungeon(width);
-
-        let holes = vec![
-            index_of_first('.', &dungeon1[0]),
-            index_of_first('.', &dungeon2[0]),
-            index_of_first('.', &dungeon3[0]),
-            index_of_first('.', &dungeon4[0]),
-            index_of_first('.', &dungeon5[0]),
-            ];
-
-
-        prop_assert!(has_enough_unique_values(&holes));
-    }
 }
 
-fn has_enough_unique_values(values: &Vec<usize>) -> bool {
-    let mut unique_values = values.clone();
+fn has_enough_unique_values<T: PartialEq + Clone>(values: &Vec<T>) -> bool {
+    let mut unique_values = values.to_vec();
     unique_values.dedup();
-    (unique_values.len() as f64 / values.len() as f64) > 0.2
+    unique_values.len() > 1 && (unique_values.len() as f64 / values.len() as f64) > 0.3
 }
 
 fn index_of_first(c: char, s: &str) -> usize {
