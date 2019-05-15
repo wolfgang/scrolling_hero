@@ -50,13 +50,16 @@ impl Game {
         self.clear_render_buffer()?;
 
         for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
+            let mut row_str = String::with_capacity(row.len());
             for (x, col) in row.iter().enumerate() {
                 if (x as u32, y as u32 + start_y as u32) == self.player_position {
-                    self.render_buffer.write(b"@")?;
+                    row_str.push('@');
                 } else {
-                    self.render_buffer.write_fmt(format_args!("{}", *col))?;
+                    row_str.push(*col);
                 }
             }
+
+            self.render_buffer.write(row_str.as_bytes())?;
 
             if y == 0 {
                 self.render_buffer.write(format!("  Steps: {}", self.steps).as_bytes())?;
