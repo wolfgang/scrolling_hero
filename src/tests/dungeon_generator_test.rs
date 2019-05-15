@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+
 use proptest::prelude::*;
 use rand::{Rng, thread_rng};
 
@@ -11,24 +13,18 @@ fn generate_dungeon(length: u32) -> Vec<String> {
         if i == entrance_x { line1.push('.') } else { line1.push('#') }
     }
 
+    let offset1 = rng.gen_range(0, 5);
+    let offset2 = rng.gen_range(0, 5);
+
     let mut line2 = line1.clone();
-    line2.replace_range(entrance_x as usize..entrance_x as usize + 1, "..");
+
+    let from = max(1, entrance_x as i32 - offset1) as usize;
+    let to = min(length - 1, entrance_x + offset2) as usize;
+
+    line2.replace_range(from..to, ".".repeat(to - from + 1).as_str());
 
 
     vec![line1, line2]
-}
-
-#[test]
-fn how_to_detect_consecutive_floor_tiles() {
-    let str1 = String::from("###...####");
-
-    let first = str1.find('.').unwrap();
-    let last = str1.rfind('.').unwrap();
-    assert_eq!(3, first);
-    assert_eq!(5, last);
-    assert_eq!(Some("..."), str1.get(first..last + 1));
-
-    assert_eq!(Some(".".repeat(last - first + 1).as_str()), str1.get(first..last + 1));
 }
 
 #[test]
@@ -37,7 +33,6 @@ fn second_line_has_floor_tile_under_entrance() {
     assert_eq!(2, dungeon.len());
     let entrance_x = index_of_first('.', &dungeon[0]);
     assert_eq!('.', char_at(entrance_x, &dungeon[1]));
-
 }
 
 #[test]
@@ -48,6 +43,13 @@ fn second_line_contains_consecutive_floor_tiles() {
     assert!(last_floor_tile > first_floor_tile, "Expected more than one floor tile");
     let floor_tiles = ".".repeat(last_floor_tile - first_floor_tile + 1);
     assert_eq!(Some(floor_tiles.as_str()), dungeon[1].get(first_floor_tile..last_floor_tile + 1));
+}
+
+#[test]
+fn two_dungeons_have_different_number_of_floor_tiles_in_second_row() {
+    let dungeon1 = generate_dungeon(16);
+    let dungeon2 = generate_dungeon(16);
+    assert_ne!(dungeon1[1], dungeon2[1]);
 }
 
 
