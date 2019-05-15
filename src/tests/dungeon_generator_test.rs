@@ -61,7 +61,6 @@ proptest! {
         let dungeon3 = generate_dungeon(width);
         let dungeon4 = generate_dungeon(width);
         let dungeon5 = generate_dungeon(width);
-        let hole1 = index_of_first('.', &dungeon1[0]);
 
         let holes = vec![
             index_of_first('.', &dungeon1[0]),
@@ -70,9 +69,16 @@ proptest! {
             index_of_first('.', &dungeon4[0]),
             index_of_first('.', &dungeon5[0]),
             ];
-        let positions_different_from_first = holes.into_iter().filter(|x| *x != hole1);
-        prop_assert!(positions_different_from_first.count() > 0);
+
+
+        prop_assert!(has_different_values(&holes));
     }
+}
+
+fn has_different_values(values: &Vec<usize>) -> bool {
+    let first = values[0];
+    let different_from_first = values[1..].into_iter().filter(|x| *x != &first);
+    (different_from_first.count() as f64 / values.len() as f64) > 0.2
 }
 
 fn index_of_first(c: char, s: &str) -> usize {
