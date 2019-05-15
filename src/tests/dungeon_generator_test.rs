@@ -71,14 +71,14 @@ proptest! {
             ];
 
 
-        prop_assert!(has_different_values(&holes));
+        prop_assert!(has_enough_unique_values(&holes));
     }
 }
 
-fn has_different_values(values: &Vec<usize>) -> bool {
-    let first = values[0];
-    let different_from_first = values[1..].into_iter().filter(|x| *x != &first);
-    (different_from_first.count() as f64 / values.len() as f64) > 0.2
+fn has_enough_unique_values(values: &Vec<usize>) -> bool {
+    let mut unique_values = values.clone();
+    unique_values.dedup();
+    (unique_values.len() as f64 / values.len() as f64) > 0.2
 }
 
 fn index_of_first(c: char, s: &str) -> usize {

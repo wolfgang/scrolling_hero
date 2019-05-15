@@ -6,3 +6,5 @@
 # everyone who runs the test benefits from these saved cases.
 cc 8c546089425ea0144400fa077d5b65eb8adcf46cb014f3777e91be5ef045ce55 # shrinks to width = 42
 cc a69200a8f1fd6113189bb5efd4151b73dfdba6ccf82ed3d6bafbe24f67888fce # shrinks to width = 11
+cc d63cf38eddc70b2482aefceb713e248e3ba9d7bd28a21e8aabb2813495926b8f # shrinks to width = 37
+cc cae6eaf30e1084aa070afae1f1c763d9cb312b8d4dd1220d4ce96b11b4c5c6a8 # shrinks to width = 12
