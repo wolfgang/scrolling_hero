@@ -9,11 +9,11 @@ pub fn make_dungeon(strings: Vec<&str>) -> DungeonDefinition {
         for (x, c) in (*row).chars().enumerate() {
             if c == '@' {
                 player_pos = (x as u32, y as u32);
-                result_row.push(0);
+                result_row.push('.');
             }
-            if c == '.' { result_row.push(0) }
-            if c == '#' { result_row.push(1) }
-            if c == 'E' { result_row.push(2) }
+            if c == '.' { result_row.push('.') }
+            if c == '#' { result_row.push('#') }
+            if c == 'E' { result_row.push('E') }
         }
         result.push(result_row);
     }

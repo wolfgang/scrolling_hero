@@ -54,9 +54,9 @@ impl Game {
                 if (x as u32, y as u32 + start_y as u32) == self.player_position {
                     self.render_buffer.write(b"@")?;
                 } else {
-                    if *col == 0 { self.render_buffer.write(b".")?; }
-                    if *col == 1 { self.render_buffer.write(b"#")?; }
-                    if *col == 2 { self.render_buffer.write(b"E")?; }
+                    if *col == '.' { self.render_buffer.write(b".")?; }
+                    if *col == '#' { self.render_buffer.write(b"#")?; }
+                    if *col == 'E' { self.render_buffer.write(b"E")?; }
                 }
             }
 
@@ -82,17 +82,17 @@ impl Game {
         let prev_position = self.player_position;
         match key {
             Key::ArrowLeft => {
-                if self.relative_to_player(-1, 0) != 1 {
+                if self.relative_to_player(-1, 0) != '#' {
                     self.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
-                if self.relative_to_player(1, 0) != 1 {
+                if self.relative_to_player(1, 0) != '#' {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
-                if self.relative_to_player(0, 1) != 1 {
+                if self.relative_to_player(0, 1) != '#' {
                     self.player_position.1 += 1;
                 }
             }
@@ -103,14 +103,14 @@ impl Game {
         }
 
         if prev_position != self.player_position { self.steps += 1; }
-        if self.under_player() == 2 { self.goto_next_dungeon(); }
+        if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
-    fn under_player(&self) -> u16 {
+    fn under_player(&self) -> char {
         self.relative_to_player(0, 0)
     }
 
-    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> u16 {
+    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> char {
         let x = self.player_position.0 as i32;
         let y = self.player_position.1 as i32;
         self.dungeon[(y + y_offset) as usize][(x + x_offset) as usize]
