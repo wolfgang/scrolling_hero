@@ -32,19 +32,24 @@ fn how_to_detect_consecutive_floor_tiles() {
 }
 
 #[test]
-fn second_line_contains_consecutive_floor_tiles_under_entrance() {
+fn second_line_has_floor_tile_under_entrance() {
     let dungeon = generate_dungeon(16);
     assert_eq!(2, dungeon.len());
     let entrance_x = index_of_first('.', &dungeon[0]);
     assert_eq!('.', char_at(entrance_x, &dungeon[1]));
 
+}
+
+#[test]
+fn second_line_contains_consecutive_floor_tiles() {
+    let dungeon = generate_dungeon(16);
     let first_floor_tile = index_of_first('.', &dungeon[1]);
     let last_floor_tile = index_of_last('.', &dungeon[1]);
     assert!(last_floor_tile > first_floor_tile, "Expected more than one floor tile");
     let floor_tiles = ".".repeat(last_floor_tile - first_floor_tile + 1);
     assert_eq!(Some(floor_tiles.as_str()), dungeon[1].get(first_floor_tile..last_floor_tile + 1));
-
 }
+
 
 proptest! {
     #[test]
