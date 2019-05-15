@@ -10,10 +10,7 @@ pub fn make_dungeon(strings: Vec<&str>) -> DungeonDefinition {
             if c == '@' {
                 player_pos = (x as u32, y as u32);
                 result_row.push('.');
-            }
-            if c == '.' { result_row.push('.') }
-            if c == '#' { result_row.push('#') }
-            if c == 'E' { result_row.push('E') }
+            } else { result_row.push(c) };
         }
         result.push(result_row);
     }
