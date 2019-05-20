@@ -15,8 +15,13 @@ fn generate_dungeon(width: u32) -> DungeonLayout {
 #[test]
 fn first_row_is_all_floor_except_left_right_walls() {
     let dungeon1 = generate_dungeon(10);
-    assert_eq!("#........#".chars().collect::<Vec<char>>(), dungeon1[0]);
+    assert_eq!(as_chars("#........#"), dungeon1[0]);
 
     let dungeon2 = generate_dungeon(5);
-    assert_eq!("#...#".chars().collect::<Vec<char>>(), dungeon2[0]);
+    assert_eq!(as_chars("#...#"), dungeon2[0]);
+}
+
+
+fn as_chars(s: &str) -> Vec<char> {
+    s.chars().collect()
 }
