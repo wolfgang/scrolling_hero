@@ -1,6 +1,6 @@
 use proptest::prelude::*;
 
-use crate::dungeon_generator::generate_dungeon;
+use crate::dungeon_generator_0::generate_dungeon;
 
 #[test]
 fn second_line_has_floor_tile_under_entrance() {
