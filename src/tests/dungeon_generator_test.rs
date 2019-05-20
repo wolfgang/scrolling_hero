@@ -13,7 +13,7 @@ fn generate_dungeon(width: u32) -> DungeonLayout {
     vec![first_row]
 }
 
-fn generate_dungeon_step(width: usize, height: usize) -> DungeonLayout {
+fn generate_dungeon_init(width: usize, height: usize) -> DungeonLayout {
     let mut open_row = vec!['.'; width as usize];
     open_row[0] = '#';
     open_row[width as usize - 1] = '#';
@@ -35,18 +35,23 @@ fn first_row_is_all_floor_except_left_right_walls() {
 
 #[test]
 fn first_iteration_is_all_walls_except_first_and_last_line() {
-    let dungeon = generate_dungeon_step(5, 4);
+    let dungeon = generate_dungeon_init(5, 4);
 
     assert_eq!(
-        make_dungeon(vec![
+        dungeon_from(vec![
             "#...#",
             "#####",
             "#####",
             "#...#",
         ]),
-        (dungeon, (0, 0)))
+        dungeon)
 }
 
 fn as_chars(s: &str) -> Vec<char> {
     s.chars().collect()
+}
+
+fn dungeon_from(strings: Vec<&str>) -> DungeonLayout {
+    let dungeon = make_dungeon(strings);
+    dungeon.0
 }
