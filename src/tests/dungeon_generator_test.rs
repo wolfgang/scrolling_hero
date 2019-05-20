@@ -13,24 +13,15 @@ fn generate_dungeon(width: u32) -> DungeonLayout {
     vec![first_row]
 }
 
-fn generate_dungeon_step(width: u32, height: u32) -> DungeonLayout {
-    let mut rows = Vec::with_capacity(height as usize);
+fn generate_dungeon_step(width: usize, height: usize) -> DungeonLayout {
+    let mut open_row = vec!['.'; width as usize];
+    open_row[0] = '#';
+    open_row[width as usize - 1] = '#';
 
-    let mut first_row = Vec::with_capacity(width as usize);
-    first_row.push('#');
-    for _i in 0..width - 2 {
-        first_row.push('.');
-    }
-    first_row.push('#');
-
-    rows.push(first_row.to_vec());
-    for _i in 0..height - 2 {
-        rows.push(vec!['#'; width as usize]);
-    }
-
-    rows.push(first_row.to_vec());
-
-    rows
+    let mut dungeon = vec![vec!['#'; width]; height as usize];
+    dungeon[0] = open_row.to_vec();
+    dungeon[height - 1] = open_row.to_vec();
+    dungeon
 }
 
 #[test]
