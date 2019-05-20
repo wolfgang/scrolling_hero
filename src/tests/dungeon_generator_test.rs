@@ -23,15 +23,9 @@ fn generate_dungeon_step(width: u32, height: u32) -> DungeonLayout {
     }
     first_row.push('#');
 
-    let mut middle_row = Vec::with_capacity(width as usize);
-    for _i in 0..width {
-        middle_row.push('#');
-    }
-
-
     rows.push(first_row.to_vec());
     for _i in 0..height - 2 {
-        rows.push(middle_row.to_vec());
+        rows.push(vec!['#'; width as usize]);
     }
 
     rows.push(first_row.to_vec());
