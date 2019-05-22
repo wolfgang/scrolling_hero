@@ -1,21 +1,20 @@
 use std::cell::RefCell;
-use std::cmp::{max, min};
-use std::io::{Cursor, Seek, SeekFrom, Write};
+use std::io::Write;
 use std::rc::Rc;
 
 use console::Key;
 
 use crate::dungeon_provider::DungeonProvider;
+use crate::dungeon_renderer::DungeonRenderer;
 use crate::types::{DungeonLayout, Position};
 
 pub struct Game {
     dungeon: DungeonLayout,
     player_position: Position,
-    camera_offset: i32,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
-    render_buffer: Cursor<Vec<u8>>,
     is_running: bool,
     steps: u32,
+    dungeon_renderer: DungeonRenderer
 }
 
 impl Game {
@@ -29,11 +28,10 @@ impl Game {
         Game {
             dungeon,
             player_position,
-            camera_offset,
             dungeon_provider,
-            render_buffer: Cursor::new(Vec::with_capacity(512)),
             is_running: true,
             steps: 0,
+            dungeon_renderer: DungeonRenderer::new(camera_offset)
         }
     }
 
@@ -43,41 +41,8 @@ impl Game {
 
 
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
-        let player_y = self.player_position.1;
-        let start_y = max(0, player_y as i32 - self.camera_offset) as usize;
-        let end_y = min(self.dungeon.len() - 1, player_y as usize + self.camera_offset as usize);
-
-        self.clear_render_buffer()?;
-
-        for (y, row) in self.dungeon[start_y..end_y + 1].iter().enumerate() {
-            let mut row_str = String::with_capacity(row.len());
-            for (x, col) in row.iter().enumerate() {
-                if (x as u32, y as u32 + start_y as u32) == self.player_position {
-                    row_str.push('@');
-                } else {
-                    row_str.push(*col);
-                }
-            }
-
-            self.render_buffer.write(row_str.as_bytes())?;
-
-            if y == 0 {
-                self.render_buffer.write(format!("  Steps: {}", self.steps).as_bytes())?;
-            }
-
-            self.render_buffer.write(b"\n")?;
-        }
-
-        writer.write(self.render_buffer.get_ref())?;
-        Ok(end_y as u32 - start_y as u32 + 1)
+        self.dungeon_renderer.render(writer, &self.dungeon, &self.player_position, self.steps)
     }
-
-    fn clear_render_buffer(&mut self) -> std::io::Result<()> {
-        self.render_buffer.get_mut().clear();
-        self.render_buffer.seek(SeekFrom::Start(0))?;
-        Ok(())
-    }
-
 
     pub fn on_key(&mut self, key: Key) {
         let prev_position = self.player_position;

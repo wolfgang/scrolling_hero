@@ -5,8 +5,6 @@ authors = ["wolfgang <wolfgang@wolfgangdeutsch.work>"]
 edition = "2018"
 
 [dev-dependencies]
-rand_core = "0.4"
-proptest = "0.9.3"
 
 [dependencies]
 rand = "0.6.4"

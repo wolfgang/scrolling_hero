@@ -12,22 +12,10 @@
 
 
 
-Generate the dungeon
+[X] Generate the dungeon
 
 
-```
-#..................#
-#........###########
-####....############
-####.###############
-####....############
-#######.############
-#...E..............#
-```
-
-
-
-Manipulate dungeon generator by hacking terminals
+[ ] Manipulate dungeon generator by hacking terminals
 
 Constrain movement and penalties
 
