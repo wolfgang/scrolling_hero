@@ -4,7 +4,7 @@ use rand::rngs::StdRng;
 use crate::types::DungeonLayout;
 
 pub fn dungeon_with_num_paths(num_paths: u16, width: usize, height: usize, rng: &mut StdRng) -> DungeonLayout {
-    let mut dungeon = generate_dungeon_init(width, height);
+    let mut dungeon = init_dungeon(width, height);
     for _ in 0..num_paths {
         generate_dungeon_path(&mut dungeon, rng);
     }
@@ -12,7 +12,7 @@ pub fn dungeon_with_num_paths(num_paths: u16, width: usize, height: usize, rng: 
 }
 
 
-fn generate_dungeon_init(width: usize, height: usize) -> DungeonLayout {
+fn init_dungeon(width: usize, height: usize) -> DungeonLayout {
     let mut open_row = vec!['.'; width as usize];
     open_row[0] = '#';
     open_row[width as usize - 1] = '#';
