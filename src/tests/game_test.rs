@@ -214,6 +214,20 @@ fn player_collides_with_walls() {
 }
 
 #[test]
+fn player_does_not_move_beyond_last_dungeon_row() {
+    let mut game = make_game(vec![
+        "#...#",
+        "#@..#"
+    ]);
+
+    game.on_key(Key::ArrowDown);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#@..#"
+    ]);
+}
+
+#[test]
 fn dont_try_to_render_dungeon_line_beyond_first() {
     let mut game = make_game(vec![
         "#@...",

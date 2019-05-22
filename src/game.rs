@@ -93,7 +93,8 @@ impl Game {
                 }
             }
             Key::ArrowDown => {
-                if self.relative_to_player(0, 1) != '#' {
+                let is_at_bottom = self.player_position.1 == self.dungeon.len() as u32 - 1;
+                if !is_at_bottom && self.relative_to_player(0, 1) != '#' {
                     self.player_position.1 += 1;
                 }
             }
