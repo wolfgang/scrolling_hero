@@ -3,9 +3,11 @@ use rand::rngs::StdRng;
 
 use crate::types::DungeonLayout;
 
-pub fn dungeon_with_one_path(width: usize, height: usize, rng: &mut StdRng) -> DungeonLayout {
+pub fn dungeon_with_num_paths(num_paths: u16, width: usize, height: usize, rng: &mut StdRng) -> DungeonLayout {
     let mut dungeon = generate_dungeon_init(width, height);
-    generate_dungeon_path(&mut dungeon, rng);
+    for _ in 0..num_paths {
+        generate_dungeon_path(&mut dungeon, rng);
+    }
     dungeon
 }
 
