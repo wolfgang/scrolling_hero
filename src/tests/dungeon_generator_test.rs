@@ -16,7 +16,7 @@ fn generates_dungeon_with_one_path() {
             "######...#",
             "#######..#",
             "#######..#",
-            "#........#"]),
+            "#......E.#"]),
         single_path_dungeon_from_seed(1000));
 
     assert_eq!(
@@ -28,7 +28,7 @@ fn generates_dungeon_with_one_path() {
             "##.....###",
             "##.....###",
             "######..##",
-            "#........#"]),
+            "#.....E..#"]),
         single_path_dungeon_from_seed(2000));
 
     assert_eq!(
@@ -40,8 +40,24 @@ fn generates_dungeon_with_one_path() {
             "###.######",
             "##..######",
             "##.#######",
-            "#........#"]),
+            "#.....E..#"]),
         single_path_dungeon_from_seed(3000));
+}
+
+#[test]
+fn does_not_generate_exit_for_each_path() {
+    let mut rng = StdRng::seed_from_u64(1000);
+    let dungeon = dungeon_with_num_paths(2, 10, 8, &mut rng);
+    assert_eq!(dungeon_layout(vec![
+        "#........#",
+        "######...#",
+        "####.....#",
+        "####.....#",
+        "####.....#",
+        "####.##..#",
+        "####.....#",
+        "#...E....#"
+    ]), dungeon)
 }
 
 pub fn single_path_dungeon_from_seed(seed: u64) -> DungeonLayout {

@@ -8,6 +8,10 @@ pub fn dungeon_with_num_paths(num_paths: u16, width: usize, height: usize, rng: 
     for _ in 0..num_paths {
         generate_dungeon_path(&mut dungeon, rng);
     }
+
+    let exit_position = rng.gen_range(1, width - 2);
+    dungeon[height - 1][exit_position] = 'E';
+
     dungeon
 }
 

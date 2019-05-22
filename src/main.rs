@@ -36,11 +36,8 @@ fn main() -> std::io::Result<()> {
 }
 
 fn generate_dungeon(rng: &mut StdRng) -> DungeonDefinition {
-    let mut dungeon = dungeon_with_num_paths(5, 16, 4, rng);
+    let dungeon = dungeon_with_num_paths(5, 16, 4, rng);
     let width = dungeon[0].len();
-    let height = dungeon.len();
-    let exit_position = rng.gen_range(1, width as u32 - 2) as usize;
     let player_position = rng.gen_range(1, width as u32 - 2);
-    dungeon[height - 1][exit_position] = 'E';
     (dungeon, (player_position, 0))
 }
