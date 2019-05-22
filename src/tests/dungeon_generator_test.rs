@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use crate::dungeon_generator::dungeon_with_one_path;
+use rand::{Rng, SeedableRng};
+use rand::rngs::StdRng;
+
+use crate::dungeon_generator::{dungeon_with_one_path, dungeon_with_one_path2};
 use crate::dungeon_helpers::make_dungeon;
 use crate::types::DungeonLayout;
 
@@ -18,7 +21,8 @@ fn generates_dungeon_with_one_path() {
 }
 
 pub fn create_dungeon_with_one_path(seed: u64) -> DungeonLayout {
-    dungeon_with_one_path(10, 8, seed)
+    let mut rng = StdRng::seed_from_u64(seed);
+    dungeon_with_one_path2(10, 8, &mut rng)
 }
 
 
