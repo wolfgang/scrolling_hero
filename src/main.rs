@@ -17,7 +17,7 @@ fn main() -> std::io::Result<()> {
     let mut dungeons = Vec::new();
 
     for _ in 1..50 {
-        dungeons.push(generate_dungeon(&mut rng));
+        dungeons.push(generate_dungeon(80, 40, &mut rng));
     }
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
@@ -35,8 +35,8 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn generate_dungeon(rng: &mut StdRng) -> DungeonDefinition {
-    let dungeon = dungeon_with_num_paths(5, 16, 4, rng);
+fn generate_dungeon(width: usize, height: usize, rng: &mut StdRng) -> DungeonDefinition {
+    let dungeon = dungeon_with_num_paths((width / 10) as u16, width, height, rng);
     let width = dungeon[0].len();
     let player_position = rng.gen_range(1, width as u32 - 2);
     (dungeon, (player_position, 0))
