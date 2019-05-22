@@ -1,5 +1,6 @@
 use console::Term;
 
+use sch::dungeon_generator::dungeon_with_one_path;
 use sch::dungeon_helpers::make_dungeon;
 use sch::dungeon_provider::MultiDungeonProvider;
 use sch::game::Game;
@@ -24,19 +25,10 @@ fn main() -> std::io::Result<()> {
 }
 
 fn dungeon1() -> DungeonDefinition {
-    make_dungeon(vec![
-        "#########################################",
-        "######################...@..#############",
-        "####################........#############",
-        "#####################.......#############",
-        "##########...............##.#############",
-        "############.............##....##########",
-        "###############..........#####.##########",
-        "#################.####...#####.##########",
-        "#################.......###.....#########",
-        "######################E.....#############",
-        "#########################################",
-    ])
+    let mut dungeon = dungeon_with_one_path(64, 32, 1234);
+    let height = dungeon.len();
+    dungeon[height - 1][10] = 'E';
+    (dungeon, (10, 0))
 }
 
 fn dungeon2() -> DungeonDefinition {
