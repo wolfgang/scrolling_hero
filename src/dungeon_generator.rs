@@ -3,8 +3,8 @@ use rand::rngs::StdRng;
 
 use crate::types::DungeonLayout;
 
-pub fn create_dungeon_with_one_path(seed: u64) -> DungeonLayout {
-    let mut dungeon = generate_dungeon_init(10, 8);
+pub fn dungeon_with_one_path(width: usize, height: usize, seed: u64) -> DungeonLayout {
+    let mut dungeon = generate_dungeon_init(width, height);
     generate_dungeon_path(&mut dungeon, seed);
     dungeon
 }

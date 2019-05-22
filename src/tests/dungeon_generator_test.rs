@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::dungeon_generator::create_dungeon_with_one_path;
+use crate::dungeon_generator::dungeon_with_one_path;
 use crate::dungeon_helpers::make_dungeon;
 use crate::types::DungeonLayout;
 
@@ -16,6 +16,11 @@ fn generates_dungeon_with_one_path() {
     assert_eq!(ref_dungeons.get(&2000), Some(&dungeon2));
     assert_eq!(ref_dungeons.get(&3000), Some(&dungeon3));
 }
+
+pub fn create_dungeon_with_one_path(seed: u64) -> DungeonLayout {
+    dungeon_with_one_path(10, 8, seed)
+}
+
 
 #[allow(dead_code)]
 fn print_dungeon_snapshot(dungeon: &DungeonLayout) {
