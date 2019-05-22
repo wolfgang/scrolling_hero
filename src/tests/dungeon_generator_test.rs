@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
 
@@ -82,32 +84,30 @@ fn first_iteration_is_all_walls_except_first_and_last_line() {
 
 #[test]
 fn second_iteration_carves_a_path() {
-    let mut dungeon = generate_dungeon_init(10, 8);
+    let mut dungeon1 = generate_dungeon_init(10, 8);
+    generate_dungeon_path(&mut dungeon1, 1000);
 
-    // Do this with a fixed seed and use first result that looks right as ref
-    generate_dungeon_path(&mut dungeon, 1000);
-
-    assert_eq!(
-        dungeon_from(vec![
-            "#........#",
-            "#######..#",
-            "####.....#",
-            "####...###",
-            "######...#",
-            "#######..#",
-            "#######..#",
-            "#........#"]),
-        dungeon
-    );
+    let ref_dungeons = seeds_to_dungeons();
+    assert_eq!(ref_dungeons.get(&1000), Some(&dungeon1));
 }
-
-
-//fn as_chars(s: &str) -> Vec<char> {
-//    s.chars().collect()
-//}
-//
 
 fn dungeon_from(strings: Vec<&str>) -> DungeonLayout {
     let dungeon = make_dungeon(strings);
     dungeon.0
+}
+
+fn seeds_to_dungeons() -> HashMap<u64, DungeonLayout> {
+    let mut hm = HashMap::new();
+
+    hm.insert(1000, dungeon_from(vec![
+        "#........#",
+        "#######..#",
+        "####.....#",
+        "####...###",
+        "######...#",
+        "#######..#",
+        "#######..#",
+        "#........#"]));
+
+    hm
 }
