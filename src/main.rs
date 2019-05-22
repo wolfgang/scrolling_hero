@@ -1,6 +1,7 @@
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use console::Term;
+use rand::{Rng, thread_rng};
 
 use sch::dungeon_generator::dungeon_with_one_path;
 use sch::dungeon_helpers::make_dungeon;
@@ -28,10 +29,12 @@ fn main() -> std::io::Result<()> {
 
 fn dungeon1() -> DungeonDefinition {
     let seed = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-    let mut dungeon = dungeon_with_one_path(64, 32, seed);
+    let mut rng = thread_rng();
+    let mut dungeon = dungeon_with_one_path(32, 16, seed);
+    let width = dungeon[0].len();
     let height = dungeon.len();
-    dungeon[height - 1][10] = 'E';
-    (dungeon, (10, 0))
+    dungeon[height - 1][rng.gen_range(1, width as u32 - 2) as usize] = 'E';
+    (dungeon, (rng.gen_range(1, width as u32 - 2), 0))
 }
 
 fn dungeon2() -> DungeonDefinition {
