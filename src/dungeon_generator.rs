@@ -3,7 +3,14 @@ use rand::rngs::StdRng;
 
 use crate::types::DungeonLayout;
 
-pub fn generate_dungeon_init(width: usize, height: usize) -> DungeonLayout {
+pub fn create_dungeon_with_one_path(seed: u64) -> DungeonLayout {
+    let mut dungeon = generate_dungeon_init(10, 8);
+    generate_dungeon_path(&mut dungeon, seed);
+    dungeon
+}
+
+
+fn generate_dungeon_init(width: usize, height: usize) -> DungeonLayout {
     let mut open_row = vec!['.'; width as usize];
     open_row[0] = '#';
     open_row[width as usize - 1] = '#';
@@ -18,7 +25,7 @@ const LEFT: u8 = 0;
 const RIGHT: u8 = 1;
 const DOWN: u8 = 2;
 
-pub fn generate_dungeon_path(dungeon: &mut DungeonLayout, rng_seed: u64) {
+fn generate_dungeon_path(dungeon: &mut DungeonLayout, rng_seed: u64) {
     let width = dungeon[0].len();
     let height = dungeon.len();
 
