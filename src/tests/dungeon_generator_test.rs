@@ -18,7 +18,7 @@ const LEFT: u8 = 0;
 const RIGHT: u8 = 1;
 const DOWN: u8 = 2;
 
-fn generate_dungeon_step(dungeon: &mut DungeonLayout) {
+fn generate_dungeon_path(dungeon: &mut DungeonLayout) {
     // Choose floor tile in first row
     // Punch floor tile below that
     // Choose random direction (left, down, right)
@@ -32,21 +32,25 @@ fn generate_dungeon_step(dungeon: &mut DungeonLayout) {
 
     let mut rng = thread_rng();
 
-    let mut x = width / 2;
+    let mut x = rng.gen_range(1, width - 2);
     let mut y = 1;
     dungeon[1][x] = '.';
 
     let mut prev_x = x;
-    let mut prev_y = y;
 
     while y < height - 1 {
         let mut directions = Vec::new();
         directions.push(DOWN);
-        if x - 1 > 1 && x - 1 != prev_x { directions.push(LEFT) };
-        if x + 1 < width - 1 && x + 1 != prev_x { directions.push(RIGHT) };
+        if x - 1 > 1 && x - 1 != prev_x {
+            directions.push(LEFT);
+            directions.push(LEFT);
+        };
+        if x + 1 < width - 1 && x + 1 != prev_x {
+            directions.push(RIGHT);
+            directions.push(RIGHT);
+        };
 
         prev_x = x;
-        prev_y = y;
 
         let index = rng.gen_range(0, directions.len());
         let direction = directions[index];
@@ -66,9 +70,6 @@ fn generate_dungeon_step(dungeon: &mut DungeonLayout) {
         }
 
         dungeon[y][x] = '.';
-
-
-
     }
 }
 
@@ -91,7 +92,7 @@ fn second_iteration_carves_a_path() {
     let mut dungeon = generate_dungeon_init(20, 10);
 
     // Do this with a fixed seed and use first result that looks right as ref
-    generate_dungeon_step(&mut dungeon);
+    generate_dungeon_path(&mut dungeon);
 
     for row in dungeon {
         println!("{}", row.into_iter().collect::<String>());
