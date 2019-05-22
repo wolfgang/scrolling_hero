@@ -1,4 +1,5 @@
-use rand::{Rng, thread_rng};
+use rand::{Rng, SeedableRng};
+use rand::rngs::StdRng;
 
 use crate::dungeon_helpers::make_dungeon;
 use crate::types::DungeonLayout;
@@ -18,19 +19,11 @@ const LEFT: u8 = 0;
 const RIGHT: u8 = 1;
 const DOWN: u8 = 2;
 
-fn generate_dungeon_path(dungeon: &mut DungeonLayout) {
-    // Choose floor tile in first row
-    // Punch floor tile below that
-    // Choose random direction (left, down, right)
-    // Punch floor tile there
-    // Choose random direction except the one we came from
-    // Punch floor tile there
-    // Repeat until we hit an existing floor tile or last row
-
+fn generate_dungeon_path(dungeon: &mut DungeonLayout, rng_seed: u64) {
     let width = dungeon[0].len();
     let height = dungeon.len();
 
-    let mut rng = thread_rng();
+    let mut rng = StdRng::seed_from_u64(rng_seed);
 
     let mut x = rng.gen_range(1, width - 2);
     let mut y = 1;
@@ -89,14 +82,23 @@ fn first_iteration_is_all_walls_except_first_and_last_line() {
 
 #[test]
 fn second_iteration_carves_a_path() {
-    let mut dungeon = generate_dungeon_init(20, 10);
+    let mut dungeon = generate_dungeon_init(10, 8);
 
     // Do this with a fixed seed and use first result that looks right as ref
-    generate_dungeon_path(&mut dungeon);
+    generate_dungeon_path(&mut dungeon, 1000);
 
-    for row in dungeon {
-        println!("{}", row.into_iter().collect::<String>());
-    }
+    assert_eq!(
+        dungeon_from(vec![
+            "#........#",
+            "#######..#",
+            "####.....#",
+            "####...###",
+            "######...#",
+            "#######..#",
+            "#######..#",
+            "#........#"]),
+        dungeon
+    );
 }
 
 
