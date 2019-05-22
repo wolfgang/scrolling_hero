@@ -1,3 +1,5 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use console::Term;
 
 use sch::dungeon_generator::dungeon_with_one_path;
@@ -25,7 +27,8 @@ fn main() -> std::io::Result<()> {
 }
 
 fn dungeon1() -> DungeonDefinition {
-    let mut dungeon = dungeon_with_one_path(64, 32, 1234);
+    let seed = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+    let mut dungeon = dungeon_with_one_path(64, 32, seed);
     let height = dungeon.len();
     dungeon[height - 1][10] = 'E';
     (dungeon, (10, 0))
