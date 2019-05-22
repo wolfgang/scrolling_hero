@@ -17,7 +17,7 @@ fn main() -> std::io::Result<()> {
     let mut dungeons = Vec::new();
 
     for _ in 1..50 {
-        dungeons.push(generate_dungeon(80, 40, &mut rng));
+        dungeons.push(generate_dungeon(60, 40, &mut rng));
     }
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
