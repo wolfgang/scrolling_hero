@@ -10,21 +10,16 @@
 
 [X] "Game over" after last dungeon was exited
 
-
-
 [X] Generate the dungeon
 
+[ ] Constrain movement and penalties
 
 [ ] Manipulate dungeon generator by hacking terminals
 
-Constrain movement and penalties
 
 Fight guards/dev team
 
 Pickup items
-
-
-
 
 
 # Dungeon Generator in the game
@@ -75,7 +70,7 @@ Pickup items
     - Destroy a power generator (reduce cpu cycles)
     - Unleash a project manager (slow down development)
     - Unleash MORE project managers
-    - Kill QA personell
+    - Kill QA personnel
     - Destroy bug reports
     - Close doors to reduce cooling:  We are in a data center that defends itself .. but also generates its next levels. Evil AI and stuff. Or evil programmers/programming team/game dev team
     - Can also strive to enhance next dungeon, to have more of a challenge, and greater reward
