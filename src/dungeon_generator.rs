@@ -13,8 +13,6 @@ pub struct DungeonGenOpts {
 
 pub fn dungeon_with_num_paths(
     num_paths: u16,
-    _width: usize,
-    _height: usize,
     gen_opts: DungeonGenOpts,
     rng: &mut StdRng) -> DungeonLayout {
     let width = gen_opts.width;
