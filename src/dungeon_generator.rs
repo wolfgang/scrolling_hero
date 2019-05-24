@@ -6,19 +6,19 @@ use crate::types::DungeonLayout;
 pub struct DungeonGenOpts {
     pub width: usize,
     pub height: usize,
+    pub num_paths: u16,
     pub vertical_bias: u16,
     pub horizontal_bias: u16,
 
 }
 
 pub fn dungeon_with_num_paths(
-    num_paths: u16,
     gen_opts: DungeonGenOpts,
     rng: &mut StdRng) -> DungeonLayout {
     let width = gen_opts.width;
     let height = gen_opts.height;
     let mut dungeon = init_dungeon(width, height);
-    for _ in 0..num_paths {
+    for _ in 0..gen_opts.num_paths {
         generate_dungeon_path(&mut dungeon, &gen_opts, rng);
     }
 
@@ -68,7 +68,6 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
             for _ in 0..gen_opts.horizontal_bias {
                 directions.push(RIGHT);
             }
-
         };
 
         prev_x = x;
