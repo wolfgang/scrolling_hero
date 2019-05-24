@@ -4,16 +4,21 @@ use rand::rngs::StdRng;
 use crate::types::DungeonLayout;
 
 pub struct DungeonGenOpts {
+    pub width: usize,
+    pub height: usize,
     pub vertical_bias: u16,
     pub horizontal_bias: u16,
+
 }
 
 pub fn dungeon_with_num_paths(
     num_paths: u16,
-    width: usize,
-    height: usize,
+    _width: usize,
+    _height: usize,
     gen_opts: DungeonGenOpts,
     rng: &mut StdRng) -> DungeonLayout {
+    let width = gen_opts.width;
+    let height = gen_opts.height;
     let mut dungeon = init_dungeon(width, height);
     for _ in 0..num_paths {
         generate_dungeon_path(&mut dungeon, &gen_opts, rng);
@@ -42,8 +47,8 @@ const RIGHT: u8 = 1;
 const DOWN: u8 = 2;
 
 fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts, rng: &mut StdRng) {
-    let width = dungeon[0].len();
-    let height = dungeon.len();
+    let width = gen_opts.width;
+    let height = gen_opts.height;
 
     let mut x = rng.gen_range(1, width - 2);
     let mut y = 1;

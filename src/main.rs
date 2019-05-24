@@ -36,7 +36,7 @@ fn main() -> std::io::Result<()> {
 }
 
 fn generate_dungeon(width: usize, height: usize, rng: &mut StdRng) -> DungeonDefinition {
-    let opts = DungeonGenOpts { vertical_bias: 1, horizontal_bias: 2 };
+    let opts = DungeonGenOpts { width, height, vertical_bias: 1, horizontal_bias: 2 };
     let dungeon = dungeon_with_num_paths((width / 10) as u16, width, height, opts, rng);
     let width = dungeon[0].len();
     let player_position = rng.gen_range(1, width as u32 - 2);
