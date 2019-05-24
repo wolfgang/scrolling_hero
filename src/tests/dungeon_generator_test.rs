@@ -47,9 +47,14 @@ fn generates_dungeon_with_one_path() {
 #[test]
 fn does_not_generate_exit_for_each_path() {
     let mut rng = StdRng::seed_from_u64(1000);
-    let dungeon = dungeon_with_num_paths(
-        DungeonGenOpts { vertical_bias: 1, horizontal_bias: 2, width: 10, height: 8, num_paths: 2 },
-        &mut rng);
+    let gen_opts = DungeonGenOpts {
+        width: 10,
+        height: 8,
+        num_paths: 2,
+        vertical_bias: 1,
+        horizontal_bias: 2,
+    };
+    let dungeon = dungeon_with_num_paths(&gen_opts, &mut rng);
     assert_eq!(dungeon_layout(vec![
         "#........#",
         "######...#",
@@ -64,7 +69,14 @@ fn does_not_generate_exit_for_each_path() {
 
 pub fn single_path_dungeon_from_seed(seed: u64) -> DungeonLayout {
     let mut rng = StdRng::seed_from_u64(seed);
-    dungeon_with_num_paths(DungeonGenOpts { vertical_bias: 1, horizontal_bias: 2, width: 10, height: 8, num_paths: 1 }, &mut rng)
+    let gen_opts = DungeonGenOpts {
+        width: 10,
+        height: 8,
+        num_paths: 1,
+        vertical_bias: 1,
+        horizontal_bias: 2,
+    };
+    dungeon_with_num_paths(&gen_opts, &mut rng)
 }
 
 #[allow(dead_code)]
