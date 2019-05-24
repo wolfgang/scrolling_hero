@@ -6,7 +6,7 @@ use crate::types::DungeonLayout;
 pub struct DungeonGenOpts {
     pub width: usize,
     pub height: usize,
-    pub num_paths: u16,
+    pub num_paths: u8,
     pub vertical_bias: u8,
     pub horizontal_bias: u8,
 

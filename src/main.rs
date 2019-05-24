@@ -39,7 +39,7 @@ fn generate_dungeon(width: usize, height: usize, rng: &mut StdRng) -> DungeonDef
     let opts = DungeonGenOpts {
         width,
         height,
-        num_paths: (width / 10) as u16,
+        num_paths: (width / 10) as u8,
         vertical_bias: 1,
         horizontal_bias: 2,
     };
