@@ -12,9 +12,7 @@ pub struct DungeonGenOpts {
 
 }
 
-pub fn dungeon_with_num_paths(
-    gen_opts: &DungeonGenOpts,
-    rng: &mut StdRng) -> DungeonLayout {
+pub fn dungeon_with_num_paths(gen_opts: &DungeonGenOpts, rng: &mut StdRng) -> DungeonLayout {
     let width = gen_opts.width;
     let height = gen_opts.height;
     let mut dungeon = init_dungeon(width, height);
@@ -56,18 +54,12 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
 
     while y < height - 1 {
         let mut directions = Vec::new();
-        for _ in 0..gen_opts.vertical_bias {
-            directions.push(DOWN);
-        }
+        add_direction_times(gen_opts.vertical_bias, DOWN, &mut directions);
         if x - 1 > 1 && x - 1 != prev_x {
-            for _ in 0..gen_opts.horizontal_bias {
-                directions.push(LEFT);
-            }
+            add_direction_times(gen_opts.horizontal_bias, LEFT, &mut directions);
         };
         if x + 1 < width - 1 && x + 1 != prev_x {
-            for _ in 0..gen_opts.horizontal_bias {
-                directions.push(RIGHT);
-            }
+            add_direction_times(gen_opts.horizontal_bias, RIGHT, &mut directions);
         };
 
         prev_x = x;
@@ -90,5 +82,11 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
         }
 
         dungeon[y][x] = '.';
+    }
+}
+
+fn add_direction_times(times: u16, direction: u8, directions: &mut Vec<u8>) {
+    for _ in 0..times {
+        directions.push(direction);
     }
 }
