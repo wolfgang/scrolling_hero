@@ -60,15 +60,9 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
         let direction = directions[index];
 
         match direction {
-            LEFT => {
-                x = x - 1;
-            }
-            DOWN => {
-                y = y + 1;
-            }
-            RIGHT => {
-                x = x + 1;
-            }
+            LEFT => { x = x - 1; }
+            DOWN => { y = y + 1; }
+            RIGHT => { x = x + 1; }
             _ => {}
         }
 
