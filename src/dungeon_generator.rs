@@ -7,8 +7,8 @@ pub struct DungeonGenOpts {
     pub width: usize,
     pub height: usize,
     pub num_paths: u16,
-    pub vertical_bias: u16,
-    pub horizontal_bias: u16,
+    pub vertical_bias: u8,
+    pub horizontal_bias: u8,
 
 }
 
@@ -88,7 +88,7 @@ fn possible_directions(gen_opts: &DungeonGenOpts, x: usize, prev_x: usize) -> Ve
     directions
 }
 
-fn add_direction_times(times: u16, direction: u8, directions: &mut Vec<u8>) {
+fn add_direction_times(times: u8, direction: u8, directions: &mut Vec<u8>) {
     for _ in 0..times {
         directions.push(direction);
     }
