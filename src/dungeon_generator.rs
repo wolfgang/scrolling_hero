@@ -53,15 +53,7 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
     let mut prev_x = x;
 
     while y < height - 1 {
-        let mut directions = Vec::new();
-        add_direction_times(gen_opts.vertical_bias, DOWN, &mut directions);
-        if x - 1 > 1 && x - 1 != prev_x {
-            add_direction_times(gen_opts.horizontal_bias, LEFT, &mut directions);
-        };
-        if x + 1 < width - 1 && x + 1 != prev_x {
-            add_direction_times(gen_opts.horizontal_bias, RIGHT, &mut directions);
-        };
-
+        let directions = possible_directions(gen_opts, x, prev_x);
         prev_x = x;
 
         let index = rng.gen_range(0, directions.len());
@@ -77,12 +69,23 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts,
             RIGHT => {
                 x = x + 1;
             }
-
             _ => {}
         }
 
         dungeon[y][x] = '.';
     }
+}
+
+fn possible_directions(gen_opts: &DungeonGenOpts, x: usize, prev_x: usize) -> Vec<u8> {
+    let mut directions = Vec::new();
+    add_direction_times(gen_opts.vertical_bias, DOWN, &mut directions);
+    if x - 1 > 1 && x - 1 != prev_x {
+        add_direction_times(gen_opts.horizontal_bias, LEFT, &mut directions);
+    };
+    if x + 1 < gen_opts.width - 1 && x + 1 != prev_x {
+        add_direction_times(gen_opts.horizontal_bias, RIGHT, &mut directions);
+    };
+    directions
 }
 
 fn add_direction_times(times: u16, direction: u8, directions: &mut Vec<u8>) {
