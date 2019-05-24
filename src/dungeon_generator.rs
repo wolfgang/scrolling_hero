@@ -16,7 +16,7 @@ pub fn dungeon_with_num_paths(
     rng: &mut StdRng) -> DungeonLayout {
     let mut dungeon = init_dungeon(width, height);
     for _ in 0..num_paths {
-        generate_dungeon_path(&mut dungeon, rng);
+        generate_dungeon_path(&mut dungeon, &gen_opts, rng);
     }
 
     let exit_position = rng.gen_range(1, width - 2);
@@ -41,7 +41,7 @@ const LEFT: u8 = 0;
 const RIGHT: u8 = 1;
 const DOWN: u8 = 2;
 
-fn generate_dungeon_path(dungeon: &mut DungeonLayout, rng: &mut StdRng) {
+fn generate_dungeon_path(dungeon: &mut DungeonLayout, gen_opts: &DungeonGenOpts, rng: &mut StdRng) {
     let width = dungeon[0].len();
     let height = dungeon.len();
 
@@ -53,14 +53,19 @@ fn generate_dungeon_path(dungeon: &mut DungeonLayout, rng: &mut StdRng) {
 
     while y < height - 1 {
         let mut directions = Vec::new();
-        directions.push(DOWN);
+        for _ in 0..gen_opts.vertical_bias {
+            directions.push(DOWN);
+        }
         if x - 1 > 1 && x - 1 != prev_x {
-            directions.push(LEFT);
-            directions.push(LEFT);
+            for _ in 0..gen_opts.horizontal_bias {
+                directions.push(LEFT);
+            }
         };
         if x + 1 < width - 1 && x + 1 != prev_x {
-            directions.push(RIGHT);
-            directions.push(RIGHT);
+            for _ in 0..gen_opts.horizontal_bias {
+                directions.push(RIGHT);
+            }
+
         };
 
         prev_x = x;
