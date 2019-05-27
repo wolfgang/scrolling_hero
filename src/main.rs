@@ -4,6 +4,7 @@ use console::Term;
 use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
 
+use sch::dungeon_decorator;
 use sch::dungeon_generator::{dungeon_with_num_paths, DungeonGenOpts};
 use sch::dungeon_provider::MultiDungeonProvider;
 use sch::game::Game;
@@ -44,8 +45,11 @@ fn generate_dungeon(width: usize, height: usize, rng: &mut StdRng) -> DungeonDef
         horizontal_bias: 2,
     };
 
-    let dungeon = dungeon_with_num_paths(&opts, rng);
+    let mut dungeon = dungeon_with_num_paths(&opts, rng);
+    dungeon_decorator::add_guards(&mut dungeon, 10, rng);
+
     let width = dungeon[0].len();
     let player_position = rng.gen_range(1, width as u32 - 2);
+
     (dungeon, (player_position, 0))
 }
