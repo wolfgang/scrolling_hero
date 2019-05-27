@@ -12,6 +12,10 @@
 
 [X] Generate the dungeon
 
+[ ] Guards and combat
+    [ ] Place random guards
+    [ ] On collision with guard, enter combat
+
 [ ] Constrain movement and penalties
 
 [ ] Manipulate dungeon generator by hacking terminals
