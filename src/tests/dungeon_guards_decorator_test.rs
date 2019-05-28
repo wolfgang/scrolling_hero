@@ -1,5 +1,5 @@
-use rand::SeedableRng;
 use rand::rngs::StdRng;
+use rand::SeedableRng;
 
 use crate::dungeon_decorator;
 use crate::tests::dungeon_test_helpers::*;
@@ -16,26 +16,26 @@ fn generates_guards_randomly_on_floor() {
 
     let mut dungeon1 = dungeon.clone();
     let mut dungeon2 = dungeon.clone();
-    dungeon_decorator::add_guards(&mut dungeon1, 20, &mut StdRng::seed_from_u64(1000));
+    dungeon_decorator::add_guards(&mut dungeon1, 30, &mut StdRng::seed_from_u64(1000));
     dungeon_decorator::add_guards(&mut dungeon2, 50, &mut StdRng::seed_from_u64(2000));
 
     assert_eq!(
         dungeon_layout(vec![
             "#.....#",
             "###...#",
-            "#...#.#",
-            "#.#.G.#",
-            "#....G#"
+            "#...#G#",
+            "#.#GG.#",
+            "#.....#",
         ]),
         dungeon1);
 
     assert_eq!(
         dungeon_layout(vec![
-            "#...G.#",
+            "#.....#",
             "###.G.#",
-            "#.GG#.#",
-            "#G#...#",
-            "#...G.#"
+            "#.G.#.#",
+            "#.#G..#",
+            "#.....#",
         ]),
         dungeon2
     );
