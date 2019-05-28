@@ -14,7 +14,7 @@ pub struct Game {
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
     steps: u32,
-    dungeon_renderer: DungeonRenderer
+    dungeon_renderer: DungeonRenderer,
 }
 
 impl Game {
@@ -31,7 +31,7 @@ impl Game {
             dungeon_provider,
             is_running: true,
             steps: 0,
-            dungeon_renderer: DungeonRenderer::new(camera_offset)
+            dungeon_renderer: DungeonRenderer::new(camera_offset),
         }
     }
 
@@ -48,18 +48,18 @@ impl Game {
         let prev_position = self.player_position;
         match key {
             Key::ArrowLeft => {
-                if self.relative_to_player(-1, 0) != '#' && self.relative_to_player(-1, 0) != 'G' {
+                if !self.obstacle_at(-1, 0) {
                     self.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
-                if self.relative_to_player(1, 0) != '#' && self.relative_to_player(1, 0) != 'G' {
+                if !self.obstacle_at(1, 0) {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
                 let is_at_bottom = self.player_position.1 == self.dungeon.len() as u32 - 1;
-                if !is_at_bottom && self.relative_to_player(0, 1) != '#' && self.relative_to_player(0, 1) != 'G' {
+                if !is_at_bottom && !self.obstacle_at(0, 1) {
                     self.player_position.1 += 1;
                 }
             }
@@ -75,6 +75,11 @@ impl Game {
 
     fn under_player(&self) -> char {
         self.relative_to_player(0, 0)
+    }
+
+    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
+        let tile = self.relative_to_player(x_offset, y_offset);
+        tile == '#' || tile == 'G'
     }
 
     fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> char {
