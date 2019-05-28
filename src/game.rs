@@ -48,18 +48,18 @@ impl Game {
         let prev_position = self.player_position;
         match key {
             Key::ArrowLeft => {
-                if self.relative_to_player(-1, 0) != '#' {
+                if self.relative_to_player(-1, 0) != '#' && self.relative_to_player(-1, 0) != 'G' {
                     self.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
-                if self.relative_to_player(1, 0) != '#' {
+                if self.relative_to_player(1, 0) != '#' && self.relative_to_player(1, 0) != 'G' {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
                 let is_at_bottom = self.player_position.1 == self.dungeon.len() as u32 - 1;
-                if !is_at_bottom && self.relative_to_player(0, 1) != '#' {
+                if !is_at_bottom && self.relative_to_player(0, 1) != '#' && self.relative_to_player(0, 1) != 'G' {
                     self.player_position.1 += 1;
                 }
             }
