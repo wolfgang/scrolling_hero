@@ -51,6 +51,7 @@ impl Game {
         let prev_position = self.player_position;
         match key {
             Key::ArrowLeft => {
+                self.process_neighbor(-1, 0);
                 if !self.obstacle_at(-1, 0) {
                     self.player_position.0 -= 1;
                 }
@@ -77,24 +78,27 @@ impl Game {
     }
 
     fn under_player(&self) -> char {
-        self.relative_to_player(0, 0).1
+        self.neighbor_at(0, 0).1
     }
 
-    fn obstacle_at(&mut self, x_offset: i32, y_offset: i32) -> bool {
-        let (pos, tile) = self.relative_to_player(x_offset, y_offset);
+    fn process_neighbor(&mut self, x_offset: i32, y_offset: i32) {
+        let (pos, tile) = self.neighbor_at(x_offset, y_offset);
         if tile == 'G' {
             let state = self.guard_states.entry(pos).or_insert(0);
             *state += 1;
 
             if *state == 2 {
                 self.dungeon[pos.1][pos.0] = '.';
-                return false
             }
         }
+    }
+
+    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
+        let (_, tile) = self.neighbor_at(x_offset, y_offset);
         tile == '#' || tile == 'G'
     }
 
-    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> ((usize, usize), char) {
+    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> ((usize, usize), char) {
         let x = self.player_position.0 as i32;
         let y = self.player_position.1 as i32;
         let relative_x = (x + x_offset) as usize;
