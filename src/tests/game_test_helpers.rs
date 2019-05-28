@@ -40,7 +40,7 @@ pub fn assert_lines_start_with(buffer: &LineBuffer, expected_lines: Lines) {
         .map(|s| s[0..line_length].to_string())
         .collect();
 
-    assert_eq!(expected_lines, actual_lines);
+    assert_eq!(actual_lines, expected_lines);
 }
 
 pub fn assert_lines_match(buffer: &LineBuffer, expected_lines: Lines) {
