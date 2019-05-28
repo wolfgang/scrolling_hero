@@ -85,7 +85,11 @@ impl Game {
         if tile == 'G' {
             let state = self.guard_states.entry(pos).or_insert(0);
             *state += 1;
-            if *state == 2 { return false }
+
+            if *state == 2 {
+                self.dungeon[pos.1][pos.0] = '.';
+                return false
+            }
         }
         tile == '#' || tile == 'G'
     }

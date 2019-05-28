@@ -60,4 +60,12 @@ fn player_kills_guard_after_colliding_twice() {
         "#@..#",
         "#...#"
     ]);
+
+    game.on_key(Key::ArrowRight);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#.@.#",
+        "#...#"
+    ]);
+
 }
