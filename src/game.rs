@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::io::Write;
 use std::rc::Rc;
 
@@ -15,6 +16,7 @@ pub struct Game {
     is_running: bool,
     steps: u32,
     dungeon_renderer: DungeonRenderer,
+    guard_states: HashMap<(usize, usize), u32>
 }
 
 impl Game {
@@ -32,6 +34,7 @@ impl Game {
             is_running: true,
             steps: 0,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
+            guard_states: HashMap::new()
         }
     }
 
@@ -74,18 +77,25 @@ impl Game {
     }
 
     fn under_player(&self) -> char {
-        self.relative_to_player(0, 0)
+        self.relative_to_player(0, 0).1
     }
 
-    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        let tile = self.relative_to_player(x_offset, y_offset);
+    fn obstacle_at(&mut self, x_offset: i32, y_offset: i32) -> bool {
+        let (pos, tile) = self.relative_to_player(x_offset, y_offset);
+        if tile == 'G' {
+            let state = self.guard_states.entry(pos).or_insert(0);
+            *state += 1;
+            if *state == 2 { return false }
+        }
         tile == '#' || tile == 'G'
     }
 
-    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> char {
+    fn relative_to_player(&self, x_offset: i32, y_offset: i32) -> ((usize, usize), char) {
         let x = self.player_position.0 as i32;
         let y = self.player_position.1 as i32;
-        self.dungeon[(y + y_offset) as usize][(x + x_offset) as usize]
+        let relative_x = (x + x_offset) as usize;
+        let relative_y = (y + y_offset) as usize;
+        ((relative_x, relative_y), self.dungeon[relative_y][relative_x])
     }
 
     fn goto_next_dungeon(&mut self) {
