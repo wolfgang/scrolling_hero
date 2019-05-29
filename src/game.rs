@@ -63,10 +63,8 @@ impl Game {
                 }
             }
             Key::ArrowDown => {
-                let is_at_bottom = self.player_position.1 == self.dungeon.len() as u32 - 1;
                 self.process_neighbor(0, 1);
-
-                if !is_at_bottom && !self.obstacle_at(0, 1) {
+                if !self.obstacle_at(0, 1) {
                     self.player_position.1 += 1;
                 }
             }
@@ -102,8 +100,10 @@ impl Game {
     }
 
     fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        let (_, tile) = self.neighbor_at(x_offset, y_offset).unwrap();
-        tile == '#' || tile == 'G'
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((_, tile)) => { return tile == '#' || tile == 'G'; }
+            None => { return true; }
+        }
     }
 
     fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<((usize, usize), char)> {
@@ -112,7 +112,7 @@ impl Game {
         let neighbor_x = (x + x_offset) as usize;
         let neighbor_y = (y + y_offset) as usize;
         if neighbor_x < self.dungeon[0].len() && neighbor_y < self.dungeon.len() {
-            return Some(((neighbor_x, neighbor_y), self.dungeon[neighbor_y][neighbor_x]))
+            return Some(((neighbor_x, neighbor_y), self.dungeon[neighbor_y][neighbor_x]));
         }
         None
     }
