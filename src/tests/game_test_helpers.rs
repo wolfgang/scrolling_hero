@@ -11,8 +11,12 @@ type LineBuffer = Cursor<Vec<u8>>;
 type Lines<'a> = Vec<&'a str>;
 
 pub fn make_game(strings: Vec<&str>) -> Game {
+    make_game_with_camera_offset(1, strings)
+}
+
+pub fn make_game_with_camera_offset(offset: i32, strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
-    Game::new(&SingleDungeonProvider::shared(dungeon, player_pos), 1)
+    Game::new(&SingleDungeonProvider::shared(dungeon, player_pos), offset)
 }
 
 pub fn verify_lines_rendered_start_with(game: &mut Game, expected_lines: Lines) {

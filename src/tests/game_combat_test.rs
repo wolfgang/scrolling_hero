@@ -4,7 +4,7 @@ use crate::tests::game_test_helpers::*;
 
 #[test]
 fn player_collides_with_guard() {
-    let mut game = make_game(vec![
+    let mut game = make_game_with_camera_offset(100, vec![
         "#...#",
         "#G@G#",
         "#..G#",
@@ -61,6 +61,7 @@ fn player_collides_with_guard() {
 
     game.on_key(Key::ArrowDown);
     verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
         "#...#",
         "#..@#",
     ]);
