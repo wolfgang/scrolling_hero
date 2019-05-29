@@ -12,10 +12,15 @@
 
 [X] Generate the dungeon
 
-[ ] Guards and combat
-    [ ] Place random guards
-    [ ] On collision with guard, enter combat
+[X] Guards and combat prototype
+    [X] Place random guards
+    [X] Kill guard after colliding twice with it
 
+[ ] Real guard combat
+    [ ] On colliding with guard, do combat round
+    [ ] If guard HP goes to zero, it is dead
+    [ ] If player HP goes to zero, game is over
+    
 [ ] Constrain movement and penalties
 
 [ ] Manipulate dungeon generator by hacking terminals

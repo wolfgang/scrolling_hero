@@ -48,6 +48,11 @@ impl DungeonRenderer {
                 self.render_buffer.write(format!("  Steps: {}", steps).as_bytes())?;
             }
 
+            if y == 1 {
+                self.render_buffer.write(format!("  HP: {}", 100).as_bytes())?;
+            }
+
+
             self.render_buffer.write(b"\n")?;
         }
 

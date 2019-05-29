@@ -67,3 +67,14 @@ fn player_kills_guard_after_colliding_twice() {
     ]);
 
 }
+
+#[test]
+fn render_player_hp() {
+    let mut game = make_game(vec![
+        "#.@#",
+        "#..#"
+    ]);
+
+    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100"]);
+}
+
