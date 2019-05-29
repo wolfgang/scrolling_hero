@@ -16,7 +16,7 @@ pub struct Game {
     is_running: bool,
     steps: u32,
     dungeon_renderer: DungeonRenderer,
-    guard_states: HashMap<(usize, usize), u32>
+    guard_states: HashMap<(usize, usize), u32>,
 }
 
 impl Game {
@@ -34,7 +34,7 @@ impl Game {
             is_running: true,
             steps: 0,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
-            guard_states: HashMap::new()
+            guard_states: HashMap::new(),
         }
     }
 
@@ -57,12 +57,15 @@ impl Game {
                 }
             }
             Key::ArrowRight => {
+                self.process_neighbor(1, 0);
                 if !self.obstacle_at(1, 0) {
                     self.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
                 let is_at_bottom = self.player_position.1 == self.dungeon.len() as u32 - 1;
+                self.process_neighbor(0, 1);
+
                 if !is_at_bottom && !self.obstacle_at(0, 1) {
                     self.player_position.1 += 1;
                 }
@@ -78,33 +81,42 @@ impl Game {
     }
 
     fn under_player(&self) -> char {
-        self.neighbor_at(0, 0).1
+        self.neighbor_at(0, 0).unwrap().1
     }
 
     fn process_neighbor(&mut self, x_offset: i32, y_offset: i32) {
-        let (pos, tile) = self.neighbor_at(x_offset, y_offset);
-        if tile == 'G' {
-            let state = self.guard_states.entry(pos).or_insert(0);
-            *state += 1;
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((pos, tile)) => {
+                if tile == 'G' {
+                    let state = self.guard_states.entry(pos).or_insert(0);
+                    *state += 1;
 
-            if *state == 2 {
-                self.dungeon[pos.1][pos.0] = '.';
+                    if *state == 2 {
+                        self.dungeon[pos.1][pos.0] = '.';
+                    }
+                }
             }
+
+            None => {}
         }
     }
 
     fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        let (_, tile) = self.neighbor_at(x_offset, y_offset);
+        let (_, tile) = self.neighbor_at(x_offset, y_offset).unwrap();
         tile == '#' || tile == 'G'
     }
 
-    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> ((usize, usize), char) {
+    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<((usize, usize), char)> {
         let x = self.player_position.0 as i32;
         let y = self.player_position.1 as i32;
-        let relative_x = (x + x_offset) as usize;
-        let relative_y = (y + y_offset) as usize;
-        ((relative_x, relative_y), self.dungeon[relative_y][relative_x])
+        let neighbor_x = (x + x_offset) as usize;
+        let neighbor_y = (y + y_offset) as usize;
+        if neighbor_x < self.dungeon[0].len() && neighbor_y < self.dungeon.len() {
+            return Some(((neighbor_x, neighbor_y), self.dungeon[neighbor_y][neighbor_x]))
+        }
+        None
     }
+
 
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {

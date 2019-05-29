@@ -33,6 +33,7 @@ pub fn render(game: &mut Game) -> LineBuffer {
 
 pub fn assert_lines_start_with(buffer: &LineBuffer, expected_lines: Lines) {
     let rendered_lines = lines_from(buffer);
+    assert_eq!(rendered_lines.len(), expected_lines.len());
 
     let line_length = expected_lines[0].len();
     let actual_lines: Vec<String> = rendered_lines[0..expected_lines.len()]
@@ -56,5 +57,6 @@ pub fn assert_lines_match(buffer: &LineBuffer, expected_lines: Lines) {
 
 fn lines_from(buffer: &LineBuffer) -> Lines {
     let actual_string = str::from_utf8(buffer.get_ref()).unwrap();
-    actual_string.split("\n").collect()
+    let lines: Vec<&str> = actual_string.split("\n").collect();
+    lines[0..lines.len() - 1].to_vec()
 }

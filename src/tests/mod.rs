@@ -1,3 +1,4 @@
+pub mod rust_test;
 pub mod dungeon_test_helpers;
 pub mod game_test_helpers;
 pub mod game_test;

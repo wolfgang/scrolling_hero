@@ -7,27 +7,62 @@ fn player_collides_with_guard() {
     let mut game = make_game(vec![
         "#...#",
         "#G@G#",
-        "#.G.#"
+        "#..G#",
     ]);
 
     verify_lines_rendered_start_with(&mut game, vec![
         "#...#",
         "#G@G#",
-        "#.G.#"
+        "#..G#",
     ]);
 
     game.on_key(Key::ArrowLeft);
     verify_lines_rendered_start_with(&mut game, vec![
         "#...#",
         "#G@G#",
-        "#.G.#"
+        "#..G#",
+    ]);
+
+    game.on_key(Key::ArrowLeft);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#@.G#",
+        "#..G#",
     ]);
 
     game.on_key(Key::ArrowRight);
     verify_lines_rendered_start_with(&mut game, vec![
         "#...#",
-        "#G@G#",
-        "#.G.#"
+        "#.@G#",
+        "#..G#",
+    ]);
+
+    game.on_key(Key::ArrowRight);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#.@G#",
+        "#..G#",
+    ]);
+
+    game.on_key(Key::ArrowRight);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#..@#",
+        "#..G#",
+    ]);
+
+
+    game.on_key(Key::ArrowDown);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#..@#",
+        "#..G#",
+    ]);
+
+    game.on_key(Key::ArrowDown);
+    verify_lines_rendered_start_with(&mut game, vec![
+        "#...#",
+        "#..@#",
     ]);
 
 }
