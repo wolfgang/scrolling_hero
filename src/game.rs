@@ -5,13 +5,11 @@ use std::rc::Rc;
 
 use console::Key;
 
+use crate::combat;
+use crate::combat::Combatant;
 use crate::dungeon_provider::DungeonProvider;
 use crate::dungeon_renderer::DungeonRenderer;
 use crate::types::{DungeonLayout, Position};
-
-struct Combatant {
-    hp: u16
-}
 
 pub struct Game {
     dungeon: DungeonLayout,
@@ -99,7 +97,7 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let mut guard = self.guards.entry(pos).or_insert(Combatant { hp: 20 });
-                    resolve_combat(&mut self.player, &mut guard);
+                    combat::resolve(&mut self.player, &mut guard);
                     if guard.hp <= 0 {
                         self.dungeon[pos.1][pos.0] = '.';
                     }
@@ -140,9 +138,4 @@ impl Game {
             None => { self.is_running = false; }
         }
     }
-}
-
-fn resolve_combat(player: &mut Combatant, guard: &mut Combatant) {
-    guard.hp -= 10;
-    if guard.hp > 0 { player.hp -= 5; }
 }
