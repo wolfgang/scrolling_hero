@@ -24,7 +24,7 @@ impl DungeonRenderer {
         dungeon: &DungeonLayout,
         player_position: &Position,
         steps: u32,
-        player_health: u32
+        player_health: u16
     ) -> std::io::Result<(u32)>
     {
         let player_y = player_position.1;

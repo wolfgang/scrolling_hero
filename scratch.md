@@ -1,3 +1,25 @@
+struct Combatant {
+    hp: u16
+    attack_bonus: u8,
+    defense: u8,
+}
+
+
+guard_combat:resolve(guard: &mut Combatant, player: &mut Combatant, rng: &mut StdRng) {
+    let attack = random(20) player.attack_bonus;
+    if (attack > guard.defense) {
+        guard.hp -= random(10);
+    }
+    let guard_attack = random(20) + guard.attack_bonus;
+    if (guard_attack > player.defense) {
+        player.hp -= random(10);
+    }
+    
+   
+}
+
+
+
 [X] Render dungeon
 
 [X] Move player on cursor left/right/down

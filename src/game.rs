@@ -9,6 +9,10 @@ use crate::dungeon_provider::DungeonProvider;
 use crate::dungeon_renderer::DungeonRenderer;
 use crate::types::{DungeonLayout, Position};
 
+struct Combatant {
+    hp: u16
+}
+
 pub struct Game {
     dungeon: DungeonLayout,
     player_position: Position,
@@ -17,7 +21,7 @@ pub struct Game {
     steps: u32,
     dungeon_renderer: DungeonRenderer,
     guard_health: HashMap<(usize, usize), u32>,
-    player_health: u32,
+    player: Combatant
 }
 
 impl Game {
@@ -37,7 +41,7 @@ impl Game {
 
             dungeon_renderer: DungeonRenderer::new(camera_offset),
             guard_health: HashMap::new(),
-            player_health: 100,
+            player: Combatant { hp: 100 },
         }
     }
 
@@ -52,7 +56,7 @@ impl Game {
             &self.dungeon,
             &self.player_position,
             self.steps,
-            self.player_health)
+            self.player.hp)
     }
 
     pub fn on_key(&mut self, key: Key) {
@@ -100,7 +104,7 @@ impl Game {
                     if *guard_health <= 0 {
                         self.dungeon[pos.1][pos.0] = '.';
                     } else {
-                        self.player_health -= 5;
+                        self.player.hp -= 5;
                     }
                 }
             }
