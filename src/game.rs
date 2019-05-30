@@ -20,7 +20,7 @@ pub struct Game {
     is_running: bool,
     steps: u32,
     dungeon_renderer: DungeonRenderer,
-    guard_health: HashMap<(usize, usize), u32>,
+    guards: HashMap<(usize, usize), Combatant>,
     player: Combatant
 }
 
@@ -40,7 +40,7 @@ impl Game {
             steps: 0,
 
             dungeon_renderer: DungeonRenderer::new(camera_offset),
-            guard_health: HashMap::new(),
+            guards: HashMap::new(),
             player: Combatant { hp: 100 },
         }
     }
@@ -98,10 +98,10 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    let guard_health = self.guard_health.entry(pos).or_insert(20);
-                    *guard_health -= 10;
+                    let guard = self.guards.entry(pos).or_insert(Combatant { hp: 20 });
+                    guard.hp -= 10;
 
-                    if *guard_health <= 0 {
+                    if guard.hp <= 0 {
                         self.dungeon[pos.1][pos.0] = '.';
                     } else {
                         self.player.hp -= 5;
