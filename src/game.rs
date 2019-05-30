@@ -98,13 +98,10 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    let guard = self.guards.entry(pos).or_insert(Combatant { hp: 20 });
-                    guard.hp -= 10;
-
+                    let mut guard = self.guards.entry(pos).or_insert(Combatant { hp: 20 });
+                    resolve_combat(&mut self.player, &mut guard);
                     if guard.hp <= 0 {
                         self.dungeon[pos.1][pos.0] = '.';
-                    } else {
-                        self.player.hp -= 5;
                     }
                 }
             }
@@ -112,6 +109,7 @@ impl Game {
             None => {}
         }
     }
+
 
     fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
         match self.neighbor_at(x_offset, y_offset) {
@@ -142,4 +140,9 @@ impl Game {
             None => { self.is_running = false; }
         }
     }
+}
+
+fn resolve_combat(player: &mut Combatant, guard: &mut Combatant) {
+    guard.hp -= 10;
+    if guard.hp > 0 { player.hp -= 5; }
 }
