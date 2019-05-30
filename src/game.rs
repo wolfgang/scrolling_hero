@@ -18,6 +18,7 @@ pub struct Game {
     in_combat: bool,
     dungeon_renderer: DungeonRenderer,
     guard_health: HashMap<(usize, usize), u32>,
+    player_health: u32,
 }
 
 impl Game {
@@ -37,6 +38,7 @@ impl Game {
             in_combat: false,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
             guard_health: HashMap::new(),
+            player_health: 100,
         }
     }
 
@@ -46,7 +48,13 @@ impl Game {
 
 
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
-        self.dungeon_renderer.render(writer, &self.dungeon, &self.player_position, self.steps, self.in_combat)
+        self.dungeon_renderer.render(
+            writer,
+            &self.dungeon,
+            &self.player_position,
+            self.steps,
+            self.in_combat,
+            self.player_health)
     }
 
     pub fn on_key(&mut self, key: Key) {
@@ -95,6 +103,8 @@ impl Game {
                     if *guard_health <= 0 {
                         self.in_combat = false;
                         self.dungeon[pos.1][pos.0] = '.';
+                    } else {
+                        self.player_health -= 5;
                     }
                 } else {
                     self.in_combat = false

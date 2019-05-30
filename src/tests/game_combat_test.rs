@@ -80,20 +80,20 @@ fn render_player_hp() {
 
 
 #[test]
-fn if_player_hits_guard_show_guard_hp() {
+fn if_player_hits_guard_guard_will_hit_back_for_5_damage() {
     let mut game = make_game_with_camera_offset(100, vec![
         "#..#",
         "#G@#",
         "#..#"
     ]);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100", r"^#..#\s*$"]);
+    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100"]);
 
     game.on_key(Key::ArrowLeft);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100", r"\s+GHP: 20"]);
+    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 95"]);
 
-    game.on_key(Key::ArrowDown);
+    game.on_key(Key::ArrowLeft);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100", r"^#..#\s*$"]);
+    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 95"]);
 }
