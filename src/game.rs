@@ -7,8 +7,8 @@ use console::Key;
 
 use crate::combat;
 use crate::combat::Combatant;
+use crate::dungeon::renderer::DungeonRenderer;
 use crate::dungeon_provider::DungeonProvider;
-use crate::dungeon_renderer::DungeonRenderer;
 use crate::types::{DungeonLayout, Position};
 
 pub struct Game {

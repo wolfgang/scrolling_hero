@@ -1,5 +1,5 @@
 pub mod game;
-pub mod dungeon_renderer;
+pub mod dungeon;
 pub mod dungeon_provider;
 pub mod dungeon_helpers;
 pub mod dungeon_generator;
