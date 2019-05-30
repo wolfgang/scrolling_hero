@@ -17,7 +17,7 @@ pub struct Game {
     steps: u32,
     in_combat: bool,
     dungeon_renderer: DungeonRenderer,
-    guard_states: HashMap<(usize, usize), u32>,
+    guard_health: HashMap<(usize, usize), u32>,
 }
 
 impl Game {
@@ -36,7 +36,7 @@ impl Game {
             steps: 0,
             in_combat: false,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
-            guard_states: HashMap::new(),
+            guard_health: HashMap::new(),
         }
     }
 
@@ -89,10 +89,10 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     self.in_combat = true;
-                    let state = self.guard_states.entry(pos).or_insert(0);
-                    *state += 1;
+                    let guard_health = self.guard_health.entry(pos).or_insert(20);
+                    *guard_health -= 10;
 
-                    if *state == 2 {
+                    if *guard_health <= 0 {
                         self.in_combat = false;
                         self.dungeon[pos.1][pos.0] = '.';
                     }
