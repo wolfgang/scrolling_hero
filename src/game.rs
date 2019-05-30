@@ -15,6 +15,7 @@ pub struct Game {
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
     steps: u32,
+    in_combat: bool,
     dungeon_renderer: DungeonRenderer,
     guard_states: HashMap<(usize, usize), u32>,
 }
@@ -33,6 +34,7 @@ impl Game {
             dungeon_provider,
             is_running: true,
             steps: 0,
+            in_combat: false,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
             guard_states: HashMap::new(),
         }
@@ -44,7 +46,7 @@ impl Game {
 
 
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
-        self.dungeon_renderer.render(writer, &self.dungeon, &self.player_position, self.steps)
+        self.dungeon_renderer.render(writer, &self.dungeon, &self.player_position, self.steps, self.in_combat)
     }
 
     pub fn on_key(&mut self, key: Key) {
@@ -86,12 +88,16 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
+                    self.in_combat = true;
                     let state = self.guard_states.entry(pos).or_insert(0);
                     *state += 1;
 
                     if *state == 2 {
+                        self.in_combat = false;
                         self.dungeon[pos.1][pos.0] = '.';
                     }
+                } else {
+                    self.in_combat = false
                 }
             }
 

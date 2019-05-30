@@ -24,6 +24,7 @@ impl DungeonRenderer {
         dungeon: &DungeonLayout,
         player_position: &Position,
         steps: u32,
+        in_combat: bool
     ) -> std::io::Result<(u32)>
     {
         let player_y = player_position.1;
@@ -50,6 +51,9 @@ impl DungeonRenderer {
 
             if y == 1 {
                 self.render_buffer.write(format!("  HP: {}", 100).as_bytes())?;
+            }
+            if in_combat && y == 2 {
+                self.render_buffer.write(format!("  GHP: {}", 20).as_bytes())?;
             }
 
 
