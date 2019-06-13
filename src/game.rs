@@ -11,15 +11,19 @@ use crate::dungeon::renderer::DungeonRenderer;
 use crate::dungeon_provider::DungeonProvider;
 use crate::types::{DungeonLayout, Position};
 
+pub struct GameState {
+    pub dungeon: DungeonLayout,
+    pub player_position: Position,
+    pub guards: HashMap<(usize, usize), Combatant>,
+    player: Combatant,
+}
+
 pub struct Game {
-    dungeon: DungeonLayout,
-    player_position: Position,
+    game_state: GameState,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
     steps: u32,
     dungeon_renderer: DungeonRenderer,
-    guards: HashMap<(usize, usize), Combatant>,
-    player: Combatant
 }
 
 impl Game {
@@ -31,15 +35,16 @@ impl Game {
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
-            dungeon,
-            player_position,
+            game_state: GameState {
+                dungeon,
+                player_position,
+                guards: HashMap::new(),
+                player: Combatant { hp: 100 },
+            },
             dungeon_provider,
             is_running: true,
             steps: 0,
-
-            dungeon_renderer: DungeonRenderer::new(camera_offset),
-            guards: HashMap::new(),
-            player: Combatant { hp: 100 },
+            dungeon_renderer: DungeonRenderer::new(camera_offset)
         }
     }
 
@@ -51,31 +56,31 @@ impl Game {
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
         self.dungeon_renderer.render(
             writer,
-            &self.dungeon,
-            &self.player_position,
+            &self.game_state.dungeon,
+            &self.game_state.player_position,
             self.steps,
-            self.player.hp)
+            self.game_state.player.hp)
     }
 
     pub fn on_key(&mut self, key: Key) {
-        let prev_position = self.player_position;
+        let prev_position = self.game_state.player_position;
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
                 if !self.obstacle_at(-1, 0) {
-                    self.player_position.0 -= 1;
+                    self.game_state.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
                 self.process_neighbor(1, 0);
                 if !self.obstacle_at(1, 0) {
-                    self.player_position.0 += 1;
+                    self.game_state.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
                 self.process_neighbor(0, 1);
                 if !self.obstacle_at(0, 1) {
-                    self.player_position.1 += 1;
+                    self.game_state.player_position.1 += 1;
                 }
             }
             Key::Escape => {
@@ -84,7 +89,7 @@ impl Game {
             _ => {}
         }
 
-        if prev_position != self.player_position { self.steps += 1; }
+        if prev_position != self.game_state.player_position { self.steps += 1; }
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
@@ -96,10 +101,10 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    let mut guard = self.guards.entry(pos).or_insert(Combatant { hp: 20 });
-                    combat::resolve(&mut self.player, &mut guard);
+                    let mut guard = self.game_state.guards.entry(pos).or_insert(Combatant { hp: 20 });
+                    combat::resolve(&mut self.game_state.player, &mut guard);
                     if guard.hp <= 0 {
-                        self.dungeon[pos.1][pos.0] = '.';
+                        self.game_state.dungeon[pos.1][pos.0] = '.';
                     }
                 }
             }
@@ -117,12 +122,12 @@ impl Game {
     }
 
     fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<((usize, usize), char)> {
-        let x = self.player_position.0 as i32;
-        let y = self.player_position.1 as i32;
+        let x = self.game_state.player_position.0 as i32;
+        let y = self.game_state.player_position.1 as i32;
         let neighbor_x = (x + x_offset) as usize;
         let neighbor_y = (y + y_offset) as usize;
-        if neighbor_x < self.dungeon[0].len() && neighbor_y < self.dungeon.len() {
-            return Some(((neighbor_x, neighbor_y), self.dungeon[neighbor_y][neighbor_x]));
+        if neighbor_x < self.game_state.dungeon[0].len() && neighbor_y < self.game_state.dungeon.len() {
+            return Some(((neighbor_x, neighbor_y), self.game_state.dungeon[neighbor_y][neighbor_x]));
         }
         None
     }
@@ -131,8 +136,8 @@ impl Game {
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
-                self.dungeon = next_dungeon;
-                self.player_position = next_player_pos;
+                self.game_state.dungeon = next_dungeon;
+                self.game_state.player_position = next_player_pos;
                 self.steps = 0;
             }
             None => { self.is_running = false; }

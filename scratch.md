@@ -1,3 +1,12 @@
+GameState -> player, guards, dungeon
+
+combat::resolve_simple(&mut GameState, guard_pos)
+
+
+
+
+
+
 struct Combatant {
     hp: u16
     attack_bonus: u8,
@@ -6,7 +15,7 @@ struct Combatant {
 
 
 guard_combat:resolve(guard: &mut Combatant, player: &mut Combatant, rng: &mut StdRng) {
-    let attack = random(20) player.attack_bonus;
+    let attack = random(20) + player.attack_bonus;
     if (attack > guard.defense) {
         guard.hp -= random(10);
     }
