@@ -10,7 +10,6 @@ use crate::combat::Combatant;
 use crate::dungeon::renderer::DungeonRenderer;
 use crate::dungeon_provider::DungeonProvider;
 use crate::game_state::GameState;
-use crate::types::{DungeonLayout, Position};
 
 pub struct Game {
     game_state: GameState,
