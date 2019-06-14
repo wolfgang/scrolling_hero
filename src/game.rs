@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::collections::HashMap;
 use std::io::Write;
 use std::rc::Rc;
 
@@ -28,16 +27,11 @@ impl Game {
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
-            game_state: GameState {
-                dungeon,
-                player_position,
-                guards: HashMap::new(),
-                player: Combatant { hp: 100 },
-            },
+            game_state: GameState::new(dungeon, player_position),
             dungeon_provider,
             is_running: true,
             steps: 0,
-            dungeon_renderer: DungeonRenderer::new(camera_offset)
+            dungeon_renderer: DungeonRenderer::new(camera_offset),
         }
     }
 
