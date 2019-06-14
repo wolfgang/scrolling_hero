@@ -27,3 +27,16 @@ fn guard_at_mut_inserts_if_not_present_and_returns_mutable_reference() {
     let guard2 = game_state.guard_at_mut(1, 2);
     assert_eq!(5, guard2.hp);
 }
+
+#[test]
+fn guard_at_mut_inserts_different_guards_at_different_positions() {
+    let (dungeon, player_pos) = make_dungeon(vec!["#.@#"]);
+    let mut game_state = GameState::new(dungeon.clone(), player_pos);
+
+    {
+        let mut guard1 = game_state.guard_at_mut(1, 2);
+        guard1.hp = 10;
+    }
+    let guard2 = game_state.guard_at_mut(11, 22);
+    assert_eq!(20, guard2.hp);
+}
