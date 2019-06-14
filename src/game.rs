@@ -9,14 +9,8 @@ use crate::combat;
 use crate::combat::Combatant;
 use crate::dungeon::renderer::DungeonRenderer;
 use crate::dungeon_provider::DungeonProvider;
+use crate::game_state::GameState;
 use crate::types::{DungeonLayout, Position};
-
-pub struct GameState {
-    pub dungeon: DungeonLayout,
-    pub player_position: Position,
-    pub guards: HashMap<(usize, usize), Combatant>,
-    player: Combatant,
-}
 
 pub struct Game {
     game_state: GameState,
