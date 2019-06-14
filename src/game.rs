@@ -5,7 +5,6 @@ use std::rc::Rc;
 use console::Key;
 
 use crate::combat;
-use crate::combat::Combatant;
 use crate::dungeon::renderer::DungeonRenderer;
 use crate::dungeon_provider::DungeonProvider;
 use crate::game_state::GameState;
@@ -88,12 +87,7 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    let mut guard = self.game_state.guards.entry(pos).or_insert(Combatant { hp: 20 });
-
-                    combat::resolve_simple(&mut self.game_state.player, &mut guard);
-                    if guard.hp <= 0 {
-                        self.game_state.dungeon[pos.1][pos.0] = '.';
-                    }
+                    combat::resolve_simple(&mut self.game_state, pos);
                 }
             }
 
