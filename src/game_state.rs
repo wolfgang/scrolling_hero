@@ -19,4 +19,8 @@ impl GameState {
             player: Combatant { hp: 100 },
         }
     }
+
+    pub fn guard_at_mut(&mut self, x: usize, y: usize) -> &mut Combatant {
+        self.guards.entry((x, y)).or_insert(Combatant { hp: 20 })
+    }
 }

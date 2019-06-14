@@ -89,6 +89,7 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let mut guard = self.game_state.guards.entry(pos).or_insert(Combatant { hp: 20 });
+
                     combat::resolve_simple(&mut self.game_state.player, &mut guard);
                     if guard.hp <= 0 {
                         self.game_state.dungeon[pos.1][pos.0] = '.';
