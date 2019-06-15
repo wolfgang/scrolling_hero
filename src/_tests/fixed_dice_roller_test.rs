@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-trait DiceRoller {
-    fn roll(&mut self, dice: u8) -> u8;
-}
+use crate::game::dice_roller::DiceRoller;
 
 struct FixedDiceRoller {
     next_rolls: HashMap<u8, Vec<u8>>,
