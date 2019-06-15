@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use std::io::Write;
 use std::rc::Rc;
 
@@ -7,7 +6,6 @@ use console::Key;
 use renderer::GameRenderer;
 use state::GameState;
 
-use crate::dungeon::provider::DungeonProvider;
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::types::{DungeonProviderRef, Position};
@@ -31,7 +29,9 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn with_config(config: &GameConfig) {}
+    pub fn with_config(config: &GameConfig, dungeon_provider: &DungeonProviderRef) -> Game {
+        Game::new(dungeon_provider, config.camera_offset)
+    }
 
     pub fn new(
         provider: &DungeonProviderRef,
