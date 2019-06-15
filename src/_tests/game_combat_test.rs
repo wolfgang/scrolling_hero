@@ -34,9 +34,15 @@ fn player_onehits_guards_with_hp_1() {
 #[test]
 fn render_player_hp() {
     let mut game = make_game(vec![
-        "#.@#",
+        "#G@#",
         "#..#"
     ]);
 
     verify_lines_rendered_match(&mut game, vec![r"\s+HP: 100"]);
+
+    game.on_key(Key::ArrowLeft);
+
+    // Guard hit us back, so HP are now two digits
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: \d{2}"]);
+
 }
