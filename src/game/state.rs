@@ -48,7 +48,7 @@ impl GameState {
         self.player.clone()
     }
 
-    fn guard_ref_at(&self, pos: Position) -> CombatantRef {
+    pub(crate) fn guard_ref_at(&self, pos: Position) -> CombatantRef {
         self.guards.get(&pos).unwrap().clone()
     }
 
