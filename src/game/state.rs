@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::game::dice_roller::DiceRoller;
 use crate::types::{CombatantRef, DungeonLayout, Position};
 
 use super::combat::Combatant;
@@ -31,17 +32,29 @@ impl GameState {
         }
     }
 
-    pub fn check_guard_state(&mut self, pos: Position) {
-        if self.guard_ref_at(pos).borrow().hp <= 0 {
-            self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
-        }
+    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) {
+        let guard_ref = self.guard_ref_at(pos);
+        let player_ref = self.player_ref();
+
+        player_ref.borrow().attack(&guard_ref, dice_roller);
+        guard_ref.borrow().attack(&player_ref, dice_roller);
+
+        self.check_guard_state(pos);
+
     }
 
-    pub fn guard_ref_at(&self, pos: Position) -> CombatantRef {
-        self.guards.get(&pos).unwrap().clone()
-    }
 
     pub fn player_ref(&self) -> CombatantRef {
         self.player.clone()
+    }
+
+    fn guard_ref_at(&self, pos: Position) -> CombatantRef {
+        self.guards.get(&pos).unwrap().clone()
+    }
+
+    fn check_guard_state(&mut self, pos: Position) {
+        if self.guard_ref_at(pos).borrow().hp <= 0 {
+            self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
+        }
     }
 }

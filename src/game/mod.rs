@@ -98,8 +98,7 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    combat::resolve(&mut self.game_state, pos, &mut *self.dice_roller);
-                    self.game_state.check_guard_state(pos);
+                    self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                 }
             }
 

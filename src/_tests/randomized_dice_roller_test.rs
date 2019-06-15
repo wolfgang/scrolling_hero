@@ -7,7 +7,7 @@ fn rolls_random_values_up_to_given_max() {
 
     let mut values = Vec::with_capacity(100);
 
-    for _ in 0..100 {
+    for _ in 0..500 {
         let roll = roller.roll(20);
         values.push(roll);
         // All rolls are between 1 and 20
