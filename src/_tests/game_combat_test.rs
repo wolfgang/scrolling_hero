@@ -1,6 +1,6 @@
 use console::Key;
 
-use crate::tests::game_test_helpers::*;
+use super::game_test_helpers::*;
 
 #[test]
 fn player_kills_guard_after_colliding_twice() {

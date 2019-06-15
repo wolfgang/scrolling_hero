@@ -4,4 +4,4 @@ pub mod combat;
 pub mod types;
 
 #[cfg(test)]
-pub mod tests;
+pub mod _tests;

@@ -5,7 +5,8 @@ use console::Key;
 use crate::dungeon::helpers::make_dungeon;
 use crate::dungeon::provider::MultiDungeonProvider;
 use crate::game::Game;
-use crate::tests::game_test_helpers::*;
+
+use super::game_test_helpers::*;
 
 #[test]
 fn is_running_is_false_after_last_dungeon_is_exited() {

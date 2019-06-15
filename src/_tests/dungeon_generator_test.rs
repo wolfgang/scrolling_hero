@@ -2,8 +2,9 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 
 use crate::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
-use crate::tests::dungeon_test_helpers::*;
 use crate::types::DungeonLayout;
+
+use super::dungeon_test_helpers::*;
 
 #[test]
 fn generates_dungeon_with_one_path() {

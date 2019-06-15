@@ -2,7 +2,8 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 
 use crate::dungeon::decorator;
-use crate::tests::dungeon_test_helpers::*;
+
+use super::dungeon_test_helpers::*;
 
 #[test]
 fn generates_guards_randomly_on_floor() {
