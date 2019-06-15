@@ -21,8 +21,4 @@ pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
 
     let guard = guard_ref.borrow();
     guard.attack_simple(&player_ref, 5);
-
-    if guard.hp <= 0 {
-        game_state.dungeon[pos.1][pos.0] = '.';
-    }
 }
