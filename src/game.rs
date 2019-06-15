@@ -42,10 +42,9 @@ impl Game {
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
         self.dungeon_renderer.render(
             writer,
-            &self.game_state.dungeon,
-            &self.game_state.player_position,
-            self.steps,
-            self.game_state.player_ref().borrow().hp)
+            &self.game_state,
+            self.steps
+        )
     }
 
     pub fn on_key(&mut self, key: Key) {
