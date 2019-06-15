@@ -45,7 +45,7 @@ impl Game {
             &self.game_state.dungeon,
             &self.game_state.player_position,
             self.steps,
-            self.game_state.player.borrow().hp)
+            self.game_state.player_ref().borrow().hp)
     }
 
     pub fn on_key(&mut self, key: Key) {

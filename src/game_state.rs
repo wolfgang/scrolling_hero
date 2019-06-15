@@ -8,8 +8,8 @@ use crate::types::{CombatantRef, DungeonLayout, Position};
 pub struct GameState {
     pub dungeon: DungeonLayout,
     pub player_position: Position,
-    pub guards: HashMap<(usize, usize), CombatantRef>,
-    pub player: CombatantRef,
+    guards: HashMap<(usize, usize), CombatantRef>,
+    player: CombatantRef,
 }
 
 impl GameState {
