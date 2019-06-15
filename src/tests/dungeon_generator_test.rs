@@ -1,7 +1,7 @@
 use rand::rngs::StdRng;
 use rand::SeedableRng;
 
-use crate::dungeon_generator::{dungeon_with_num_paths, DungeonGenOpts};
+use crate::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
 use crate::tests::dungeon_test_helpers::*;
 use crate::types::DungeonLayout;
 
