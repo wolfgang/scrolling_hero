@@ -86,9 +86,7 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     combat::resolve_simple(&mut self.game_state, pos);
-                    if self.game_state.guard_ref_at(pos).borrow().hp <= 0 {
-                        self.game_state.dungeon[pos.1][pos.0] = '.';
-                    }
+                    self.game_state.check_guard_state(pos);
                 }
             }
 

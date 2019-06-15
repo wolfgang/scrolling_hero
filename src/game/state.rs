@@ -33,6 +33,12 @@ impl GameState {
         }
     }
 
+    pub fn check_guard_state(&mut self, pos: (usize, usize)) {
+        if self.guard_ref_at(pos).borrow().hp <= 0 {
+            self.dungeon[pos.1][pos.0] = '.';
+        }
+    }
+
     pub fn guard_ref_at(&self, pos: (usize, usize)) -> CombatantRef {
         self.guards.get(&pos).unwrap().clone()
     }
