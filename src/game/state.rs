@@ -1,6 +1,4 @@
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 use crate::types::{CombatantRef, DungeonLayout, Position};
 
@@ -20,7 +18,7 @@ impl GameState {
         for y in 0..dungeon.len() {
             for x in 0..dungeon[0].len() {
                 if dungeon[y][x] == 'G' {
-                    guards.insert((x as u32, y as u32), Rc::new(RefCell::new(Combatant { hp: 20 })));
+                    guards.insert((x as u32, y as u32), Combatant::ref_with_hp(20));
                 }
             }
         }
@@ -29,7 +27,7 @@ impl GameState {
             dungeon,
             player_position,
             guards,
-            player: Rc::new(RefCell::new(Combatant { hp: 100 }))
+            player: Combatant::ref_with_hp(100)
         }
     }
 

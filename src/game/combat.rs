@@ -1,3 +1,6 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::game::dice_roller::DiceRoller;
 use crate::types::{CombatantRef, Position};
 
@@ -8,6 +11,13 @@ pub struct Combatant {
 }
 
 impl Combatant {
+    pub fn ref_with_hp(hp: i16) -> CombatantRef {
+        Rc::new(RefCell::new(Combatant::with_hp(hp)))
+    }
+    pub fn with_hp(hp: i16) -> Combatant {
+        Combatant { hp }
+    }
+
     pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {
         if self.hp > 0 {
             target.borrow_mut().hp -= damage;
