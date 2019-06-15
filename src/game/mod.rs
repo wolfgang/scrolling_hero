@@ -10,7 +10,7 @@ use state::GameState;
 use crate::dungeon::provider::DungeonProvider;
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::Position;
+use crate::types::{DungeonProviderRef, Position};
 
 pub mod renderer;
 pub mod state;
@@ -18,17 +18,23 @@ pub mod combat;
 pub mod dice_roller;
 pub mod randomized_dice_roller;
 
+pub struct GameConfig {
+    pub camera_offset: i32
+}
+
 pub struct Game {
     game_state: GameState,
-    dungeon_provider: Rc<RefCell<DungeonProvider>>,
+    dungeon_provider: DungeonProviderRef,
     is_running: bool,
     dungeon_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
 }
 
 impl Game {
+    pub fn with_config(config: &GameConfig) {}
+
     pub fn new(
-        provider: &Rc<RefCell<DungeonProvider>>,
+        provider: &DungeonProviderRef,
         camera_offset: i32) -> Game
     {
         let dungeon_provider = Rc::clone(provider);

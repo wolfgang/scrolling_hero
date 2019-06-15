@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::types::{DungeonDefinition, DungeonLayout, Position};
+use crate::types::{DungeonDefinition, DungeonLayout, DungeonProviderRef, Position};
 
 pub type DungeonProvider = Iterator<Item=DungeonDefinition>;
 
@@ -15,8 +15,8 @@ impl SingleDungeonProvider {
         SingleDungeonProvider { dungeon, player_position }
     }
 
-    pub fn shared(dungeon: DungeonLayout, player_position: Position) -> Rc<RefCell<DungeonProvider>> {
-        Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon, player_position))) as Rc<RefCell<DungeonProvider>>
+    pub fn shared(dungeon: DungeonLayout, player_position: Position) -> DungeonProviderRef {
+        Rc::new(RefCell::new(SingleDungeonProvider::new(dungeon, player_position))) as DungeonProviderRef
     }
 }
 
@@ -38,8 +38,8 @@ impl MultiDungeonProvider {
         MultiDungeonProvider { current_index: 0, dungeons }
     }
 
-    pub fn shared(dungeons: Vec<DungeonDefinition>) -> Rc<RefCell<DungeonProvider>> {
-        Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as Rc<RefCell<DungeonProvider>>
+    pub fn shared(dungeons: Vec<DungeonDefinition>) -> DungeonProviderRef {
+        Rc::new(RefCell::new(MultiDungeonProvider::new(dungeons))) as DungeonProviderRef
     }
 }
 
