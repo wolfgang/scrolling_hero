@@ -15,7 +15,7 @@ impl Combatant {
 }
 
 pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
-    let guard_ref = game_state.guard_at_ref(pos.0, pos.1);
+    let guard_ref = game_state.guard_ref_at(pos);
     let player_ref = game_state.player_ref();
 
     player_ref.borrow().attack_simple(&guard_ref, 10);

@@ -33,8 +33,8 @@ impl GameState {
         }
     }
 
-    pub fn guard_at_ref(&self, x: usize, y: usize) -> CombatantRef {
-        self.guards.get(&(x, y)).unwrap().clone()
+    pub fn guard_ref_at(&self, pos: (usize, usize)) -> CombatantRef {
+        self.guards.get(&pos).unwrap().clone()
     }
 
     pub fn player_ref(&self) -> CombatantRef {
