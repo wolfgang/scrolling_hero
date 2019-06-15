@@ -8,6 +8,7 @@ use renderer::GameRenderer;
 use state::GameState;
 
 use crate::dungeon::provider::DungeonProvider;
+use crate::types::Position;
 
 pub mod renderer;
 pub mod state;
@@ -102,13 +103,13 @@ impl Game {
         }
     }
 
-    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<((usize, usize), char)> {
+    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
         let x = self.game_state.player_position.0 as i32;
         let y = self.game_state.player_position.1 as i32;
         let neighbor_x = (x + x_offset) as usize;
         let neighbor_y = (y + y_offset) as usize;
         if neighbor_x < self.game_state.dungeon[0].len() && neighbor_y < self.game_state.dungeon.len() {
-            return Some(((neighbor_x, neighbor_y), self.game_state.dungeon[neighbor_y][neighbor_x]));
+            return Some(((neighbor_x as u32, neighbor_y as u32), self.game_state.dungeon[neighbor_y][neighbor_x]));
         }
         None
     }

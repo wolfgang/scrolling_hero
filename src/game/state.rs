@@ -9,7 +9,7 @@ use super::combat::Combatant;
 pub struct GameState {
     pub dungeon: DungeonLayout,
     pub player_position: Position,
-    guards: HashMap<(usize, usize), CombatantRef>,
+    guards: HashMap<Position, CombatantRef>,
     player: CombatantRef,
 }
 
@@ -20,7 +20,7 @@ impl GameState {
         for y in 0..dungeon.len() {
             for x in 0..dungeon[0].len() {
                 if dungeon[y][x] == 'G' {
-                    guards.insert((x, y), Rc::new(RefCell::new(Combatant { hp: 20 })));
+                    guards.insert((x as u32, y as u32), Rc::new(RefCell::new(Combatant { hp: 20 })));
                 }
             }
         }
@@ -33,13 +33,13 @@ impl GameState {
         }
     }
 
-    pub fn check_guard_state(&mut self, pos: (usize, usize)) {
+    pub fn check_guard_state(&mut self, pos: Position) {
         if self.guard_ref_at(pos).borrow().hp <= 0 {
-            self.dungeon[pos.1][pos.0] = '.';
+            self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
         }
     }
 
-    pub fn guard_ref_at(&self, pos: (usize, usize)) -> CombatantRef {
+    pub fn guard_ref_at(&self, pos: Position) -> CombatantRef {
         self.guards.get(&pos).unwrap().clone()
     }
 

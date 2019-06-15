@@ -1,4 +1,4 @@
-use crate::types::CombatantRef;
+use crate::types::{CombatantRef, Position};
 
 use super::state::GameState;
 
@@ -14,7 +14,7 @@ impl Combatant {
     }
 }
 
-pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
+pub fn resolve_simple(game_state: &mut GameState, pos: Position) {
     let guard_ref = game_state.guard_ref_at(pos);
     let player_ref = game_state.player_ref();
 
