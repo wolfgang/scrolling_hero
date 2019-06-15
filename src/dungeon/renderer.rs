@@ -42,7 +42,7 @@ impl DungeonRenderer {
 
             self.render_buffer.write(row_str.as_bytes())?;
 
-            if y == 1 {
+            if y == 0 {
                 let player_health = game_state.player_ref().borrow().hp;
                 self.render_buffer.write(format!("  HP: {}", player_health).as_bytes())?;
             }

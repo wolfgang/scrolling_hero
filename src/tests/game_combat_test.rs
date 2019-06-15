@@ -75,7 +75,7 @@ fn render_player_hp() {
         "#..#"
     ]);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100"]);
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 100"]);
 }
 
 
@@ -87,14 +87,14 @@ fn if_player_hits_guard_guard_will_hit_back_for_5_damage() {
         "#G.#"
     ]);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 100"]);
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 100"]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 95"]);
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 95"]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 95"]);
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 95"]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+HP: 90"]);
+    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 90"]);
 }
