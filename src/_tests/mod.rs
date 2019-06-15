@@ -10,3 +10,4 @@ pub mod combatant_test;
 pub mod game_state_test;
 pub mod fixed_dice_roller;
 pub mod fixed_dice_roller_test;
+pub mod randomized_dice_roller_test;

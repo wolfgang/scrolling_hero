@@ -14,6 +14,7 @@ pub mod renderer;
 pub mod state;
 pub mod combat;
 pub mod dice_roller;
+pub mod randomized_dice_roller;
 
 pub struct Game {
     game_state: GameState,
