@@ -5,12 +5,12 @@ pub struct Combatant {
 }
 
 pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
-    let mut guard = game_state.guard_at_mut(pos.0, pos.1);
-    guard.hp -= 10;
-    let guard_hp = guard.hp;
-    if guard_hp > 0 { game_state.player.hp -= 5; }
+    let guard = game_state.guard_at_ref(pos.0, pos.1);
+    let mut guard_ref = guard.borrow_mut();
+    guard_ref.hp -= 10;
+    if guard_ref.hp > 0 { game_state.player.hp -= 5; }
 
-    if guard_hp <= 0 {
+    if guard_ref.hp <= 0 {
         game_state.dungeon[pos.1][pos.0] = '.';
     }
 }
