@@ -4,10 +4,13 @@ use std::rc::Rc;
 
 use console::Key;
 
+use renderer::GameRenderer;
+
 use crate::combat;
 use crate::dungeon::provider::DungeonProvider;
-use crate::game_renderer::GameRenderer;
 use crate::game_state::GameState;
+
+pub mod renderer;
 
 pub struct Game {
     game_state: GameState,
