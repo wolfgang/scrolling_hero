@@ -1,3 +1,4 @@
+use crate::game::dice_roller::DiceRoller;
 use crate::types::{CombatantRef, Position};
 
 use super::state::GameState;
@@ -11,6 +12,10 @@ impl Combatant {
         if self.hp > 0 {
             target.borrow_mut().hp -= damage;
         }
+    }
+
+    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) {
+        target.borrow_mut().hp -= dice_roller.roll(10) as i16;
     }
 }
 

@@ -1,27 +1,25 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
+use crate::_tests::fixed_dice_roller::FixedDiceRoller;
+use crate::game::combat::Combatant;
+
 #[test]
 fn combat_resolves_1() {
-    // given a guard at 11, 12 with:
-    // - HP 20
-    // - attack 5
-    // - defense 10
+    let mut player_hits_guard_twice = FixedDiceRoller::new();
 
-    // given a player at ?? with:
-    // - HP 100
-    // - attack 10
-    // - defense 15
+    let player = Combatant { hp: 100 };
+    let guard_ref = Rc::new(RefCell::new(Combatant { hp: 20 }));
 
-    // Given player attack roll 15
-    // Given damage roll 5
-    // Given guard attack roll 16
-    // Given damage roll 7
+    dice_roller.next_roll(20, 11);
+    dice_roller.next_roll(10, 7);
+    dice_roller.next_roll(10, 4);
 
-    // Given player attack roll > guard defense
-    // Given guard attack roll > player defense
-    // Then:
-    // Guard takes damage (min 1 max 10)
-    // Player takes damage (min 1 max 10)
+    player.attack(&guard_ref, &mut dice_roller);
 
-    // Then:
-    // Guard HP is 15
-    // Player HP is 93
+    assert_eq!(guard_ref.borrow().hp, 13);
+
+    player.attack(&guard_ref, &mut dice_roller);
+    assert_eq!(guard_ref.borrow().hp, 9);
+
 }
