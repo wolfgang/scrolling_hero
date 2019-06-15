@@ -12,13 +12,17 @@ impl Combatant {
 }
 
 pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
-    let guard = game_state.guard_at_ref(pos.0, pos.1);
-    game_state.player.borrow().attack_simple(&guard, 10);
+    let guard_ref = game_state.guard_at_ref(pos.0, pos.1);
+    let player_ref = game_state.player.clone();
 
-    let guard_ref = guard.borrow();
-    if guard_ref.hp > 0 { game_state.player.borrow_mut().hp -= 5; }
+    player_ref.borrow().attack_simple(&guard_ref, 10);
 
-    if guard_ref.hp <= 0 {
+    let guard = guard_ref.borrow();
+    if guard.hp > 0 {
+        guard.attack_simple(&player_ref, 5);
+    }
+
+    if guard.hp <= 0 {
         game_state.dungeon[pos.1][pos.0] = '.';
     }
 }
