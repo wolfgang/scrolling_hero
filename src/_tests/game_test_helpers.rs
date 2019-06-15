@@ -14,6 +14,14 @@ pub fn make_game(strings: Vec<&str>) -> Game {
     make_game_with_camera_offset(1, strings)
 }
 
+pub fn make_game_with_config(config: &GameConfig, strings: Vec<&str>) -> Game {
+    let (dungeon, player_pos) = make_dungeon(strings);
+    Game::with_config(
+        config,
+        &SingleDungeonProvider::shared(dungeon, player_pos))
+}
+
+
 pub fn make_game_with_camera_offset(offset: i32, strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
     Game::with_config(

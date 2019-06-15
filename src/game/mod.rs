@@ -17,12 +17,13 @@ pub mod dice_roller;
 pub mod randomized_dice_roller;
 
 pub struct GameConfig {
-    pub camera_offset: i32
+    pub camera_offset: i32,
+    pub guard_hp: u16
 }
 
 impl GameConfig {
     pub fn with_camera_offset(camera_offset: i32) -> GameConfig {
-        GameConfig { camera_offset }
+        GameConfig { camera_offset, guard_hp: 20 }
     }
 }
 
@@ -40,7 +41,7 @@ impl Game {
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
-            game_state: GameState::new(dungeon, player_position),
+            game_state: GameState::new(dungeon, player_position, config.guard_hp),
             dungeon_provider,
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),

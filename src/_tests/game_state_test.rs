@@ -4,7 +4,7 @@ use crate::game::state::GameState;
 #[test]
 fn construct_with_new() {
     let (dungeon, player_pos) = make_dungeon(vec!["#.@#"]);
-    let game_state = GameState::new(dungeon.clone(), player_pos);
+    let game_state = GameState::new(dungeon.clone(), player_pos, 20);
 
     assert_eq!(dungeon, game_state.dungeon);
     assert_eq!(player_pos, game_state.player_position);
@@ -17,7 +17,7 @@ fn guard_at_ref_gets_rc_to_guard_that_can_be_modified() {
         "#G..#",
         "#..G#"
     ]);
-    let game_state = GameState::new(dungeon.clone(), player_pos);
+    let game_state = GameState::new(dungeon.clone(), player_pos, 20);
 
     let guard = game_state.guard_ref_at((1, 0));
     assert_eq!(20, guard.borrow().hp);
@@ -32,11 +32,9 @@ fn guard_at_ref_gets_rc_to_guard_that_can_be_modified() {
 #[test]
 fn resolve_combat_player_onehits_guard() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@.#"]);
-    let mut game_state = GameState::new(dungeon.clone(), player_pos);
+    let mut game_state = GameState::new(dungeon.clone(), player_pos, 1);
 
     assert_eq!(game_state.dungeon[0][1], 'G');
-
-    game_state.guard_ref_at((1, 0)).borrow_mut().hp = 1;
 
     game_state.resolve_combat_at((1, 0));
 
@@ -46,7 +44,7 @@ fn resolve_combat_player_onehits_guard() {
 #[test]
 fn resolve_combat_player_decreases_health_of_guard() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@.#"]);
-    let mut game_state = GameState::new(dungeon.clone(), player_pos);
+    let mut game_state = GameState::new(dungeon.clone(), player_pos, 20);
 
     assert_eq!(game_state.dungeon[0][1], 'G');
 

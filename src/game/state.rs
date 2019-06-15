@@ -12,13 +12,13 @@ pub struct GameState {
 }
 
 impl GameState {
-    pub fn new(dungeon: DungeonLayout, player_position: Position) -> GameState {
+    pub fn new(dungeon: DungeonLayout, player_position: Position, guard_hp: u16) -> GameState {
         let mut guards = HashMap::new();
 
         for y in 0..dungeon.len() {
             for x in 0..dungeon[0].len() {
                 if dungeon[y][x] == 'G' {
-                    guards.insert((x as u32, y as u32), Combatant::ref_with_hp(20));
+                    guards.insert((x as u32, y as u32), Combatant::ref_with_hp(guard_hp as i16));
                 }
             }
         }
