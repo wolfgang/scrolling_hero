@@ -14,7 +14,7 @@ fn combatant_has_default_attack_and_defense_of_zero() {
 }
 
 #[test]
-fn player_misses_first_then_hits() {
+fn attacker_misses_first_then_hits() {
     let mut dice_roller = FixedDiceRoller::new();
 
     let attacker = Combatant { hp: 100, attack: 5, defense: 0 };
@@ -32,7 +32,15 @@ fn player_misses_first_then_hits() {
 
     attacker.attack(&target_ref, &mut dice_roller);
     assert_eq!(target_ref.borrow().hp, 17);
+}
 
+#[test]
+fn attacker_does_not_attack_if_they_are_dead() {
+    let attacker = Combatant::with_hp(0);
+    let target_ref = Combatant::ref_with_hp(10);
 
+    let mut dice_roller = FixedDiceRoller::new();
 
+    attacker.attack(&target_ref, &mut dice_roller);
+    assert_eq!(target_ref.borrow().hp, 10);
 }

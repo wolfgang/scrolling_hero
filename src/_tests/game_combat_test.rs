@@ -2,6 +2,7 @@ use console::Key;
 
 use super::game_test_helpers::*;
 
+#[ignore]
 #[test]
 fn player_kills_guard_after_colliding_twice() {
     let mut game = make_game_with_camera_offset(100, vec![
@@ -79,6 +80,7 @@ fn render_player_hp() {
 }
 
 
+#[ignore]
 #[test]
 fn if_player_hits_guard_guard_will_hit_back_for_5_damage() {
     let mut game = make_game_with_camera_offset(100, vec![

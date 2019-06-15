@@ -8,6 +8,8 @@ use renderer::GameRenderer;
 use state::GameState;
 
 use crate::dungeon::provider::DungeonProvider;
+use crate::game::dice_roller::DiceRoller;
+use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::types::Position;
 
 pub mod renderer;
@@ -21,6 +23,7 @@ pub struct Game {
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
     dungeon_renderer: GameRenderer,
+    dice_roller: Box<dyn DiceRoller>,
 }
 
 impl Game {
@@ -36,6 +39,7 @@ impl Game {
             dungeon_provider,
             is_running: true,
             dungeon_renderer: GameRenderer::new(camera_offset),
+            dice_roller: Box::from(RandomizedDiceRoller::new()),
         }
     }
 
@@ -47,7 +51,7 @@ impl Game {
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
         self.dungeon_renderer.render(
             writer,
-            &self.game_state
+            &self.game_state,
         )
     }
 
@@ -88,7 +92,7 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    combat::resolve_simple(&mut self.game_state, pos);
+                    combat::resolve(&mut self.game_state, pos, &mut *self.dice_roller);
                     self.game_state.check_guard_state(pos);
                 }
             }
