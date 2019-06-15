@@ -9,7 +9,7 @@ pub struct GameState {
     pub dungeon: DungeonLayout,
     pub player_position: Position,
     pub guards: HashMap<(usize, usize), CombatantRef>,
-    pub player: Combatant,
+    pub player: CombatantRef,
 }
 
 impl GameState {
@@ -28,7 +28,7 @@ impl GameState {
             dungeon,
             player_position,
             guards,
-            player: Combatant { hp: 100 },
+            player: Rc::new(RefCell::new(Combatant { hp: 100 }))
         }
     }
 

@@ -8,7 +8,7 @@ fn construct_with_new() {
 
     assert_eq!(dungeon, game_state.dungeon);
     assert_eq!(player_pos, game_state.player_position);
-    assert_eq!(100, game_state.player.hp);
+    assert_eq!(100, game_state.player.borrow().hp);
     assert!(game_state.guards.is_empty());
 }
 
