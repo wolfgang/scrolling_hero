@@ -18,7 +18,5 @@ pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
     let player_ref = game_state.player_ref();
 
     player_ref.borrow().attack_simple(&guard_ref, 10);
-
-    let guard = guard_ref.borrow();
-    guard.attack_simple(&player_ref, 5);
+    guard_ref.borrow().attack_simple(&player_ref, 5);
 }
