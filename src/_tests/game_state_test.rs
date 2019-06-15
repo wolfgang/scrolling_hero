@@ -49,14 +49,12 @@ fn resolve_combat_player_decreases_health_of_guard() {
     let mut game_state = GameState::new(dungeon.clone(), player_pos);
 
     assert_eq!(game_state.dungeon[0][1], 'G');
-    let guard_health_before = game_state.guard_ref_at((1, 0)).borrow().hp;
+
+    let guard_ref = game_state.guard_ref_at((1, 0));
+    let guard_health_before = guard_ref.borrow().hp;
 
     game_state.resolve_combat_at((1, 0));
 
-    let guard_health_after = game_state.guard_ref_at((1, 0)).borrow().hp;
-
-    assert!(guard_health_after < guard_health_before);
-
-
+    assert!(guard_ref.borrow().hp < guard_health_before);
     assert_eq!(game_state.dungeon[0][1], 'G');
 }
