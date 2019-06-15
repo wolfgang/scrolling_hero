@@ -1,5 +1,9 @@
 use std::collections::HashMap;
 
+trait DiceRoller {
+    fn roll(&mut self, dice: u8) -> u8;
+}
+
 struct FixedDiceRoller {
     next_rolls: HashMap<u8, Vec<u8>>,
     index: HashMap<u8, usize>,
@@ -17,8 +21,10 @@ impl FixedDiceRoller {
         let next_rolls_for_dice = self.next_rolls.entry(dice).or_insert(Vec::with_capacity(10));
         next_rolls_for_dice.push(value);
     }
+}
 
-    pub fn roll(&mut self, dice: u8) -> u8 {
+impl DiceRoller for FixedDiceRoller {
+    fn roll(&mut self, dice: u8) -> u8 {
         let index_for_dice = self.index.entry(dice).or_insert(0);
         let roll = self.next_rolls.get(&dice).unwrap()[*index_for_dice];
         *index_for_dice += 1;
