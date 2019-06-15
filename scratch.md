@@ -1,10 +1,19 @@
-GameState -> player, guards, dungeon
+test game_state.resolve_combat
 
-combat::resolve_simple(&mut GameState, guard_pos)
-
-
+test that colliding with guard somehow triggers combat 
 
 
+````
+fn resolve_combat(&mut self) {
+    guard = get guard ref
+    player attacks gard.borrow_mut()
+    guard borrow attacks player borrow mut
+    
+    check if guard is dead
+    
+} 
+
+````
 
 
 struct Combatant {

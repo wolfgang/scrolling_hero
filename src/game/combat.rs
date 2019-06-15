@@ -3,11 +3,11 @@ use crate::types::{CombatantRef, Position};
 use super::state::GameState;
 
 pub struct Combatant {
-    pub hp: u16
+    pub hp: i16
 }
 
 impl Combatant {
-    pub fn attack_simple(&self, target: &CombatantRef, damage: u16) {
+    pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {
         if self.hp > 0 {
             target.borrow_mut().hp -= damage;
         }
