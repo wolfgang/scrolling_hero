@@ -2,9 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
-use crate::types::{CombatantRef, Position};
-
-use super::state::GameState;
+use crate::types::CombatantRef;
 
 pub struct Combatant {
     pub hp: i16,
@@ -35,8 +33,4 @@ impl Combatant {
             }
         }
     }
-}
-
-pub fn resolve(game_state: &mut GameState, pos: Position, dice_roller: &mut DiceRoller) {
-    game_state.resolve_combat(pos, dice_roller);
 }
