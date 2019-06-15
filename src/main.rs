@@ -6,7 +6,7 @@ use rand::rngs::StdRng;
 
 use sch::dungeon::decorator;
 use sch::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
-use sch::dungeon_provider::MultiDungeonProvider;
+use sch::dungeon::provider::MultiDungeonProvider;
 use sch::game::Game;
 use sch::types::DungeonDefinition;
 

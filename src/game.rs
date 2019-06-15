@@ -5,7 +5,7 @@ use std::rc::Rc;
 use console::Key;
 
 use crate::combat;
-use crate::dungeon_provider::DungeonProvider;
+use crate::dungeon::provider::DungeonProvider;
 use crate::game_renderer::GameRenderer;
 use crate::game_state::GameState;
 

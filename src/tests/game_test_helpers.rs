@@ -4,7 +4,7 @@ use std::str;
 use regex::Regex;
 
 use crate::dungeon::helpers::make_dungeon;
-use crate::dungeon_provider::SingleDungeonProvider;
+use crate::dungeon::provider::SingleDungeonProvider;
 use crate::game::Game;
 
 type LineBuffer = Cursor<Vec<u8>>;
