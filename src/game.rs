@@ -5,8 +5,8 @@ use std::rc::Rc;
 use console::Key;
 
 use crate::combat;
-use crate::dungeon::renderer::GameRenderer;
 use crate::dungeon_provider::DungeonProvider;
+use crate::game_renderer::GameRenderer;
 use crate::game_state::GameState;
 
 pub struct Game {
