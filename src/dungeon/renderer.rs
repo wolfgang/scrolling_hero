@@ -3,16 +3,16 @@ use std::io::{Cursor, Seek, SeekFrom, Write};
 
 use crate::game_state::GameState;
 
-pub struct DungeonRenderer {
+pub struct GameRenderer {
     camera_offset: i32,
     render_buffer: Cursor<Vec<u8>>,
 }
 
-impl DungeonRenderer {
+impl GameRenderer {
     pub fn new(
-        camera_offset: i32) -> DungeonRenderer
+        camera_offset: i32) -> GameRenderer
     {
-        DungeonRenderer {
+        GameRenderer {
             camera_offset,
             render_buffer: Cursor::new(Vec::with_capacity(512)),
         }

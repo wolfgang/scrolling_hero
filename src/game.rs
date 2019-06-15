@@ -5,7 +5,7 @@ use std::rc::Rc;
 use console::Key;
 
 use crate::combat;
-use crate::dungeon::renderer::DungeonRenderer;
+use crate::dungeon::renderer::GameRenderer;
 use crate::dungeon_provider::DungeonProvider;
 use crate::game_state::GameState;
 
@@ -13,7 +13,7 @@ pub struct Game {
     game_state: GameState,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
-    dungeon_renderer: DungeonRenderer,
+    dungeon_renderer: GameRenderer,
 }
 
 impl Game {
@@ -28,7 +28,7 @@ impl Game {
             game_state: GameState::new(dungeon, player_position),
             dungeon_provider,
             is_running: true,
-            dungeon_renderer: DungeonRenderer::new(camera_offset),
+            dungeon_renderer: GameRenderer::new(camera_offset),
         }
     }
 
