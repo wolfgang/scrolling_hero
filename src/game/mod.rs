@@ -5,12 +5,13 @@ use std::rc::Rc;
 use console::Key;
 
 use renderer::GameRenderer;
+use state::GameState;
 
 use crate::combat;
 use crate::dungeon::provider::DungeonProvider;
-use crate::game_state::GameState;
 
 pub mod renderer;
+pub mod state;
 
 pub struct Game {
     game_state: GameState,

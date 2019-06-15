@@ -1,5 +1,5 @@
 use crate::dungeon::helpers::make_dungeon;
-use crate::game_state::GameState;
+use crate::game::state::GameState;
 
 #[test]
 fn construct_with_new() {

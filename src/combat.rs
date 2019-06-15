@@ -1,4 +1,4 @@
-use crate::game_state::GameState;
+use crate::game::state::GameState;
 use crate::types::CombatantRef;
 
 pub struct Combatant {

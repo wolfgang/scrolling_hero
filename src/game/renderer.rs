@@ -1,7 +1,7 @@
 use std::cmp::{max, min};
 use std::io::{Cursor, Seek, SeekFrom, Write};
 
-use crate::game_state::GameState;
+use super::state::GameState;
 
 pub struct GameRenderer {
     camera_offset: i32,
