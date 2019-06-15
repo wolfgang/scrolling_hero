@@ -12,7 +12,7 @@ use crate::types::{DungeonProviderRef, Position};
 
 pub mod renderer;
 pub mod state;
-pub mod combat;
+pub mod combatant;
 pub mod dice_roller;
 pub mod randomized_dice_roller;
 

@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::game::dice_roller::DiceRoller;
 use crate::types::{CombatantRef, DungeonLayout, Position};
 
-use super::combat::Combatant;
+use super::combatant::Combatant;
 
 pub struct GameState {
     pub dungeon: DungeonLayout,

@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::combat::Combatant;
+use crate::game::combatant::Combatant;
 
 use super::fixed_dice_roller::FixedDiceRoller;
 

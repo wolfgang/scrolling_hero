@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::dungeon::provider::DungeonProvider;
-use crate::game::combat::Combatant;
+use crate::game::combatant::Combatant;
 
 pub type DungeonLayout = Vec<Vec<char>>;
 pub type Position = (u32, u32);
