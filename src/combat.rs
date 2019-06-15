@@ -4,6 +4,10 @@ pub struct Combatant {
     pub hp: u16
 }
 
+impl Combatant {
+    pub fn attack_simple() {}
+}
+
 pub fn resolve_simple(game_state: &mut GameState, pos: (usize, usize)) {
     let guard = game_state.guard_at_ref(pos.0, pos.1);
     let mut guard_ref = guard.borrow_mut();
