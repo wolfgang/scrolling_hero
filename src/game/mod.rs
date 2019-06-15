@@ -7,11 +7,11 @@ use console::Key;
 use renderer::GameRenderer;
 use state::GameState;
 
-use crate::combat;
 use crate::dungeon::provider::DungeonProvider;
 
 pub mod renderer;
 pub mod state;
+pub mod combat;
 
 pub struct Game {
     game_state: GameState,

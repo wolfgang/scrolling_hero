@@ -2,8 +2,9 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-use crate::combat::Combatant;
 use crate::types::{CombatantRef, DungeonLayout, Position};
+
+use super::combat::Combatant;
 
 pub struct GameState {
     pub dungeon: DungeonLayout,

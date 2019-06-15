@@ -1,5 +1,6 @@
-use crate::game::state::GameState;
 use crate::types::CombatantRef;
+
+use super::state::GameState;
 
 pub struct Combatant {
     pub hp: u16

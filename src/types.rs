@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::combat::Combatant;
+use crate::game::combat::Combatant;
 
 pub type DungeonLayout = Vec<Vec<char>>;
 pub type Position = (u32, u32);
