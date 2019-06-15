@@ -7,7 +7,9 @@ use crate::types::{CombatantRef, Position};
 use super::state::GameState;
 
 pub struct Combatant {
-    pub hp: i16
+    pub hp: i16,
+    pub attack: u8,
+    pub defense: u8
 }
 
 impl Combatant {
@@ -15,7 +17,7 @@ impl Combatant {
         Rc::new(RefCell::new(Combatant::with_hp(hp)))
     }
     pub fn with_hp(hp: i16) -> Combatant {
-        Combatant { hp }
+        Combatant { hp, attack: 0, defense: 0 }
     }
 
     pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {
