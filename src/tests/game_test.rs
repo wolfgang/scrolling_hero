@@ -2,7 +2,7 @@ use std::io::Cursor;
 
 use console::Key;
 
-use crate::dungeon_helpers::make_dungeon;
+use crate::dungeon::helpers::make_dungeon;
 use crate::dungeon_provider::MultiDungeonProvider;
 use crate::game::Game;
 use crate::tests::game_test_helpers::*;

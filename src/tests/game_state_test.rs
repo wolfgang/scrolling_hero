@@ -1,4 +1,4 @@
-use crate::dungeon_helpers::make_dungeon;
+use crate::dungeon::helpers::make_dungeon;
 use crate::game_state::GameState;
 
 #[test]
