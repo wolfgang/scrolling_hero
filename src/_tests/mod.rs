@@ -6,7 +6,7 @@ pub mod game_combat_test;
 pub mod dungeon_provider_test;
 pub mod dungeon_generator_test;
 pub mod dungeon_guards_decorator_test;
-pub mod combat_test;
+pub mod combatant_test;
 pub mod game_state_test;
 pub mod fixed_dice_roller;
 pub mod fixed_dice_roller_test;

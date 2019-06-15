@@ -1,5 +1,6 @@
-use crate::_tests::fixed_dice_roller::FixedDiceRoller;
 use crate::game::combat::Combatant;
+
+use super::fixed_dice_roller::FixedDiceRoller;
 
 #[test]
 fn player_hits_guard_twice() {
