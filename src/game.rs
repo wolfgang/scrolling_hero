@@ -13,7 +13,6 @@ pub struct Game {
     game_state: GameState,
     dungeon_provider: Rc<RefCell<DungeonProvider>>,
     is_running: bool,
-    steps: u32,
     dungeon_renderer: DungeonRenderer,
 }
 
@@ -29,7 +28,6 @@ impl Game {
             game_state: GameState::new(dungeon, player_position),
             dungeon_provider,
             is_running: true,
-            steps: 0,
             dungeon_renderer: DungeonRenderer::new(camera_offset),
         }
     }
@@ -42,13 +40,11 @@ impl Game {
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
         self.dungeon_renderer.render(
             writer,
-            &self.game_state,
-            self.steps
+            &self.game_state
         )
     }
 
     pub fn on_key(&mut self, key: Key) {
-        let prev_position = self.game_state.player_position;
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
@@ -74,7 +70,6 @@ impl Game {
             _ => {}
         }
 
-        if prev_position != self.game_state.player_position { self.steps += 1; }
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
@@ -122,7 +117,6 @@ impl Game {
             Some((next_dungeon, next_player_pos)) => {
                 self.game_state.dungeon = next_dungeon;
                 self.game_state.player_position = next_player_pos;
-                self.steps = 0;
             }
             None => { self.is_running = false; }
         }

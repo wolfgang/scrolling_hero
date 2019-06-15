@@ -8,41 +8,6 @@ use crate::game::Game;
 use crate::tests::game_test_helpers::*;
 
 #[test]
-fn reset_number_of_steps_when_entering_new_dungeon() {
-    let mut game = make_game(vec![
-        "#.@#",
-        "#E.#"
-    ]);
-
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 0"]);
-
-    game.on_key(Key::ArrowDown);
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 1"]);
-
-    game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 0"]);
-}
-
-
-
-#[test]
-fn increases_number_of_steps_with_each_move() {
-    let mut game = make_game(vec![
-        "#.@#",
-        "#.E#"
-    ]);
-
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 0"]);
-
-    game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 1"]);
-
-    game.on_key(Key::ArrowDown);
-    verify_lines_rendered_match(&mut game, vec![r"\s+Steps: 2"]);
-
-}
-
-#[test]
 fn is_running_is_false_after_last_dungeon_is_exited() {
     let (dungeon1, player_pos1) = make_dungeon(vec![
         "#.@#",

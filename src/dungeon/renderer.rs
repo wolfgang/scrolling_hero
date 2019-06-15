@@ -22,7 +22,6 @@ impl DungeonRenderer {
         &mut self,
         writer: &mut Write,
         game_state: &GameState,
-        steps: u32,
     ) -> std::io::Result<(u32)>
     {
         let player_y = game_state.player_position.1;
@@ -42,10 +41,6 @@ impl DungeonRenderer {
             }
 
             self.render_buffer.write(row_str.as_bytes())?;
-
-            if y == 0 {
-                self.render_buffer.write(format!("  Steps: {}", steps).as_bytes())?;
-            }
 
             if y == 1 {
                 let player_health = game_state.player_ref().borrow().hp;
