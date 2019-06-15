@@ -37,15 +37,6 @@ impl Combatant {
     }
 }
 
-pub fn resolve_simple(game_state: &mut GameState, pos: Position) {
-    let guard_ref = game_state.guard_ref_at(pos);
-    let player_ref = game_state.player_ref();
-
-    player_ref.borrow().attack_simple(&guard_ref, 10);
-    guard_ref.borrow().attack_simple(&player_ref, 5);
-}
-
-
 pub fn resolve(game_state: &mut GameState, pos: Position, dice_roller: &mut DiceRoller) {
     let guard_ref = game_state.guard_ref_at(pos);
     let player_ref = game_state.player_ref();
