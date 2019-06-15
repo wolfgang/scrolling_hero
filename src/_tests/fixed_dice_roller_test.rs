@@ -1,23 +1,27 @@
+use std::collections::HashMap;
+
 struct FixedDiceRoller {
-    next_rolls: Vec<u8>,
-    index: usize,
+    next_rolls: HashMap<u8, Vec<u8>>,
+    index: HashMap<u8, usize>,
 }
 
 impl FixedDiceRoller {
     pub fn new() -> FixedDiceRoller {
         FixedDiceRoller {
-            next_rolls: Vec::with_capacity(10),
-            index: 0,
+            next_rolls: HashMap::new(),
+            index: HashMap::new(),
         }
     }
 
-    pub fn next_roll20(&mut self, value: u8) {
-        self.next_rolls.push(value);
+    pub fn next_roll(&mut self, dice: u8, value: u8) {
+        let next_rolls_for_dice = self.next_rolls.entry(dice).or_insert(Vec::with_capacity(10));
+        next_rolls_for_dice.push(value);
     }
 
-    pub fn roll20(&mut self) -> u8 {
-        let roll = self.next_rolls[self.index];
-        self.index += 1;
+    pub fn roll(&mut self, dice: u8) -> u8 {
+        let index_for_dice = self.index.entry(dice).or_insert(0);
+        let roll = self.next_rolls.get(&dice).unwrap()[*index_for_dice];
+        *index_for_dice += 1;
         roll
     }
 }
@@ -26,11 +30,25 @@ impl FixedDiceRoller {
 #[test]
 fn roll_a_fixed_sequence_of_d20s() {
     let mut roller = FixedDiceRoller::new();
-    roller.next_roll20(10);
-    roller.next_roll20(15);
-    roller.next_roll20(1);
+    roller.next_roll(20, 10);
+    roller.next_roll(20, 15);
+    roller.next_roll(20, 1);
 
-    assert_eq!(roller.roll20(), 10);
-    assert_eq!(roller.roll20(), 15);
-    assert_eq!(roller.roll20(), 1);
+    assert_eq!(roller.roll(20), 10);
+    assert_eq!(roller.roll(20), 15);
+    assert_eq!(roller.roll(20), 1);
+}
+
+#[test]
+fn roll_a_fixed_sequence_of_various_dice() {
+    let mut roller = FixedDiceRoller::new();
+    roller.next_roll(20, 10);
+    roller.next_roll(10, 3);
+    roller.next_roll(10, 7);
+    roller.next_roll(20, 15);
+
+    assert_eq!(roller.roll(20), 10);
+    assert_eq!(roller.roll(20), 15);
+    assert_eq!(roller.roll(10), 3);
+    assert_eq!(roller.roll(10), 7);
 }
