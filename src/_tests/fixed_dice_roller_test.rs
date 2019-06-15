@@ -32,6 +32,16 @@ impl DiceRoller for FixedDiceRoller {
     }
 }
 
+struct DiceUser {
+    pub roll: u8
+}
+
+impl DiceUser {
+    pub fn use_roll(&mut self, roller: &mut DiceRoller) {
+        self.roll = roller.roll(20)
+    }
+}
+
 
 #[test]
 fn roll_a_fixed_sequence_of_d20s() {
@@ -57,4 +67,13 @@ fn roll_a_fixed_sequence_of_various_dice() {
     assert_eq!(roller.roll(20), 15);
     assert_eq!(roller.roll(10), 3);
     assert_eq!(roller.roll(10), 7);
+}
+
+#[test]
+fn can_pass_trait_ref_to_function() {
+    let mut user = DiceUser { roll: 0 };
+    let mut roller = FixedDiceRoller::new();
+    roller.next_roll(20, 15);
+    user.use_roll(&mut roller);
+    assert_eq!(user.roll, 15);
 }
