@@ -20,6 +20,12 @@ pub struct GameConfig {
     pub camera_offset: i32
 }
 
+impl GameConfig {
+    pub fn with_camera_offset(camera_offset: i32) -> GameConfig {
+        GameConfig { camera_offset }
+    }
+}
+
 pub struct Game {
     game_state: GameState,
     dungeon_provider: DungeonProviderRef,
@@ -29,23 +35,16 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn with_config(config: &GameConfig, dungeon_provider: &DungeonProviderRef) -> Game {
-        Game::new(dungeon_provider, config.camera_offset)
-    }
-
-    pub fn new(
-        provider: &DungeonProviderRef,
-        camera_offset: i32) -> Game
-    {
-        let dungeon_provider = Rc::clone(provider);
+    pub fn with_config(config: &GameConfig, dungeon_provider_ref: &DungeonProviderRef) -> Game {
+        let dungeon_provider = Rc::clone(dungeon_provider_ref);
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
             game_state: GameState::new(dungeon, player_position),
             dungeon_provider,
-            is_running: true,
-            dungeon_renderer: GameRenderer::new(camera_offset),
+            dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
+            is_running: true,
         }
     }
 

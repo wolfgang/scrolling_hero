@@ -5,7 +5,7 @@ use regex::Regex;
 
 use crate::dungeon::helpers::make_dungeon;
 use crate::dungeon::provider::SingleDungeonProvider;
-use crate::game::Game;
+use crate::game::{Game, GameConfig};
 
 type LineBuffer = Cursor<Vec<u8>>;
 type Lines<'a> = Vec<&'a str>;
@@ -16,7 +16,9 @@ pub fn make_game(strings: Vec<&str>) -> Game {
 
 pub fn make_game_with_camera_offset(offset: i32, strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
-    Game::new(&SingleDungeonProvider::shared(dungeon, player_pos), offset)
+    Game::with_config(
+        &GameConfig::with_camera_offset(offset),
+        &SingleDungeonProvider::shared(dungeon, player_pos))
 }
 
 pub fn verify_lines_rendered_start_with(game: &mut Game, expected_lines: Lines) {

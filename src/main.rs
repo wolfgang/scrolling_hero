@@ -7,7 +7,7 @@ use rand::rngs::StdRng;
 use sch::dungeon::decorator;
 use sch::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
 use sch::dungeon::provider::MultiDungeonProvider;
-use sch::game::Game;
+use sch::game::{Game, GameConfig};
 use sch::types::DungeonDefinition;
 
 fn main() -> std::io::Result<()> {
@@ -23,7 +23,8 @@ fn main() -> std::io::Result<()> {
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
 
-    let mut game = Game::new(&dungeon_provider, 2);
+    let mut game = Game::with_config(&GameConfig::with_camera_offset(2), &dungeon_provider);
+
 
     while game.is_running() {
         let num_lines = game.render(&mut term)?;
