@@ -77,7 +77,6 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
-        self.init_messages();
 
         match key {
             Key::ArrowLeft => {
@@ -122,6 +121,8 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+                    self.init_messages();
+
                     let guard_health = self.game_state.borrow_guard_at(pos).hp;
                     let player_health = self.game_state.borrow_player().hp;
                     self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));

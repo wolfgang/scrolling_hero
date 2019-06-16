@@ -1,19 +1,12 @@
 use console::Key;
 
-use crate::game::GameConfig;
+use crate::game::{Game, GameConfig};
 
 use super::game_test_helpers::*;
 
 #[test]
 fn player_onehits_guards_with_hp_1() {
-    let config = GameConfig {
-        camera_offset: 100,
-        guard_hp: 1,
-        player_hp: 100,
-        ..Default::default()
-    };
-
-    let mut game = make_game_with_config(&config, vec![
+    let mut game = make_game_with_config(&game_with_weak_guards(), vec![
         "#...#",
         "#G@G#",
         "#..G#",
@@ -49,30 +42,31 @@ fn player_onehits_guards_with_hp_1() {
 }
 
 #[test]
-fn render_player_hp() {
+fn render_current_player_hp() {
+    let config = game_with_strong_guards();
     let mut game = make_game_with_config(
-        &GameConfig { player_hp: 100, ..Default::default() },
+        &config,
         vec![
             "#G@#",
             "#..#"
         ]);
 
-    verify_lines_rendered_match(&mut game, vec![r"\s+HP: 100"]);
+    verify_player_hp_rendered(&mut game, config.player_hp as i16);
 
     game.on_key(Key::ArrowLeft);
 
-    // Guard hit us back, so HP are now two digits
-    verify_lines_rendered_match(&mut game, vec![r"\s+HP: \d{2}"]);
+    let new_player_hp = game.game_state.borrow_player().hp;
+    assert!(new_player_hp < config.player_hp as i16);
+    verify_player_hp_rendered(&mut game, new_player_hp);
+}
+
+fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
+    verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
 }
 
 #[test]
 fn when_player_hits_guard_print_damage_dealt() {
-    let config = GameConfig {
-        camera_offset: 100,
-        guard_hp: 50,
-        player_hp: 100,
-        ..Default::default()
-    };
+    let config = game_with_strong_guards();
 
     let mut game = make_game_with_config(&config, vec![
         "#...#",
@@ -82,8 +76,8 @@ fn when_player_hits_guard_print_damage_dealt() {
 
     game.on_key(Key::ArrowLeft);
 
-    let damage_to_guard = 50 - game.game_state.borrow_guard_at((1, 1)).hp;
-    let damage_to_player = 100 - game.game_state.borrow_player().hp;
+    let damage_to_guard = config.guard_hp as i16 - game.game_state.borrow_guard_at((1, 1)).hp;
+    let damage_to_player = config.player_hp as i16 - game.game_state.borrow_player().hp;
 
     verify_lines_rendered_match(&mut game, vec![
         r".*",
@@ -95,21 +89,13 @@ fn when_player_hits_guard_print_damage_dealt() {
 
 #[test]
 fn when_attacks_miss_display_different_messages() {
-    let config = GameConfig {
-        camera_offset: 100,
-        guard_hp: 50,
-        player_hp: 100,
-        // guard and player can never be hit
-        guard_defense: 100,
-        player_defense: 100,
-        ..Default::default()
-    };
-
-    let mut game = make_game_with_config(&config, vec![
-        "#...#",
-        "#G@.#",
-        "#...#"
-    ]);
+    let mut game = make_game_with_config(
+        &game_with_unhittable_combatants(),
+        vec![
+            "#...#",
+            "#G@.#",
+            "#...#"
+        ]);
 
     game.on_key(Key::ArrowLeft);
 
@@ -122,19 +108,14 @@ fn when_attacks_miss_display_different_messages() {
 
 #[test]
 fn display_guard_dies_if_guard_drops_below_zero() {
-    let config = GameConfig {
-        camera_offset: 100,
-        guard_hp: 1,
-        player_hp: 100,
-        ..Default::default()
-    };
-
-    let mut game = make_game_with_config(&config, vec![
-        "#...#",
-        "#.@G#",
-        "#...#",
-        "#...#",
-    ]);
+    let mut game = make_game_with_config(
+        &game_with_weak_guards(),
+        vec![
+            "#...#",
+            "#.@G#",
+            "#...#",
+            "#...#",
+        ]);
 
 
     game.on_key(Key::ArrowRight);
@@ -149,18 +130,13 @@ fn display_guard_dies_if_guard_drops_below_zero() {
 
 #[test]
 fn when_player_moves_away_clear_combat_log() {
-    let config = GameConfig {
-        camera_offset: 100,
-        guard_hp: 50,
-        player_hp: 100,
-        ..Default::default()
-    };
-
-    let mut game = make_game_with_config(&config, vec![
-        "#...#",
-        "#G@.#",
-        "#...#"
-    ]);
+    let mut game = make_game_with_config(
+        &game_with_strong_guards(),
+        vec![
+            "#...#",
+            "#G@.#",
+            "#...#"
+        ]);
 
     game.on_key(Key::ArrowLeft);
     game.on_key(Key::ArrowRight);
@@ -170,4 +146,34 @@ fn when_player_moves_away_clear_combat_log() {
         r"#G.@#",
         r"#...#"
     ]);
+}
+
+fn game_with_strong_guards() -> GameConfig {
+    GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        ..Default::default()
+    }
+}
+
+fn game_with_weak_guards() -> GameConfig {
+    GameConfig {
+        camera_offset: 100,
+        guard_hp: 1,
+        player_hp: 100,
+        ..Default::default()
+    }
+}
+
+fn game_with_unhittable_combatants() -> GameConfig {
+    GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        // guard and player can never be hit
+        guard_defense: 100,
+        player_defense: 100,
+        ..Default::default()
+    }
 }
