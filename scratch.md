@@ -20,7 +20,7 @@
 [X] Real guard combat
     [X] On colliding with guard, do combat round
     [X] If guard HP goes to zero, it is dead
-    [ ] If player HP goes to zero, game is over
+    [X] If player HP goes to zero, game is over
     
 [ ] Constrain movement and penalties
 

@@ -16,7 +16,7 @@ pub mod combatant;
 pub mod dice_roller;
 pub mod randomized_dice_roller;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct GameConfig {
     pub camera_offset: i32,
     pub guard_hp: u16,
@@ -42,6 +42,7 @@ pub struct Game {
     game_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
     messages: Vec<String>,
+    config: GameConfig,
 }
 
 impl Game {
@@ -57,6 +58,7 @@ impl Game {
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
             messages: Vec::with_capacity(10),
+            config: (*config).clone(),
         };
 
         game.show_player_hp();
@@ -178,8 +180,7 @@ impl Game {
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
-                self.game_state.dungeon = next_dungeon;
-                self.game_state.player_position = next_player_pos;
+                self.game_state = GameState::from_game_config(&self.config, next_dungeon, next_player_pos);
             }
             None => { self.is_running = false; }
         }
