@@ -4,8 +4,8 @@ use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::game::state::GameState;
 
 #[test]
-fn construct_with_from_game_config() {
-    let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
+fn from_game_config_inits_player_and_guards() {
+    let (dungeon, player_pos) = make_dungeon(vec!["#G@.G#"]);
     let game_config = GameConfig {
         guard_hp: 30,
         guard_attack: 7,
@@ -22,10 +22,16 @@ fn construct_with_from_game_config() {
     assert_eq!(120, game_state.borrow_player().hp);
     assert_eq!(9, game_state.borrow_player().attack);
     assert_eq!(15, game_state.borrow_player().defense);
-    let guard_ref = game_state.borrow_guard_at((1, 0));
-    assert_eq!(30, guard_ref.hp);
-    assert_eq!(7, guard_ref.attack);
-    assert_eq!(12, guard_ref.defense);
+
+    let guard_ref_1_0 = game_state.borrow_guard_at((1, 0));
+    assert_eq!(30, guard_ref_1_0.hp);
+    assert_eq!(7, guard_ref_1_0.attack);
+    assert_eq!(12, guard_ref_1_0.defense);
+
+    let guard_ref_4_0 = game_state.borrow_guard_at((4, 0));
+    assert_eq!(30, guard_ref_4_0.hp);
+    assert_eq!(7, guard_ref_4_0.attack);
+    assert_eq!(12, guard_ref_4_0.defense);
 }
 
 #[test]
