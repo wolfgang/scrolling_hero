@@ -16,7 +16,7 @@ fn construct_with_from_game_config() {
 
     assert_eq!(dungeon, game_state.dungeon);
     assert_eq!(player_pos, game_state.player_position);
-    assert_eq!(100, game_state.player_ref().borrow().hp);
+    assert_eq!(100, game_state.borrow_player().hp);
     let guard_ref = game_state.borrow_guard_at((1, 0));
     assert_eq!(30, guard_ref.hp);
     assert_eq!(7, guard_ref.attack);
@@ -31,13 +31,13 @@ fn resolve_combat_with_zero_attack_or_defense() {
 
     let mut game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
 
-    assert_eq!(game_state.player_ref().borrow().hp, 100);
+    assert_eq!(game_state.borrow_player().hp, 100);
     assert_eq!(game_state.borrow_guard_at((1, 0)).hp, 20);
 
 
     let mut dice_roller = RandomizedDiceRoller::new();
     game_state.resolve_combat((1, 0), &mut dice_roller);
 
-    assert!(game_state.player_ref().borrow().hp < 100);
+    assert!(game_state.borrow_player().hp < 100);
     assert!(game_state.borrow_guard_at((1, 0)).hp < 20);
 }

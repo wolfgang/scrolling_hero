@@ -54,15 +54,19 @@ impl GameState {
     }
 
 
+    pub fn borrow_player(&self) -> Ref<Combatant> {
+        self.player.borrow()
+    }
+
     pub fn player_ref(&self) -> CombatantRef {
         self.player.clone()
     }
 
-    pub(crate) fn borrow_guard_at(&self, pos: Position) -> Ref<Combatant> {
+    pub fn borrow_guard_at(&self, pos: Position) -> Ref<Combatant> {
         self.guards.get(&pos).unwrap().borrow()
     }
 
-    pub(crate) fn guard_ref_at(&self, pos: Position) -> CombatantRef {
+    pub fn guard_ref_at(&self, pos: Position) -> CombatantRef {
         self.guards.get(&pos).unwrap().clone()
     }
 

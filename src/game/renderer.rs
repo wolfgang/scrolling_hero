@@ -43,7 +43,7 @@ impl GameRenderer {
             self.render_buffer.write(row_str.as_bytes())?;
 
             if y == 0 {
-                let player_health = game_state.player_ref().borrow().hp;
+                let player_health = game_state.borrow_player().hp;
                 self.render_buffer.write(format!("  HP: {}", player_health).as_bytes())?;
             }
 
