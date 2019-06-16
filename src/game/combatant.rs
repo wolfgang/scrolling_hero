@@ -36,13 +36,15 @@ impl Combatant {
         }
     }
 
-    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) {
+    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) -> u8 {
+        let mut damage = 0;
         if self.hp > 0 {
             let attack_roll = dice_roller.roll(20);
             if attack_roll + self.attack > target.borrow().defense {
-                let damage_roll = dice_roller.roll(10);
-                target.borrow_mut().hp -= damage_roll as i16;
+                damage = dice_roller.roll(10);
+                target.borrow_mut().hp -= damage as i16;
             }
         }
+        damage
     }
 }

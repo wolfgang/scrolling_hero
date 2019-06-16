@@ -36,7 +36,7 @@ impl GameConfig {
 }
 
 pub struct Game {
-    game_state: GameState,
+    pub game_state: GameState,
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     dungeon_renderer: GameRenderer,

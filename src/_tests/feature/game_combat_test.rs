@@ -65,6 +65,7 @@ fn render_player_hp() {
     verify_lines_rendered_match(&mut game, vec![r"\s+HP: \d{2}"]);
 }
 
+#[ignore]
 #[test]
 fn when_player_hits_guard_print_damage_dealt() {
     let config = GameConfig {
@@ -88,5 +89,8 @@ fn when_player_hits_guard_print_damage_dealt() {
 
     game.on_key(Key::ArrowLeft);
 
-    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+Player hits Guard for \d+"]);
+    let damage = 50 - game.game_state.borrow_guard_at((1, 1)).hp;
+
+    let second_line = format!(r"\s+Player hits Guard for {}", damage);
+    verify_lines_rendered_match(&mut game, vec![r".*", &second_line]);
 }
