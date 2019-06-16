@@ -46,8 +46,12 @@ fn resolve_combat_with_zero_attack_or_defense() {
 
 
     let mut dice_roller = RandomizedDiceRoller::new();
-    game_state.resolve_combat((1, 0), &mut dice_roller);
+    let (damage_to_guard, damage_to_player) = game_state.resolve_combat((1, 0), &mut dice_roller);
 
     assert!(game_state.borrow_player().hp < 100);
     assert!(game_state.borrow_guard_at((1, 0)).hp < 20);
+
+    assert_eq!(damage_to_player, 100 - game_state.borrow_player().hp as u8);
+    assert_eq!(damage_to_guard, 20 - game_state.borrow_guard_at((1, 0)).hp as u8);
+
 }

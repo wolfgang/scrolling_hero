@@ -65,7 +65,6 @@ fn render_player_hp() {
     verify_lines_rendered_match(&mut game, vec![r"\s+HP: \d{2}"]);
 }
 
-#[ignore]
 #[test]
 fn when_player_hits_guard_print_damage_dealt() {
     let config = GameConfig {
