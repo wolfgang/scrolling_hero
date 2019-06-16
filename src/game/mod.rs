@@ -41,7 +41,7 @@ impl Game {
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
         Game {
-            game_state: GameState::new(dungeon, player_position, config.guard_hp),
+            game_state: GameState::from_game_config(config, dungeon, player_position),
             dungeon_provider,
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),

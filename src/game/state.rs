@@ -2,6 +2,7 @@ use std::cell::Ref;
 use std::collections::HashMap;
 
 use crate::game::dice_roller::DiceRoller;
+use crate::game::GameConfig;
 use crate::types::{CombatantRef, DungeonLayout, Position};
 
 use super::combatant::Combatant;
@@ -14,13 +15,14 @@ pub struct GameState {
 }
 
 impl GameState {
-    pub fn new(dungeon: DungeonLayout, player_position: Position, guard_hp: u16) -> GameState {
+    pub fn from_game_config(
+        game_config: &GameConfig, dungeon: DungeonLayout, player_position: Position) -> GameState {
         let mut guards = HashMap::new();
 
         for y in 0..dungeon.len() {
             for x in 0..dungeon[0].len() {
                 if dungeon[y][x] == 'G' {
-                    guards.insert((x as u32, y as u32), Combatant::ref_with_hp(guard_hp as i16));
+                    guards.insert((x as u32, y as u32), Combatant::ref_with_hp(game_config.guard_hp as i16));
                 }
             }
         }
@@ -29,7 +31,7 @@ impl GameState {
             dungeon,
             player_position,
             guards,
-            player: Combatant::ref_with_hp(100)
+            player: Combatant::ref_with_hp(100),
         }
     }
 
@@ -41,7 +43,6 @@ impl GameState {
         guard_ref.borrow().attack(&player_ref, dice_roller);
 
         self.check_guard_state(pos);
-
     }
 
 

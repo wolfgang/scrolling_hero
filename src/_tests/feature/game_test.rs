@@ -48,7 +48,7 @@ fn renders_exit() {
         "#.E#"
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#.@#",
         "#.E#"
     ]);
@@ -73,7 +73,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
     ]);
 
     let mut game = Game::with_config(&GameConfig::with_camera_offset(1), &provider);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#.@#",
         "#.E#"
@@ -81,7 +81,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
 
     game.on_key(Key::ArrowDown);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "##@#",
         "#E.#"
     ]);
@@ -95,21 +95,21 @@ fn player_is_moved_left_right_by_cursor_keys() {
         "#..#"
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#.@#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#@.#",
         "#..#"
     ]);
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -127,21 +127,21 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
         "#....#"
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#....",
         "#@..#",
         "#..##"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#...#",
         "#@.##",
         "..###"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#..##",
         ".@###",
         "...##"
@@ -157,21 +157,21 @@ fn player_collides_with_walls() {
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowRight);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#####",
         "###@#",
         "#####"
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#####",
         "###@#",
         "#####"
@@ -186,7 +186,7 @@ fn player_does_not_move_beyond_last_dungeon_row() {
     ]);
 
     game.on_key(Key::ArrowDown);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#...#",
         "#@..#"
     ]);
@@ -200,7 +200,7 @@ fn dont_try_to_render_dungeon_line_beyond_first() {
         "#..##",
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#@...",
         "#...#",
     ]);
@@ -214,7 +214,7 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
         "#@.##",
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#...#",
         "#@.##",
     ]);

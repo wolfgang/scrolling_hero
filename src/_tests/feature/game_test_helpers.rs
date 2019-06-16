@@ -29,7 +29,7 @@ pub fn make_game_with_camera_offset(offset: i32, strings: Vec<&str>) -> Game {
         &SingleDungeonProvider::shared(dungeon, player_pos))
 }
 
-pub fn verify_lines_rendered_start_with(game: &mut Game, expected_lines: Lines) {
+pub fn verify_dungeon_rendered(game: &mut Game, expected_lines: Lines) {
     let buffer = render(game);
     assert_lines_start_with(&buffer, expected_lines);
 }

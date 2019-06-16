@@ -17,18 +17,34 @@ fn player_onehits_guards_with_hp_1() {
         "#..G#",
     ]);
 
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#...#",
         "#G@G#",
         "#..G#",
     ]);
 
     game.on_key(Key::ArrowLeft);
-    verify_lines_rendered_start_with(&mut game, vec![
+    verify_dungeon_rendered(&mut game, vec![
         "#...#",
         "#@.G#",
         "#..G#",
     ]);
+
+    game.on_key(Key::ArrowRight);
+    game.on_key(Key::ArrowRight);
+    verify_dungeon_rendered(&mut game, vec![
+        "#...#",
+        "#..@#",
+        "#..G#",
+    ]);
+
+    game.on_key(Key::ArrowDown);
+    verify_dungeon_rendered(&mut game, vec![
+        "#...#",
+        "#...#",
+        "#..@#",
+    ]);
+
 }
 
 #[test]
