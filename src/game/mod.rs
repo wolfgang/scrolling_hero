@@ -77,7 +77,6 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
-
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
@@ -127,6 +126,8 @@ impl Game {
                     let player_health = self.game_state.borrow_player().hp;
                     self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
                     self.messages.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
+                } else {
+                    self.messages.clear();
                 }
             }
 

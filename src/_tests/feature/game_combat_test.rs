@@ -143,8 +143,8 @@ fn when_player_moves_away_clear_combat_log() {
 
     verify_lines_rendered_match(&mut game, vec![
         r"#...#.*",
-        r"#G.@#",
-        r"#...#"
+        r"#G.@#$",
+        r"#...#$"
     ]);
 }
 
