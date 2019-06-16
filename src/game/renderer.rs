@@ -43,7 +43,7 @@ impl GameRenderer {
 
             self.render_buffer.write(row_str.as_bytes())?;
 
-            self.render_message_at(y as i32, &messages);
+            self.render_message_at(y, &messages);
             self.render_buffer.write(b"\n")?;
         }
 
@@ -51,9 +51,9 @@ impl GameRenderer {
         Ok(end_y as u32 - start_y as u32 + 1)
     }
 
-    fn render_message_at(&mut self, index: i32, messages: &Vec<String>) {
-        if index >= 0 && index < messages.len() as i32 {
-            self.render_buffer.write(format!("  {}", messages[index as usize]).as_bytes()).unwrap();
+    fn render_message_at(&mut self, index: usize, messages: &Vec<String>) {
+        if index < messages.len() {
+            self.render_buffer.write(format!("  {}", messages[index]).as_bytes()).unwrap();
         }
     }
 
