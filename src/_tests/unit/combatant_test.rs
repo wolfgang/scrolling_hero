@@ -6,14 +6,6 @@ use crate::game::combatant::{Combatant, CombatantConfig};
 use super::fixed_dice_roller::FixedDiceRoller;
 
 #[test]
-fn with_hp_constructs_guard_with_given_hp_and_zero_attack_and_defense() {
-    let combatant = Combatant::with_hp(10);
-    assert_eq!(combatant.hp, 10);
-    assert_eq!(combatant.attack, 0);
-    assert_eq!(combatant.defense, 0);
-}
-
-#[test]
 fn with_config_takes_values_from_given_config() {
     let config = CombatantConfig { initial_hp: 20, attack: 5, defense: 10 };
 
@@ -45,11 +37,15 @@ fn attacker_misses_first_then_hits() {
 
 #[test]
 fn attacker_does_not_attack_if_they_are_dead() {
-    let attacker = Combatant::with_hp(0);
-    let target_ref = Combatant::ref_with_hp(10);
+    let attacker = combatant_with_hp(0);
+    let target_ref = combatant_with_hp(10).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
 
     attacker.attack(&target_ref, &mut dice_roller);
     assert_eq!(target_ref.borrow().hp, 10);
+}
+
+fn combatant_with_hp(hp: u16) -> Combatant {
+    Combatant::with_config(&CombatantConfig { initial_hp: hp, ..Default::default() })
 }

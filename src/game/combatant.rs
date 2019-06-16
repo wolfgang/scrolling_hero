@@ -4,6 +4,7 @@ use std::rc::Rc;
 use crate::game::dice_roller::DiceRoller;
 use crate::types::CombatantRef;
 
+#[derive(Default)]
 pub struct CombatantConfig {
     pub initial_hp: u16,
     pub attack: u8,
@@ -17,19 +18,16 @@ pub struct Combatant {
 }
 
 impl Combatant {
-    pub fn ref_with_hp(hp: i16) -> CombatantRef {
-        Rc::new(RefCell::new(Combatant::with_hp(hp)))
-    }
-    pub fn with_hp(hp: i16) -> Combatant {
-        Combatant { hp, attack: 0, defense: 0 }
+    pub fn with_config(config: &CombatantConfig) -> Combatant {
+        Combatant {
+            hp: config.initial_hp as i16,
+            attack: config.attack,
+            defense: config.defense,
+        }
     }
 
     pub fn into_ref(self) -> CombatantRef {
         Rc::new(RefCell::new(self))
-    }
-
-    pub fn with_config(config: &CombatantConfig) -> Combatant {
-        Combatant { hp: config.initial_hp as i16, attack: config.attack, defense: config.defense }
     }
 
     pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {
