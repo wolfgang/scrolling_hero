@@ -22,6 +22,7 @@ impl GameRenderer {
         &mut self,
         writer: &mut Write,
         game_state: &GameState,
+        message: &str
     ) -> std::io::Result<(u32)>
     {
         let player_y = game_state.player_position.1;
@@ -45,6 +46,10 @@ impl GameRenderer {
             if y == 0 {
                 let player_health = game_state.borrow_player().hp;
                 self.render_buffer.write(format!("  HP: {}", player_health).as_bytes())?;
+            }
+
+            if y == 1 {
+                self.render_buffer.write(format!(" {}", message).as_bytes())?;
             }
 
             self.render_buffer.write(b"\n")?;

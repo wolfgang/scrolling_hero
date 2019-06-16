@@ -64,3 +64,29 @@ fn render_player_hp() {
     // Guard hit us back, so HP are now two digits
     verify_lines_rendered_match(&mut game, vec![r"\s+HP: \d{2}"]);
 }
+
+#[test]
+fn when_player_hits_guard_print_damage_dealt() {
+    let config = GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        ..Default::default()
+    };
+
+    let mut game = make_game_with_config(&config, vec![
+        "#...#",
+        "#G@.#",
+        "#...#"
+    ]);
+
+    verify_dungeon_rendered(&mut game, vec![
+        "#...#",
+        "#G@.#",
+        "#...#"
+    ]);
+
+    game.on_key(Key::ArrowLeft);
+
+    verify_lines_rendered_match(&mut game, vec![r".*", r"\s+Player hits Guard for \d+"]);
+}

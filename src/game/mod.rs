@@ -41,6 +41,7 @@ pub struct Game {
     is_running: bool,
     dungeon_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
+    message: String
 }
 
 impl Game {
@@ -54,6 +55,7 @@ impl Game {
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
+            message: String::with_capacity(64)
         }
     }
 
@@ -66,6 +68,7 @@ impl Game {
         self.dungeon_renderer.render(
             writer,
             &self.game_state,
+            &self.message
         )
     }
 
@@ -107,6 +110,7 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+                    self.message = String::from("Player hits Guard for 1234");
                 }
             }
 
