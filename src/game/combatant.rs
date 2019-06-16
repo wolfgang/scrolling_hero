@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
+use crate::game::GameConfig;
 use crate::types::CombatantRef;
 
 pub struct Combatant {
@@ -16,6 +17,10 @@ impl Combatant {
     }
     pub fn with_hp(hp: i16) -> Combatant {
         Combatant { hp, attack: 0, defense: 0 }
+    }
+
+    pub fn from_game_config(game_config: &GameConfig) -> Combatant {
+        Combatant { hp: game_config.guard_hp as i16, attack: 0, defense: 0 }
     }
 
     pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {

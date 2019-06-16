@@ -2,16 +2,28 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::game::combatant::Combatant;
+use crate::game::GameConfig;
 
 use super::fixed_dice_roller::FixedDiceRoller;
 
 #[test]
-fn combatant_has_default_attack_and_defense_of_zero() {
+fn with_hp_constructs_guard_with_given_hp_and_zero_attack_and_defense() {
     let combatant = Combatant::with_hp(10);
     assert_eq!(combatant.hp, 10);
     assert_eq!(combatant.attack, 0);
     assert_eq!(combatant.defense, 0);
 }
+
+#[test]
+fn from_game_config_takes_values_from_given_game_config() {
+    let game_config = GameConfig { camera_offset: 1, guard_hp: 20 };
+
+    let combatant = Combatant::from_game_config(&game_config);
+    assert_eq!(combatant.hp, 20);
+    assert_eq!(combatant.attack, 0);
+    assert_eq!(combatant.defense, 0);
+}
+
 
 #[test]
 fn attacker_misses_first_then_hits() {
