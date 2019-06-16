@@ -77,7 +77,6 @@ fn render_current_player_hp_after_non_combat_move() {
     verify_player_hp_rendered(&mut game, config.player_hp as i16);
 }
 
-
 fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
     verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
 }
@@ -166,6 +165,21 @@ fn when_player_moves_away_clear_combat_log() {
     ]);
 }
 
+#[test]
+fn game_is_over_if_player_dies() {
+    let mut game = make_game_with_config(
+        &game_with_weak_player(),
+        vec![
+            "#G@#",
+            "#..#"
+        ]);
+
+    game.on_key(Key::ArrowLeft);
+    assert!(game.game_state.borrow_player().hp <= 0);
+    assert!(!game.is_running());
+}
+
+
 fn game_with_strong_guards() -> GameConfig {
     GameConfig {
         camera_offset: 100,
@@ -192,6 +206,15 @@ fn game_with_unhittable_combatants() -> GameConfig {
         // guard and player can never be hit
         guard_defense: 100,
         player_defense: 100,
+        ..Default::default()
+    }
+}
+
+fn game_with_weak_player() -> GameConfig {
+    GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 1,
         ..Default::default()
     }
 }

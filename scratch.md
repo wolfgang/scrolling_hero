@@ -1,42 +1,3 @@
-test game_state.resolve_combat
-
-test that colliding with guard somehow triggers combat 
-
-
-````
-fn resolve_combat(&mut self) {
-    guard = get guard ref
-    player attacks gard.borrow_mut()
-    guard borrow attacks player borrow mut
-    
-    check if guard is dead
-    
-} 
-
-````
-
-
-struct Combatant {
-    hp: u16
-    attack_bonus: u8,
-    defense: u8,
-}
-
-
-guard_combat:resolve(guard: &mut Combatant, player: &mut Combatant, rng: &mut StdRng) {
-    let attack = random(20) + player.attack_bonus;
-    if (attack > guard.defense) {
-        guard.hp -= random(10);
-    }
-    let guard_attack = random(20) + guard.attack_bonus;
-    if (guard_attack > player.defense) {
-        player.hp -= random(10);
-    }
-    
-   
-}
-
-
 
 [X] Render dungeon
 
@@ -56,9 +17,9 @@ guard_combat:resolve(guard: &mut Combatant, player: &mut Combatant, rng: &mut St
     [X] Place random guards
     [X] Kill guard after colliding twice with it
 
-[ ] Real guard combat
-    [ ] On colliding with guard, do combat round
-    [ ] If guard HP goes to zero, it is dead
+[X] Real guard combat
+    [X] On colliding with guard, do combat round
+    [X] If guard HP goes to zero, it is dead
     [ ] If player HP goes to zero, game is over
     
 [ ] Constrain movement and penalties

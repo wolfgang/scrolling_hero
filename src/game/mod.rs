@@ -105,12 +105,6 @@ impl Game {
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
-    fn show_player_hp(&mut self) {
-        self.messages.clear();
-        let player_health = self.game_state.borrow_player().hp;
-        self.messages.push(Game::player_health_message(player_health));
-    }
-
     fn under_player(&self) -> char {
         self.neighbor_at(0, 0).unwrap().1
     }
@@ -121,13 +115,25 @@ impl Game {
                 self.show_player_hp();
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+
                     self.show_player_hp();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
+
+                    if self.game_state.borrow_player().hp <= 0 {
+                        self.is_running = false;
+                    }
+
                 }
             }
 
             None => {}
         }
+    }
+
+    fn show_player_hp(&mut self) {
+        self.messages.clear();
+        let player_health = self.game_state.borrow_player().hp;
+        self.messages.push(Game::player_health_message(player_health));
     }
 
     fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: u8, damage_to_player: u8) {

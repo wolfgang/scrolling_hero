@@ -28,7 +28,7 @@ fn main() -> std::io::Result<()> {
         guard_hp: 20,
         guard_attack: 2,
         guard_defense: 10,
-        player_hp: 100,
+        player_hp: 50,
         player_attack: 5,
         player_defense: 15,
     };
