@@ -119,3 +119,29 @@ fn when_attacks_miss_display_different_messages() {
         r"\s+Guard misses Player!"
     ]);
 }
+
+#[test]
+fn display_guard_dies_if_guard_drops_below_zero() {
+    let config = GameConfig {
+        camera_offset: 100,
+        guard_hp: 1,
+        player_hp: 100,
+        ..Default::default()
+    };
+
+    let mut game = make_game_with_config(&config, vec![
+        "#...#",
+        "#.@G#",
+        "#...#",
+        "#...#",
+    ]);
+
+
+    game.on_key(Key::ArrowRight);
+
+    verify_lines_rendered_match(&mut game, vec![
+        r".*",
+        r".*",
+        r"\s+Guard dies!"
+    ]);
+}

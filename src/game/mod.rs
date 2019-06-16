@@ -110,9 +110,11 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+                    let guard_health = self.game_state.borrow_guard_at(pos).hp;
+                    let player_health = self.game_state.borrow_player().hp;
                     self.messages = vec![
-                        self.attack_message("Player", "Guard", damage_to_guard),
-                        self.attack_message("Guard", "Player", damage_to_player),
+                        self.attack_message("Player", "Guard", damage_to_guard, player_health),
+                        self.attack_message("Guard", "Player", damage_to_player, guard_health),
                     ];
                 }
             }
@@ -121,7 +123,10 @@ impl Game {
         }
     }
 
-    fn attack_message(&self, attacker: &str, target: &str, damage: u8) -> String {
+    fn attack_message(&self, attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
+        if attacker_hp <= 0 {
+            return String::from(format!("{} dies!", attacker))
+        }
         if damage > 0 {
             return String::from(format!("{} hits {} for {}", attacker, target, damage))
         }
