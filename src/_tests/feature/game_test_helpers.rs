@@ -10,7 +10,7 @@ use crate::game::{Game, GameConfig};
 type LineBuffer = Cursor<Vec<u8>>;
 type Lines<'a> = Vec<&'a str>;
 
-pub fn make_game(strings: Vec<&str>) -> Game {
+pub fn make_default_game(strings: Vec<&str>) -> Game {
     make_game_with_camera_offset(1, strings)
 }
 

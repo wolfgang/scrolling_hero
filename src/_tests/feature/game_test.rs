@@ -25,7 +25,7 @@ fn is_running_is_false_after_last_dungeon_is_exited() {
 
 #[test]
 fn is_running_is_true_until_escape_key() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#.@#",
         "#..#"
     ]);
@@ -43,7 +43,7 @@ fn is_running_is_true_until_escape_key() {
 
 #[test]
 fn renders_exit() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#.@#",
         "#.E#"
     ]);
@@ -89,7 +89,7 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
 
 #[test]
 fn player_is_moved_left_right_by_cursor_keys() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#..#",
         "#.@#",
         "#..#"
@@ -118,7 +118,7 @@ fn player_is_moved_left_right_by_cursor_keys() {
 
 #[test]
 fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#....",
         "#@..#",
         "#..##",
@@ -150,7 +150,7 @@ fn player_is_moved_down_by_arrow_down_key_with_scrolling() {
 
 #[test]
 fn player_collides_with_walls() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#####",
         "###@#",
         "#####"
@@ -180,7 +180,7 @@ fn player_collides_with_walls() {
 
 #[test]
 fn player_does_not_move_beyond_last_dungeon_row() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#...#",
         "#@..#"
     ]);
@@ -194,7 +194,7 @@ fn player_does_not_move_beyond_last_dungeon_row() {
 
 #[test]
 fn dont_try_to_render_dungeon_line_beyond_first() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#@...",
         "#...#",
         "#..##",
@@ -208,7 +208,7 @@ fn dont_try_to_render_dungeon_line_beyond_first() {
 
 #[test]
 fn dont_try_to_render_dungeon_line_beyond_last() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#....",
         "#...#",
         "#@.##",
@@ -222,7 +222,7 @@ fn dont_try_to_render_dungeon_line_beyond_last() {
 
 #[test]
 fn render_returns_number_of_lines_rendered() {
-    let mut game = make_game(vec![
+    let mut game = make_default_game(vec![
         "#@...",
         "#...#",
         "#..##",

@@ -31,7 +31,7 @@ pub struct GameConfig {
 
 impl GameConfig {
     pub fn with_camera_offset(camera_offset: i32) -> GameConfig {
-        GameConfig { camera_offset, guard_hp: 20, player_hp: 100, ..Default::default() }
+        GameConfig { camera_offset, ..Default::default() }
     }
 }
 
