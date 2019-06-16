@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::combatant::Combatant;
+use crate::game::combatant::{Combatant, CombatantConfig};
 use crate::game::GameConfig;
 
 use super::fixed_dice_roller::FixedDiceRoller;
@@ -22,6 +22,16 @@ fn from_game_config_takes_values_from_given_game_config() {
     assert_eq!(combatant.hp, 20);
     assert_eq!(combatant.attack, 0);
     assert_eq!(combatant.defense, 0);
+}
+
+#[test]
+fn with_config_takes_values_from_given_config() {
+    let config = CombatantConfig { initial_hp: 20, attack: 5, defense: 10 };
+
+    let combatant = Combatant::with_config(&config);
+    assert_eq!(combatant.hp, 20);
+    assert_eq!(combatant.attack, 5);
+    assert_eq!(combatant.defense, 10);
 }
 
 
