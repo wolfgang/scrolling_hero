@@ -145,3 +145,29 @@ fn display_guard_dies_if_guard_drops_below_zero() {
         r"\s+Guard dies!"
     ]);
 }
+
+
+#[test]
+fn when_player_moves_away_clear_combat_log() {
+    let config = GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        ..Default::default()
+    };
+
+    let mut game = make_game_with_config(&config, vec![
+        "#...#",
+        "#G@.#",
+        "#...#"
+    ]);
+
+    game.on_key(Key::ArrowLeft);
+    game.on_key(Key::ArrowRight);
+
+    verify_lines_rendered_match(&mut game, vec![
+        r"#...#.*",
+        r"#G.@#",
+        r"#...#"
+    ]);
+}

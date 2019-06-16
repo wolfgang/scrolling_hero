@@ -116,6 +116,8 @@ impl Game {
                         self.attack_message("Player", "Guard", damage_to_guard, player_health),
                         self.attack_message("Guard", "Player", damage_to_player, guard_health),
                     ];
+                } else {
+                    self.messages = Vec::new();
                 }
             }
 
