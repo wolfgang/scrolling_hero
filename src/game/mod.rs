@@ -49,24 +49,24 @@ impl Game {
         let dungeon_provider = Rc::clone(dungeon_provider_ref);
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
-        let mut messages = Vec::with_capacity(10);
-        messages.push(Game::player_health_message(config.player_hp as i16));
 
-
-        Game {
+        let mut game = Game {
             game_state: GameState::from_game_config(config, dungeon, player_position),
             dungeon_provider,
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
-            messages
-        }
+            messages: Vec::with_capacity(10)
+        };
+
+        game.init_messages();
+
+        game
     }
 
     pub fn is_running(&self) -> bool {
         self.is_running
     }
-
 
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
         self.dungeon_renderer.render(
@@ -77,9 +77,7 @@ impl Game {
     }
 
     pub fn on_key(&mut self, key: Key) {
-        self.messages.clear();
-        let player_health = self.game_state.borrow_player().hp;
-        self.messages.push(Game::player_health_message(player_health));
+        self.init_messages();
 
         match key {
             Key::ArrowLeft => {
@@ -109,6 +107,12 @@ impl Game {
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
+    fn init_messages(&mut self) {
+        self.messages.clear();
+        let player_health = self.game_state.borrow_player().hp;
+        self.messages.push(Game::player_health_message(player_health));
+    }
+
     fn under_player(&self) -> char {
         self.neighbor_at(0, 0).unwrap().1
     }
@@ -120,8 +124,8 @@ impl Game {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     let guard_health = self.game_state.borrow_guard_at(pos).hp;
                     let player_health = self.game_state.borrow_player().hp;
-                    self.messages.push(self.attack_message("Player", "Guard", damage_to_guard, player_health));
-                    self.messages.push(self.attack_message("Guard", "Player", damage_to_player, guard_health));
+                    self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
+                    self.messages.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
                 }
             }
 
@@ -129,7 +133,7 @@ impl Game {
         }
     }
 
-    fn attack_message(&self, attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
+    fn attack_message(attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
             return String::from(format!("{} dies!", attacker))
         }
