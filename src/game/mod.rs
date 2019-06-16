@@ -109,8 +109,11 @@ impl Game {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    let (damage_to_guard, _) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    self.messages = vec![String::from(format!("Player hits Guard for {}", damage_to_guard))];
+                    let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+                    self.messages = vec![
+                        String::from(format!("Player hits Guard for {}", damage_to_guard)),
+                        String::from(format!("Guard hits Player for {}", damage_to_player))
+                    ];
                 }
             }
 

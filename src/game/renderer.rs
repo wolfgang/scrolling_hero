@@ -22,7 +22,7 @@ impl GameRenderer {
         &mut self,
         writer: &mut Write,
         game_state: &GameState,
-        messages: &Vec<String>
+        messages: &Vec<String>,
     ) -> std::io::Result<(u32)>
     {
         let player_y = game_state.player_position.1;
@@ -48,11 +48,14 @@ impl GameRenderer {
                 self.render_buffer.write(format!("  HP: {}", player_health).as_bytes())?;
             }
 
-            if y == 1 {
-                for m in messages {
-                    self.render_buffer.write(format!(" {}", m).as_bytes())?;
-                }
+            if y == 1 && messages.len() > 0 {
+                self.render_buffer.write(format!(" {}", messages[0]).as_bytes())?;
             }
+
+            if y == 2 && messages.len() > 1 {
+                self.render_buffer.write(format!(" {}", messages[1]).as_bytes())?;
+            }
+
 
             self.render_buffer.write(b"\n")?;
         }

@@ -92,6 +92,6 @@ fn when_player_hits_guard_print_damage_dealt() {
     let damage_to_player = 100 - game.game_state.borrow_player().hp;
 
     let second_line = format!(r"\s+Player hits Guard for {}", damage_to_guard);
-//    let third_line = format!(r"\s+Guard hits Player for {}", damage_to_player);
-    verify_lines_rendered_match(&mut game, vec![r".*", &second_line]);
+    let third_line = format!(r"\s+Guard hits Player for {}", damage_to_player);
+    verify_lines_rendered_match(&mut game, vec![r".*", &second_line, &third_line]);
 }
