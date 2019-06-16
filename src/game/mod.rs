@@ -49,13 +49,17 @@ impl Game {
         let dungeon_provider = Rc::clone(dungeon_provider_ref);
 
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
+        let mut messages = Vec::with_capacity(10);
+        messages.push(Game::player_health_message(config.player_hp as i16));
+
+
         Game {
             game_state: GameState::from_game_config(config, dungeon, player_position),
             dungeon_provider,
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
-            messages: Vec::with_capacity(10)
+            messages
         }
     }
 
@@ -74,6 +78,9 @@ impl Game {
 
     pub fn on_key(&mut self, key: Key) {
         self.messages.clear();
+        let player_health = self.game_state.borrow_player().hp;
+        self.messages.push(Game::player_health_message(player_health));
+
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
@@ -113,10 +120,8 @@ impl Game {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     let guard_health = self.game_state.borrow_guard_at(pos).hp;
                     let player_health = self.game_state.borrow_player().hp;
-                    self.messages = vec![
-                        self.attack_message("Player", "Guard", damage_to_guard, player_health),
-                        self.attack_message("Guard", "Player", damage_to_player, guard_health),
-                    ];
+                    self.messages.push(self.attack_message("Player", "Guard", damage_to_guard, player_health));
+                    self.messages.push(self.attack_message("Guard", "Player", damage_to_player, guard_health));
                 }
             }
 
@@ -132,6 +137,10 @@ impl Game {
             return String::from(format!("{} hits {} for {}", attacker, target, damage))
         }
         String::from(format!("{} misses {}!", attacker, target))
+    }
+
+    fn player_health_message(player_hp: i16) -> String {
+        format!("HP: {}", player_hp)
     }
 
 
