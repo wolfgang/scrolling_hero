@@ -4,7 +4,7 @@ use std::str;
 use regex::Regex;
 
 use crate::dungeon::helpers::make_dungeon;
-use crate::dungeon::provider::SingleDungeonProvider;
+use crate::dungeon::provider::{MultiDungeonProvider, SingleDungeonProvider};
 use crate::game::{Game, GameConfig};
 
 type LineBuffer = Cursor<Vec<u8>>;
@@ -14,11 +14,25 @@ pub fn make_default_game(dungeon_definition: Vec<&str>) -> Game {
     make_game_with_config(&GameConfig::with_defaults(), dungeon_definition)
 }
 
-pub fn make_game_with_config(config: &GameConfig, dungeon_definition: Vec<&str>) -> Game {
-    let (dungeon, player_pos) = make_dungeon(dungeon_definition);
+pub fn make_game_with_config(config: &GameConfig, dungeon: Vec<&str>) -> Game {
+    let (dungeon, player_pos) = make_dungeon(dungeon);
     Game::with_config(
         config,
         &SingleDungeonProvider::shared(dungeon, player_pos))
+}
+
+
+pub fn make_game_with_two_dungeons(config: &GameConfig, dungeon1: Vec<&str>, dungeon2: Vec<&str>) -> Game {
+    let (dungeon1, player_pos1) = make_dungeon(dungeon1);
+
+    let (dungeon2, player_pos2) = make_dungeon(dungeon2);
+
+    let provider = MultiDungeonProvider::shared(vec![
+        (dungeon1.clone(), player_pos1),
+        (dungeon2.clone(), player_pos2),
+    ]);
+
+    Game::with_config(config, &provider)
 }
 
 pub fn verify_dungeon_rendered(game: &mut Game, expected_lines: Lines) {

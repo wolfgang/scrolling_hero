@@ -56,23 +56,19 @@ fn renders_exit() {
 
 #[test]
 fn if_player_steps_on_exit_goto_next_dungeon() {
-    let (dungeon1, player_pos1) = make_dungeon(vec![
-        "#..#",
-        "#.@#",
-        "#.E#"
-    ]);
+    let mut game = make_game_with_two_dungeons(
+        &GameConfig::with_defaults(),
+        vec![
+            "#..#",
+            "#.@#",
+            "#.E#"
+        ],
+        vec![
+            "##@#",
+            "#E.#",
+        ],
+    );
 
-    let (dungeon2, player_pos2) = make_dungeon(vec![
-        "##@#",
-        "#E.#",
-    ]);
-
-    let provider = MultiDungeonProvider::shared(vec![
-        (dungeon1.clone(), player_pos1),
-        (dungeon2.clone(), player_pos2),
-    ]);
-
-    let mut game = Game::with_config(&GameConfig::with_defaults(), &provider);
     verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#.@#",

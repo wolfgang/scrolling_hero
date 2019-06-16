@@ -1,7 +1,5 @@
 use console::Key;
 
-use crate::dungeon::helpers::make_dungeon;
-use crate::dungeon::provider::MultiDungeonProvider;
 use crate::game::{Game, GameConfig};
 
 use super::game_test_helpers::*;
@@ -184,22 +182,16 @@ fn game_is_over_if_player_dies() {
 
 #[test]
 fn guards_are_spawned_in_next_dungeon() {
-    let (dungeon1, player_pos1) = make_dungeon(vec![
-        "#.@#",
-        "#.E#"
-    ]);
-
-    let (dungeon2, player_pos2) = make_dungeon(vec![
-        "#G@#",
-        "#..#",
-    ]);
-
-    let provider = MultiDungeonProvider::shared(vec![
-        (dungeon1.clone(), player_pos1),
-        (dungeon2.clone(), player_pos2),
-    ]);
-
-    let mut game = Game::with_config(&game_with_strong_guards(), &provider);
+    let mut game = make_game_with_two_dungeons(
+        &game_with_strong_guards(),
+        vec![
+            "#.@#",
+            "#.E#"
+        ],
+        vec![
+            "#G@#",
+            "#..#",
+        ]);
 
     verify_dungeon_rendered(&mut game, vec![
         "#.@#",
