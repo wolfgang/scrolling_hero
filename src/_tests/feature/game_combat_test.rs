@@ -9,6 +9,7 @@ fn player_onehits_guards_with_hp_1() {
     let config = GameConfig {
         camera_offset: 100,
         guard_hp: 1,
+        player_hp: 100,
         ..Default::default()
     };
 

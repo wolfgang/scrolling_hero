@@ -22,11 +22,16 @@ pub struct GameConfig {
     pub guard_hp: u16,
     pub guard_attack: u8,
     pub guard_defense: u8,
+
+    pub player_hp: u16,
+    pub player_attack: u8,
+    pub player_defense: u8,
+
 }
 
 impl GameConfig {
     pub fn with_camera_offset(camera_offset: i32) -> GameConfig {
-        GameConfig { camera_offset, guard_hp: 20, ..Default::default() }
+        GameConfig { camera_offset, guard_hp: 20, player_hp: 100, ..Default::default() }
     }
 }
 

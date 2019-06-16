@@ -35,11 +35,17 @@ impl GameState {
             }
         }
 
+        let player_config = CombatantConfig {
+            initial_hp: game_config.player_hp,
+            attack: game_config.player_attack,
+            defense: game_config.player_defense,
+        };
+
         GameState {
             dungeon,
             player_position,
             guards,
-            player: Combatant::ref_with_hp(100),
+            player: Combatant::with_config(&player_config).into_ref(),
         }
     }
 
