@@ -35,23 +35,26 @@ fn from_game_config_inits_player_and_guards() {
 }
 
 #[test]
-fn resolve_combat_with_zero_attack_or_defense() {
+fn resolve_combat_damages_both_combatants_and_returns_damages() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
-    let game_config = GameConfig { guard_hp: 20, player_hp: 100, ..Default::default() };
 
+    // Both player and guard have 0 attack and 0 defense, so every roll is a hit
+    let game_config = GameConfig { guard_hp: 20, player_hp: 100, ..Default::default() };
     let mut game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
 
-    assert_eq!(game_state.borrow_player().hp, 100);
-    assert_eq!(game_state.borrow_guard_at((1, 0)).hp, 20);
+    let player_ref = game_state.player_ref();
+    let guard_ref = game_state.guard_ref_at((1, 0));
 
+    assert_eq!(player_ref.borrow().hp, 100);
+    assert_eq!(guard_ref.borrow().hp, 20);
 
     let mut dice_roller = RandomizedDiceRoller::new();
     let (damage_to_guard, damage_to_player) = game_state.resolve_combat((1, 0), &mut dice_roller);
 
-    assert!(game_state.borrow_player().hp < 100);
-    assert!(game_state.borrow_guard_at((1, 0)).hp < 20);
+    assert!(player_ref.borrow().hp < 100);
+    assert!(guard_ref.borrow().hp < 20);
 
-    assert_eq!(damage_to_player, 100 - game_state.borrow_player().hp as u8);
-    assert_eq!(damage_to_guard, 20 - game_state.borrow_guard_at((1, 0)).hp as u8);
+    assert_eq!(damage_to_player, 100 - player_ref.borrow().hp as u8);
+    assert_eq!(damage_to_guard, 20 - guard_ref.borrow().hp as u8);
 
 }
