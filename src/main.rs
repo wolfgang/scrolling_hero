@@ -23,7 +23,17 @@ fn main() -> std::io::Result<()> {
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
 
-    let mut game = Game::with_config(&GameConfig::with_camera_offset(2), &dungeon_provider);
+    let game_config = GameConfig {
+        camera_offset: 2,
+        guard_hp: 20,
+        guard_attack: 2,
+        guard_defense: 10,
+        player_hp: 100,
+        player_attack: 5,
+        player_defense: 15,
+    };
+
+    let mut game = Game::with_config(&game_config, &dungeon_provider);
 
 
     while game.is_running() {
