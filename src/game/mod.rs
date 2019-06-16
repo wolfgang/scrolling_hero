@@ -180,7 +180,9 @@ impl Game {
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
+                let player_hp = self.player_hp();
                 self.game_state = GameState::from_game_config(&self.config, next_dungeon, next_player_pos);
+                self.game_state.player_ref().borrow_mut().hp = player_hp;
             }
             None => { self.is_running = false; }
         }

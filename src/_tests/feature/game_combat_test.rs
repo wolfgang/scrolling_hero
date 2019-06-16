@@ -214,6 +214,37 @@ fn guards_are_spawned_in_next_dungeon() {
     ]);
 }
 
+#[test]
+fn player_hp_is_not_reset_in_next_dungeon() {
+    let mut game = make_game_with_two_dungeons(
+        &game_with_strong_guards(),
+        vec![
+            "#G@#",
+            "#.E#"
+        ],
+        vec![
+            "#.@#",
+            "####",
+        ]);
+
+
+    // Hit guard once, take damage
+    game.on_key(Key::ArrowLeft);
+
+    let player_hp_before_switch = game.game_state.borrow_player().hp;
+    assert!(player_hp_before_switch < 100);
+
+    // Go to next dungeon
+    game.on_key(Key::ArrowDown);
+
+    verify_dungeon_rendered(&mut game, vec![
+        "#.@#",
+        "####"
+    ]);
+
+    assert_eq!(game.game_state.borrow_player().hp, player_hp_before_switch);
+}
+
 
 fn game_with_strong_guards() -> GameConfig {
     GameConfig {
