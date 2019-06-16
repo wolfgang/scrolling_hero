@@ -17,15 +17,36 @@ pub struct GameState {
 
 impl GameState {
     pub fn from_game_config(
-        game_config: &GameConfig, dungeon: DungeonLayout, player_position: Position) -> GameState {
-        let mut guards = HashMap::new();
+        game_config: &GameConfig,
+        dungeon: DungeonLayout,
+        player_position: Position) -> GameState
+    {
+        GameState {
+            player: GameState::create_player(game_config),
+            guards: GameState::create_guards(game_config, &dungeon),
+            player_position,
+            dungeon,
+        }
+    }
 
+    fn create_player(game_config: &GameConfig) -> CombatantRef {
+        let player_config = CombatantConfig {
+            initial_hp: game_config.player_hp,
+            attack: game_config.player_attack,
+            defense: game_config.player_defense,
+        };
+
+        Combatant::with_config(&player_config).into_ref()
+    }
+
+    fn create_guards(game_config: &GameConfig, dungeon: &Vec<Vec<char>>) -> HashMap<(u32, u32), CombatantRef> {
         let guard_config = CombatantConfig {
             initial_hp: game_config.guard_hp,
             attack: game_config.guard_attack,
             defense: game_config.guard_defense,
         };
 
+        let mut guards = HashMap::new();
         for y in 0..dungeon.len() {
             for x in 0..dungeon[0].len() {
                 if dungeon[y][x] == 'G' {
@@ -34,19 +55,7 @@ impl GameState {
                 }
             }
         }
-
-        let player_config = CombatantConfig {
-            initial_hp: game_config.player_hp,
-            attack: game_config.player_attack,
-            defense: game_config.player_defense,
-        };
-
-        GameState {
-            dungeon,
-            player_position,
-            guards,
-            player: Combatant::with_config(&player_config).into_ref(),
-        }
+        guards
     }
 
     pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) {
