@@ -10,15 +10,12 @@ use crate::game::{Game, GameConfig};
 type LineBuffer = Cursor<Vec<u8>>;
 type Lines<'a> = Vec<&'a str>;
 
-pub fn make_default_game(strings: Vec<&str>) -> Game {
-    let (dungeon, player_pos) = make_dungeon(strings);
-    Game::with_config(
-        &GameConfig::with_defaults(),
-        &SingleDungeonProvider::shared(dungeon, player_pos))
+pub fn make_default_game(dungeon_definition: Vec<&str>) -> Game {
+    make_game_with_config(&GameConfig::with_defaults(), dungeon_definition)
 }
 
-pub fn make_game_with_config(config: &GameConfig, strings: Vec<&str>) -> Game {
-    let (dungeon, player_pos) = make_dungeon(strings);
+pub fn make_game_with_config(config: &GameConfig, dungeon_definition: Vec<&str>) -> Game {
+    let (dungeon, player_pos) = make_dungeon(dungeon_definition);
     Game::with_config(
         config,
         &SingleDungeonProvider::shared(dungeon, player_pos))
