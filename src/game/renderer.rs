@@ -49,11 +49,11 @@ impl GameRenderer {
             }
 
             if y == 1 && messages.len() > 0 {
-                self.render_buffer.write(format!(" {}", messages[0]).as_bytes())?;
+                self.render_buffer.write(format!("  {}", messages[0]).as_bytes())?;
             }
 
             if y == 2 && messages.len() > 1 {
-                self.render_buffer.write(format!(" {}", messages[1]).as_bytes())?;
+                self.render_buffer.write(format!("  {}", messages[1]).as_bytes())?;
             }
 
 

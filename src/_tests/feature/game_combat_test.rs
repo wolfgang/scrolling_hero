@@ -80,12 +80,6 @@ fn when_player_hits_guard_print_damage_dealt() {
         "#...#"
     ]);
 
-    verify_dungeon_rendered(&mut game, vec![
-        "#...#",
-        "#G@.#",
-        "#...#"
-    ]);
-
     game.on_key(Key::ArrowLeft);
 
     let damage_to_guard = 50 - game.game_state.borrow_guard_at((1, 1)).hp;
@@ -95,5 +89,33 @@ fn when_player_hits_guard_print_damage_dealt() {
         r".*",
         &format!(r"\s+Player hits Guard for {}", damage_to_guard),
         &format!(r"\s+Guard hits Player for {}", damage_to_player)
+    ]);
+}
+
+
+#[test]
+fn when_attacks_miss_display_different_messages() {
+    let config = GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        // guard and player can never be hit
+        guard_defense: 100,
+        player_defense: 100,
+        ..Default::default()
+    };
+
+    let mut game = make_game_with_config(&config, vec![
+        "#...#",
+        "#G@.#",
+        "#...#"
+    ]);
+
+    game.on_key(Key::ArrowLeft);
+
+    verify_lines_rendered_match(&mut game, vec![
+        r".*",
+        r"\s+Player misses Guard!",
+        r"\s+Guard misses Player!"
     ]);
 }

@@ -111,14 +111,21 @@ impl Game {
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.messages = vec![
-                        String::from(format!("Player hits Guard for {}", damage_to_guard)),
-                        String::from(format!("Guard hits Player for {}", damage_to_player))
+                        self.attack_message("Player", "Guard", damage_to_guard),
+                        self.attack_message("Guard", "Player", damage_to_player),
                     ];
                 }
             }
 
             None => {}
         }
+    }
+
+    fn attack_message(&self, attacker: &str, target: &str, damage: u8) -> String {
+        if damage > 0 {
+            return String::from(format!("{} hits {} for {}", attacker, target, damage))
+        }
+        String::from(format!("{} misses {}!", attacker, target))
     }
 
 
