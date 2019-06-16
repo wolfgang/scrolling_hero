@@ -41,7 +41,7 @@ pub struct Game {
     is_running: bool,
     dungeon_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
-    message: String
+    messages: Vec<String>
 }
 
 impl Game {
@@ -55,7 +55,7 @@ impl Game {
             dungeon_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
-            message: String::with_capacity(64)
+            messages: Vec::with_capacity(10)
         }
     }
 
@@ -68,7 +68,7 @@ impl Game {
         self.dungeon_renderer.render(
             writer,
             &self.game_state,
-            &self.message
+            &self.messages
         )
     }
 
@@ -110,7 +110,7 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let (damage_to_guard, _) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    self.message = String::from(format!("Player hits Guard for {}", damage_to_guard));
+                    self.messages = vec![String::from(format!("Player hits Guard for {}", damage_to_guard))];
                 }
             }
 

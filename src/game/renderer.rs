@@ -22,7 +22,7 @@ impl GameRenderer {
         &mut self,
         writer: &mut Write,
         game_state: &GameState,
-        message: &str
+        messages: &Vec<String>
     ) -> std::io::Result<(u32)>
     {
         let player_y = game_state.player_position.1;
@@ -49,7 +49,9 @@ impl GameRenderer {
             }
 
             if y == 1 {
-                self.render_buffer.write(format!(" {}", message).as_bytes())?;
+                for m in messages {
+                    self.render_buffer.write(format!(" {}", m).as_bytes())?;
+                }
             }
 
             self.render_buffer.write(b"\n")?;
