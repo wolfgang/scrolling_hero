@@ -48,20 +48,18 @@ impl GameRenderer {
                 self.render_buffer.write(format!("  HP: {}", player_health).as_bytes())?;
             }
 
-            if y == 1 && messages.len() > 0 {
-                self.render_buffer.write(format!("  {}", messages[0]).as_bytes())?;
-            }
-
-            if y == 2 && messages.len() > 1 {
-                self.render_buffer.write(format!("  {}", messages[1]).as_bytes())?;
-            }
-
-
+            self.render_message_at(y as i32 - 1, &messages);
             self.render_buffer.write(b"\n")?;
         }
 
         writer.write(self.render_buffer.get_ref())?;
         Ok(end_y as u32 - start_y as u32 + 1)
+    }
+
+    fn render_message_at(&mut self, index: i32, messages: &Vec<String>) {
+        if index >= 0 && index < messages.len() as i32 {
+            self.render_buffer.write(format!("  {}", messages[index as usize]).as_bytes()).unwrap();
+        }
     }
 
     fn clear_render_buffer(&mut self) -> std::io::Result<()> {
