@@ -41,7 +41,7 @@ pub struct Game {
     is_running: bool,
     game_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
-    messages: Vec<String>
+    messages: Vec<String>,
 }
 
 impl Game {
@@ -56,7 +56,7 @@ impl Game {
             game_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
-            messages: Vec::with_capacity(10)
+            messages: Vec::with_capacity(10),
         };
 
         game.show_player_hp();
@@ -72,7 +72,7 @@ impl Game {
         self.game_renderer.render(
             writer,
             &self.game_state,
-            &self.messages
+            &self.messages,
         )
     }
 
@@ -115,14 +115,9 @@ impl Game {
                 self.show_player_hp();
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-
                     self.show_player_hp();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
-
-                    if self.game_state.borrow_player().hp <= 0 {
-                        self.is_running = false;
-                    }
-
+                    if self.player_hp() <= 0 { self.is_running = false; }
                 }
             }
 
@@ -132,23 +127,26 @@ impl Game {
 
     fn show_player_hp(&mut self) {
         self.messages.clear();
-        let player_health = self.game_state.borrow_player().hp;
-        self.messages.push(Game::player_health_message(player_health));
+        self.messages.push(Game::player_health_message(self.player_hp()));
     }
 
     fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: u8, damage_to_player: u8) {
         let guard_health = self.game_state.borrow_guard_at(guard_pos).hp;
-        let player_health = self.game_state.borrow_player().hp;
+        let player_health = self.player_hp();
         self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
         self.messages.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
     }
 
+    fn player_hp(&self) -> i16 {
+        self.game_state.borrow_player().hp
+    }
+
     fn attack_message(attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
-            return String::from(format!("{} dies!", attacker))
+            return String::from(format!("{} dies!", attacker));
         }
         if damage > 0 {
-            return String::from(format!("{} hits {} for {}", attacker, target, damage))
+            return String::from(format!("{} hits {} for {}", attacker, target, damage));
         }
         String::from(format!("{} misses {}!", attacker, target))
     }
