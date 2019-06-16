@@ -17,7 +17,7 @@ fn is_running_is_false_after_last_dungeon_is_exited() {
 
     let provider = MultiDungeonProvider::shared(vec![(dungeon1.clone(), player_pos1)]);
 
-    let mut game = Game::with_config(&GameConfig::with_camera_offset(1), &provider);
+    let mut game = Game::with_config(&GameConfig::with_defaults(), &provider);
 
     game.on_key(Key::ArrowDown);
     assert_eq!(false, game.is_running());
@@ -72,12 +72,13 @@ fn if_player_steps_on_exit_goto_next_dungeon() {
         (dungeon2.clone(), player_pos2),
     ]);
 
-    let mut game = Game::with_config(&GameConfig::with_camera_offset(1), &provider);
+    let mut game = Game::with_config(&GameConfig::with_defaults(), &provider);
     verify_dungeon_rendered(&mut game, vec![
         "#..#",
         "#.@#",
         "#.E#"
     ]);
+
 
     game.on_key(Key::ArrowDown);
 

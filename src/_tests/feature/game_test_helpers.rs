@@ -11,21 +11,16 @@ type LineBuffer = Cursor<Vec<u8>>;
 type Lines<'a> = Vec<&'a str>;
 
 pub fn make_default_game(strings: Vec<&str>) -> Game {
-    make_game_with_camera_offset(1, strings)
+    let (dungeon, player_pos) = make_dungeon(strings);
+    Game::with_config(
+        &GameConfig::with_defaults(),
+        &SingleDungeonProvider::shared(dungeon, player_pos))
 }
 
 pub fn make_game_with_config(config: &GameConfig, strings: Vec<&str>) -> Game {
     let (dungeon, player_pos) = make_dungeon(strings);
     Game::with_config(
         config,
-        &SingleDungeonProvider::shared(dungeon, player_pos))
-}
-
-
-pub fn make_game_with_camera_offset(offset: i32, strings: Vec<&str>) -> Game {
-    let (dungeon, player_pos) = make_dungeon(strings);
-    Game::with_config(
-        &GameConfig::with_camera_offset(offset),
         &SingleDungeonProvider::shared(dungeon, player_pos))
 }
 
