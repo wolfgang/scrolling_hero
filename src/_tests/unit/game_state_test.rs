@@ -6,7 +6,7 @@ use crate::game::state::GameState;
 #[test]
 fn construct_with_from_game_config() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
-    let game_config = GameConfig { camera_offset: 1, guard_hp: 30 };
+    let game_config = GameConfig { guard_hp: 30, ..Default::default() };
     let game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
 
     assert_eq!(dungeon, game_state.dungeon);
@@ -19,7 +19,7 @@ fn construct_with_from_game_config() {
 #[test]
 fn resolve_combat() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
-    let game_config = GameConfig { camera_offset: 1, guard_hp: 20 };
+    let game_config = GameConfig { guard_hp: 20, ..Default::default() };
 
     let mut game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
 

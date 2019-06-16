@@ -16,7 +16,7 @@ fn with_hp_constructs_guard_with_given_hp_and_zero_attack_and_defense() {
 
 #[test]
 fn from_game_config_takes_values_from_given_game_config() {
-    let game_config = GameConfig { camera_offset: 1, guard_hp: 20 };
+    let game_config = GameConfig { guard_hp: 20, ..Default::default() };
 
     let combatant = Combatant::from_game_config(&game_config);
     assert_eq!(combatant.hp, 20);

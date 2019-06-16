@@ -16,6 +16,7 @@ pub mod combatant;
 pub mod dice_roller;
 pub mod randomized_dice_roller;
 
+#[derive(Default)]
 pub struct GameConfig {
     pub camera_offset: i32,
     pub guard_hp: u16
