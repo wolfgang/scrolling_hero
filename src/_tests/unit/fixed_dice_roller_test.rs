@@ -1,5 +1,6 @@
-use crate::_tests::fixed_dice_roller::FixedDiceRoller;
 use crate::game::dice_roller::DiceRoller;
+
+use super::fixed_dice_roller::FixedDiceRoller;
 
 struct DiceUser {
     pub roll: u8
