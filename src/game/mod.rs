@@ -19,12 +19,14 @@ pub mod randomized_dice_roller;
 #[derive(Default)]
 pub struct GameConfig {
     pub camera_offset: i32,
-    pub guard_hp: u16
+    pub guard_hp: u16,
+    pub guard_attack: u8,
+    pub guard_defense: u8,
 }
 
 impl GameConfig {
     pub fn with_camera_offset(camera_offset: i32) -> GameConfig {
-        GameConfig { camera_offset, guard_hp: 20 }
+        GameConfig { camera_offset, guard_hp: 20, ..Default::default() }
     }
 }
 
