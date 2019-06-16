@@ -39,7 +39,7 @@ pub struct Game {
     pub game_state: GameState,
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
-    dungeon_renderer: GameRenderer,
+    game_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
     messages: Vec<String>
 }
@@ -53,7 +53,7 @@ impl Game {
         let mut game = Game {
             game_state: GameState::from_game_config(config, dungeon, player_position),
             dungeon_provider,
-            dungeon_renderer: GameRenderer::new(config.camera_offset),
+            game_renderer: GameRenderer::new(config.camera_offset),
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
             messages: Vec::with_capacity(10)
@@ -69,7 +69,7 @@ impl Game {
     }
 
     pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
-        self.dungeon_renderer.render(
+        self.game_renderer.render(
             writer,
             &self.game_state,
             &self.messages
