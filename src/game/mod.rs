@@ -59,7 +59,7 @@ impl Game {
             messages: Vec::with_capacity(10)
         };
 
-        game.init_messages();
+        game.show_player_hp();
 
         game
     }
@@ -105,7 +105,7 @@ impl Game {
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
-    fn init_messages(&mut self) {
+    fn show_player_hp(&mut self) {
         self.messages.clear();
         let player_health = self.game_state.borrow_player().hp;
         self.messages.push(Game::player_health_message(player_health));
@@ -118,21 +118,23 @@ impl Game {
     fn process_neighbor(&mut self, x_offset: i32, y_offset: i32) {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
+                self.show_player_hp();
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    self.init_messages();
-
-                    let guard_health = self.game_state.borrow_guard_at(pos).hp;
-                    let player_health = self.game_state.borrow_player().hp;
-                    self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
-                    self.messages.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
-                } else {
-                    self.init_messages();
+                    self.show_player_hp();
+                    self.show_combat_messages(pos, damage_to_guard, damage_to_player);
                 }
             }
 
             None => {}
         }
+    }
+
+    fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: u8, damage_to_player: u8) {
+        let guard_health = self.game_state.borrow_guard_at(guard_pos).hp;
+        let player_health = self.game_state.borrow_player().hp;
+        self.messages.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
+        self.messages.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
     }
 
     fn attack_message(attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
