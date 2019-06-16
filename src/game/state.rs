@@ -1,3 +1,4 @@
+use std::cell::Ref;
 use std::collections::HashMap;
 
 use crate::game::dice_roller::DiceRoller;
@@ -48,12 +49,16 @@ impl GameState {
         self.player.clone()
     }
 
+    pub(crate) fn borrow_guard_at(&self, pos: Position) -> Ref<Combatant> {
+        self.guards.get(&pos).unwrap().borrow()
+    }
+
     pub(crate) fn guard_ref_at(&self, pos: Position) -> CombatantRef {
         self.guards.get(&pos).unwrap().clone()
     }
 
     fn check_guard_state(&mut self, pos: Position) {
-        if self.guard_ref_at(pos).borrow().hp <= 0 {
+        if self.borrow_guard_at(pos).hp <= 0 {
             self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
         }
     }
