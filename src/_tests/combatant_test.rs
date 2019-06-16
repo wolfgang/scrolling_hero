@@ -21,13 +21,11 @@ fn attacker_misses_first_then_hits() {
     let target = Combatant { hp: 20, attack: 0, defense: 10 };
     let target_ref = Rc::new(RefCell::new(target));
 
-    dice_roller.next_roll(20, 4);
-    dice_roller.next_roll(20, 6);
-    dice_roller.next_roll(10, 3);
-
+    dice_roller.next_roll(20, 4); // 4 + attack (5) < target defense (10)
+    dice_roller.next_roll(20, 6); // 4 + attack > target defense
+    dice_roller.next_roll(10, 3); // Damage roll
 
     attacker.attack(&target_ref, &mut dice_roller);
-
     assert_eq!(target_ref.borrow().hp, 20);
 
     attacker.attack(&target_ref, &mut dice_roller);
