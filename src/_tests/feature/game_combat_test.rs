@@ -60,6 +60,24 @@ fn render_current_player_hp() {
     verify_player_hp_rendered(&mut game, new_player_hp);
 }
 
+#[test]
+fn render_current_player_hp_after_non_combat_move() {
+    let config = game_with_strong_guards();
+    let mut game = make_game_with_config(
+        &config,
+        vec![
+            "#.@#",
+            "#..#"
+        ]);
+
+    verify_player_hp_rendered(&mut game, config.player_hp as i16);
+
+    game.on_key(Key::ArrowLeft);
+
+    verify_player_hp_rendered(&mut game, config.player_hp as i16);
+}
+
+
 fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
     verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
 }
