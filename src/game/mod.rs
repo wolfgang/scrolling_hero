@@ -106,6 +106,10 @@ impl Game {
 
         if self.under_player() == 'H' {
             self.game_state.player_ref().borrow_mut().hp += 5;
+            let x = self.game_state.player_position.0 as usize;
+            let y = self.game_state.player_position.1 as usize;
+
+            self.game_state.dungeon[y][x] = '.';
             self.show_player_hp();
         }
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
