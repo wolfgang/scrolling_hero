@@ -5,32 +5,6 @@ use crate::game::GameConfig;
 use super::game_test_helpers::*;
 
 #[test]
-fn stepping_on_health_option_increases_player_hp() {
-    let mut game = make_game_with_config(
-        &game_with_player_hp(19),
-        vec![
-            "#@H#",
-            "#..#",
-        ]);
-
-    verify_dungeon_rendered(&mut game, vec![
-        "#@H#",
-        "#..#",
-    ]);
-
-    game.on_key(Key::ArrowRight);
-
-    // Verify new hp is rendered as at least 20
-    verify_lines_rendered_match(
-        &mut game,
-        vec![
-            r"#.@#\s+HP: 2\d$",
-            r"#..#",
-        ],
-    );
-}
-
-#[test]
 fn stepping_on_health_potion_consumes_it() {
     let mut game = make_game_with_config(
         &game_with_player_hp(19),

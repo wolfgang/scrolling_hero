@@ -20,8 +20,8 @@ fn with_config_takes_values_from_given_config() {
 fn attacker_misses_first_then_hits() {
     let mut dice_roller = FixedDiceRoller::new();
 
-    let attacker = Combatant { hp: 100, attack: 5, defense: 0 };
-    let target = Combatant { hp: 20, attack: 0, defense: 10 };
+    let attacker = Combatant::with_config(&CombatantConfig { initial_hp: 100, attack: 5, defense: 0 });
+    let target = Combatant::with_config(&CombatantConfig { initial_hp: 20, attack: 0, defense: 10 });
     let target_ref = Rc::new(RefCell::new(target));
 
     dice_roller.next_roll(20, 4); // 4 + attack (5) < target defense (10)
@@ -37,8 +37,8 @@ fn attacker_misses_first_then_hits() {
 
 #[test]
 fn attacker_does_not_attack_if_they_are_dead() {
-    let attacker = combatant_with_hp(0);
-    let target_ref = combatant_with_hp(10).into_ref();
+    let attacker = combatant_with_initial_hp(0);
+    let target_ref = combatant_with_initial_hp(10).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
 
@@ -48,8 +48,8 @@ fn attacker_does_not_attack_if_they_are_dead() {
 
 #[test]
 fn attach_returns_damage_dealt() {
-    let attacker = combatant_with_hp(10);
-    let target_ref = combatant_with_hp(20).into_ref();
+    let attacker = combatant_with_initial_hp(10);
+    let target_ref = combatant_with_initial_hp(20).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(20, 20);
@@ -61,8 +61,8 @@ fn attach_returns_damage_dealt() {
 
 #[test]
 fn attach_returns_zero_if_it_does_not_hit() {
-    let attacker = combatant_with_hp(10);
-    let target_ref = Combatant { hp: 20, defense: 10, attack: 0 }.into_ref();
+    let attacker = combatant_with_initial_hp(10);
+    let target_ref = Combatant::with_config(&CombatantConfig { initial_hp: 20, defense: 10, attack: 0 }).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(20, 1);
@@ -73,7 +73,8 @@ fn attach_returns_zero_if_it_does_not_hit() {
 
 #[test]
 fn heal_heals_with_d10_roll() {
-    let mut combatant = combatant_with_hp(10);
+    let mut combatant = combatant_with_initial_hp(20);
+    combatant.apply_damage(10);
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(10, 2);
     dice_roller.next_roll(10, 7);
@@ -85,19 +86,19 @@ fn heal_heals_with_d10_roll() {
 }
 
 #[test]
-fn heal_caps_at_100() {
-    let mut combatant = combatant_with_hp(97);
+fn heal_caps_at_max_hp() {
+    let mut combatant = combatant_with_initial_hp(50);
+    combatant.apply_damage(3);
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(10, 5);
     dice_roller.next_roll(10, 7);
 
     combatant.heal(&mut dice_roller);
-    assert_eq!(combatant.hp, 100);
     combatant.heal(&mut dice_roller);
-    assert_eq!(combatant.hp, 100);
+    assert_eq!(combatant.hp, 50);
 }
 
 
-fn combatant_with_hp(hp: u16) -> Combatant {
+fn combatant_with_initial_hp(hp: u16) -> Combatant {
     Combatant::with_config(&CombatantConfig { initial_hp: hp, ..Default::default() })
 }

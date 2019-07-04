@@ -14,6 +14,7 @@ pub struct CombatantConfig {
 
 pub struct Combatant {
     pub hp: i16,
+    max_hp: i16,
     pub attack: u8,
     pub defense: u8,
 }
@@ -22,6 +23,7 @@ impl Combatant {
     pub fn with_config(config: &CombatantConfig) -> Combatant {
         Combatant {
             hp: config.initial_hp as i16,
+            max_hp: config.initial_hp as i16,
             attack: config.attack,
             defense: config.defense,
         }
@@ -50,7 +52,7 @@ impl Combatant {
     }
 
     pub fn heal(&mut self, dice_roller: &mut DiceRoller) {
-        self.hp = min(100, self.hp + dice_roller.roll(10) as i16);
+        self.hp = min(self.max_hp, self.hp + dice_roller.roll(10) as i16);
     }
 
     pub fn is_hit(&self, attack_roll: u8) -> bool {
