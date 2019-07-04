@@ -73,6 +73,8 @@ impl GameState {
 
     pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) {
         self.player.borrow_mut().heal(dice_roller);
+        let (x, y) = self.player_position;
+        self.dungeon[y as usize][x as usize] = '.';
     }
 
 
