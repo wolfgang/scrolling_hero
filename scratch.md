@@ -21,6 +21,9 @@
     [X] On colliding with guard, do combat round
     [X] If guard HP goes to zero, it is dead
     [X] If player HP goes to zero, game is over
+  
+  
+[ ] Health potions (consumed on walking-over)  
     
 [ ] Constrain movement and penalties
 
