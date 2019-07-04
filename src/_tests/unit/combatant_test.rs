@@ -84,6 +84,20 @@ fn heal_heals_with_d10_roll() {
     assert_eq!(combatant.hp, 19);
 }
 
+#[test]
+fn heal_caps_at_100() {
+    let mut combatant = combatant_with_hp(97);
+    let mut dice_roller = FixedDiceRoller::new();
+    dice_roller.next_roll(10, 5);
+    dice_roller.next_roll(10, 7);
+
+    combatant.heal(&mut dice_roller);
+    assert_eq!(combatant.hp, 100);
+    combatant.heal(&mut dice_roller);
+    assert_eq!(combatant.hp, 100);
+}
+
+
 fn combatant_with_hp(hp: u16) -> Combatant {
     Combatant::with_config(&CombatantConfig { initial_hp: hp, ..Default::default() })
 }

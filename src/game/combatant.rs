@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::cmp::min;
 use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
@@ -49,7 +50,7 @@ impl Combatant {
     }
 
     pub fn heal(&mut self, dice_roller: &mut DiceRoller) {
-        self.hp += dice_roller.roll(10) as i16;
+        self.hp = min(100, self.hp + dice_roller.roll(10) as i16);
     }
 
     pub fn is_hit(&self, attack_roll: u8) -> bool {
