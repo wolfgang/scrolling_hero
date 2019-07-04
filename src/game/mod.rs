@@ -105,7 +105,8 @@ impl Game {
         }
 
         if self.under_player() == 'H' {
-            self.game_state.player_ref().borrow_mut().hp += self.dice_roller.roll(10) as i16;
+            self.game_state.heal_player(&mut *self.dice_roller);
+
             let (x, y) = self.game_state.player_position;
             self.game_state.dungeon[y as usize][x as usize] = '.';
             self.show_player_hp();
