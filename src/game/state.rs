@@ -72,7 +72,7 @@ impl GameState {
     }
 
     pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) {
-        self.player.borrow_mut().hp += dice_roller.roll(10) as i16;
+        self.player.borrow_mut().heal(dice_roller);
     }
 
 

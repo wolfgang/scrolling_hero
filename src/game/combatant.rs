@@ -48,6 +48,10 @@ impl Combatant {
         damage
     }
 
+    pub fn heal(&mut self, dice_roller: &mut DiceRoller) {
+        self.hp += dice_roller.roll(10) as i16;
+    }
+
     pub fn is_hit(&self, attack_roll: u8) -> bool {
         return attack_roll > self.defense
     }

@@ -71,6 +71,19 @@ fn attach_returns_zero_if_it_does_not_hit() {
     assert_eq!(damage, 0);
 }
 
+#[test]
+fn heal_heals_with_d10_roll() {
+    let mut combatant = combatant_with_hp(10);
+    let mut dice_roller = FixedDiceRoller::new();
+    dice_roller.next_roll(10, 2);
+    dice_roller.next_roll(10, 7);
+
+    combatant.heal(&mut dice_roller);
+    assert_eq!(combatant.hp, 12);
+    combatant.heal(&mut dice_roller);
+    assert_eq!(combatant.hp, 19);
+}
+
 fn combatant_with_hp(hp: u16) -> Combatant {
     Combatant::with_config(&CombatantConfig { initial_hp: hp, ..Default::default() })
 }
