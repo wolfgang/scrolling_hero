@@ -21,14 +21,16 @@ fn generates_guards_randomly_on_floor() {
     decorator::add_guards(&mut dungeon2, 50, &mut StdRng::seed_from_u64(2000));
 
     assert_eq!(
-        dungeon_layout(vec![
-            "#.....#",
-            "###...#",
-            "#...#G#",
-            "#.#GG.#",
-            "#.....#",
-        ]),
-        dungeon1);
+        dungeon1,
+        dungeon_layout(
+            vec![
+                "#.....#",
+                "###...#",
+                "#...#G#",
+                "#.#GG.#",
+                "#.....#",
+            ])
+    );
 
     assert_eq!(
         dungeon_layout(vec![
