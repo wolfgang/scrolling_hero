@@ -48,6 +48,36 @@ fn stepping_on_health_potion_consumes_it() {
     ]);
 }
 
+#[ignore]
+#[test]
+fn health_potion_adds_random_hp_between_1_and_10() {
+    let initial_player_hp: i16 = 10;
+    let mut game = make_game_with_config(
+        &game_with_player_hp(initial_player_hp as u16),
+        vec![
+            "#@H#",
+            "#.H#",
+            "#.H#",
+            "#.H#",
+        ]);
+
+
+    game.on_key(Key::ArrowRight);
+    let player_hp_after_first_heal = game.game_state.borrow_player().hp;
+    game.on_key(Key::ArrowDown);
+    game.on_key(Key::ArrowDown);
+    game.on_key(Key::ArrowDown);
+    let player_hp_after_last_heal = game.game_state.borrow_player().hp;
+    let first_heal = player_hp_after_first_heal - initial_player_hp;
+    let last_heal = player_hp_after_last_heal - player_hp_after_first_heal;
+
+    assert!(first_heal >= 1 && first_heal <= 10);
+    assert!(last_heal >= 1 && last_heal <= 10);
+
+    assert_ne!(first_heal, last_heal);
+}
+
+
 fn game_with_player_hp(player_hp: u16) -> GameConfig {
     GameConfig {
         camera_offset: 100,
