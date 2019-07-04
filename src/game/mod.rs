@@ -106,12 +106,11 @@ impl Game {
 
         if self.under_player() == 'H' {
             self.game_state.player_ref().borrow_mut().hp += 5;
-            let x = self.game_state.player_position.0 as usize;
-            let y = self.game_state.player_position.1 as usize;
-
-            self.game_state.dungeon[y][x] = '.';
+            let (x, y) = self.game_state.player_position;
+            self.game_state.dungeon[y as usize][x as usize] = '.';
             self.show_player_hp();
         }
+
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
@@ -174,10 +173,9 @@ impl Game {
     }
 
     fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
-        let x = self.game_state.player_position.0 as i32;
-        let y = self.game_state.player_position.1 as i32;
-        let neighbor_x = (x + x_offset) as usize;
-        let neighbor_y = (y + y_offset) as usize;
+        let (x, y) = self.game_state.player_position;
+        let neighbor_x = (x as i32 + x_offset) as usize;
+        let neighbor_y = (y as i32 + y_offset) as usize;
         if neighbor_x < self.game_state.dungeon[0].len() && neighbor_y < self.game_state.dungeon.len() {
             return Some(((neighbor_x as u32, neighbor_y as u32), self.game_state.dungeon[neighbor_y][neighbor_x]));
         }
