@@ -58,7 +58,7 @@ fn generate_dungeon(width: usize, height: usize, rng: &mut StdRng) -> DungeonDef
 
     let mut dungeon = dungeon_with_num_paths(&opts, rng);
     decorator::add_guards(&mut dungeon, 10, rng);
-    decorator::add_health_potions(&mut dungeon, 60, rng);
+    decorator::add_health_potions(&mut dungeon, 2, rng);
 
     let width = dungeon[0].len();
     let player_position = rng.gen_range(1, width as u32 - 2);
