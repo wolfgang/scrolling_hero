@@ -104,6 +104,10 @@ impl Game {
             _ => {}
         }
 
+        if self.under_player() == 'H' {
+            self.game_state.player_ref().borrow_mut().hp += 5;
+            self.show_player_hp();
+        }
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
     }
 
