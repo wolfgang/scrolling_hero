@@ -58,20 +58,3 @@ fn resolve_combat_damages_both_combatants_and_returns_damages() {
     assert_eq!(damage_to_guard, 20 - guard_ref.borrow().hp as u8);
 
 }
-
-#[test]
-fn heal_player_increases_player_hp_and_removes_potion() {
-    let (dungeon, _) = make_dungeon(vec!["#.H#"]);
-    let player_pos = (2, 0);
-    let game_config = GameConfig { player_hp: 100, ..Default::default() };
-    let mut game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
-    game_state.player_ref().borrow_mut().apply_damage(1);
-
-    assert_eq!(game_state.borrow_player().hp, 99);
-    assert_eq!(game_state.dungeon[0][2], 'H');
-
-    let mut dice_roller = RandomizedDiceRoller::new();
-    game_state.heal_player(&mut dice_roller);
-    assert_eq!(game_state.borrow_player().hp, 100);
-    assert_eq!(game_state.dungeon[0][2], '.');
-}

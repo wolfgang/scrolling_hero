@@ -1,11 +1,11 @@
 use console::Key;
 
 use crate::_tests::feature::game_test_helpers::*;
-use crate::game::GameConfig;
+use crate::game::{Game, GameConfig};
 
 #[test]
 fn stepping_on_health_potion_increases_player_health() {
-    let mut game = make_game_with_config(&game_with_initial_player_hp(100), vec![
+    let mut game = make_game_with_healthy_player(vec![
         "#...#",
         "#.@H#",
         "#...#",
@@ -18,13 +18,12 @@ fn stepping_on_health_potion_increases_player_health() {
     game.on_key(Key::ArrowRight);
 
     assert!(player_ref.borrow().hp > 80);
-
     verify_player_hp_rendered(&mut game, player_ref.borrow().hp);
 }
 
 #[test]
 fn stepping_on_health_potion_removes_it() {
-    let mut game = make_game_with_config(&game_with_initial_player_hp(100), vec![
+    let mut game = make_game_with_healthy_player(vec![
         "#...#",
         "#.@H#",
         "#...#",
@@ -40,11 +39,12 @@ fn stepping_on_health_potion_removes_it() {
     ]);
 }
 
-
-fn game_with_initial_player_hp(player_hp: u16) -> GameConfig {
-    GameConfig {
-        camera_offset: 100,
-        player_hp,
-        ..Default::default()
-    }
+fn make_game_with_healthy_player(dungeon: Vec<&str>) -> Game {
+    make_game_with_config(
+        &GameConfig {
+            camera_offset: 100,
+            player_hp: 100,
+            ..Default::default()
+        },
+        dungeon)
 }
