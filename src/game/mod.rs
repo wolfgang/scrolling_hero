@@ -82,19 +82,19 @@ impl Game {
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
-                if !self.obstacle_at(-1, 0) {
+                if !self.game_state.obstacle_at(-1, 0) {
                     self.game_state.player_position.0 -= 1;
                 }
             }
             Key::ArrowRight => {
                 self.process_neighbor(1, 0);
-                if !self.obstacle_at(1, 0) {
+                if !self.game_state.obstacle_at(1, 0) {
                     self.game_state.player_position.0 += 1;
                 }
             }
             Key::ArrowDown => {
                 self.process_neighbor(0, 1);
-                if !self.obstacle_at(0, 1) {
+                if !self.game_state.obstacle_at(0, 1) {
                     self.game_state.player_position.1 += 1;
                 }
             }
@@ -161,14 +161,6 @@ impl Game {
 
     fn player_health_message(player_hp: i16) -> String {
         format!("HP: {}", player_hp)
-    }
-
-
-    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        match self.game_state.neighbor_at(x_offset, y_offset) {
-            Some((_, tile)) => { return tile == '#' || tile == 'G'; }
-            None => { return true; }
-        }
     }
 
     fn goto_next_dungeon(&mut self) {

@@ -94,7 +94,14 @@ impl GameState {
         self.guards.get(&pos).unwrap().clone()
     }
 
-    pub(crate) fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
+    pub fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((_, tile)) => { return tile == '#' || tile == 'G'; }
+            None => { return true; }
+        }
+    }
+
+    pub fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
         let (x, y) = self.player_position;
         let neighbor_x = (x as i32 + x_offset) as usize;
         let neighbor_y = (y as i32 + y_offset) as usize;
