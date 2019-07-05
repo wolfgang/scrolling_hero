@@ -35,6 +35,10 @@ pub fn make_game_with_two_dungeons(config: &GameConfig, dungeon1: Vec<&str>, dun
     Game::with_config(config, &provider)
 }
 
+pub fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
+    verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
+}
+
 pub fn verify_dungeon_rendered(game: &mut Game, expected_lines: Lines) {
     let buffer = render(game);
     assert_lines_start_with(&buffer, expected_lines);

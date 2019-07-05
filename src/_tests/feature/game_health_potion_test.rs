@@ -1,7 +1,7 @@
 use console::Key;
 
 use crate::_tests::feature::game_test_helpers::*;
-use crate::game::{Game, GameConfig};
+use crate::game::GameConfig;
 
 #[test]
 fn stepping_on_health_potion_increases_player_health() {
@@ -47,8 +47,4 @@ fn game_with_initial_player_hp(player_hp: u16) -> GameConfig {
         player_hp,
         ..Default::default()
     }
-}
-
-fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
-    verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
 }

@@ -1,6 +1,6 @@
 use console::Key;
 
-use crate::game::{Game, GameConfig};
+use crate::game::GameConfig;
 
 use super::game_test_helpers::*;
 
@@ -75,10 +75,6 @@ fn render_current_player_hp_after_non_combat_move() {
     game.on_key(Key::ArrowLeft);
 
     verify_player_hp_rendered(&mut game, config.player_hp as i16);
-}
-
-fn verify_player_hp_rendered(game: &mut Game, player_hp: i16) {
-    verify_lines_rendered_match(game, vec![&format!(r"\s+HP: {}$", player_hp)]);
 }
 
 #[test]
