@@ -47,7 +47,7 @@ fn attacker_does_not_attack_if_they_are_dead() {
 }
 
 #[test]
-fn attach_returns_damage_dealt() {
+fn attack_returns_damage_dealt() {
     let attacker = combatant_with_initial_hp(10);
     let target_ref = combatant_with_initial_hp(20).into_ref();
 
@@ -60,7 +60,7 @@ fn attach_returns_damage_dealt() {
 }
 
 #[test]
-fn attach_returns_zero_if_it_does_not_hit() {
+fn attack_returns_zero_if_it_does_not_hit() {
     let attacker = combatant_with_initial_hp(10);
     let target_ref = Combatant::with_config(&CombatantConfig { initial_hp: 20, defense: 10, attack: 0 }).into_ref();
 
