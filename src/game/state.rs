@@ -92,32 +92,32 @@ impl GameState {
         self.guards.get(&pos).unwrap().clone()
     }
 
-    pub fn check_player_move(&mut self, x_offset: i32, y_offset: u32) {
-        if !self.obstacle_at(x_offset, y_offset as i32) {
+    pub fn attempt_player_move_to(&mut self, x_offset: i32, y_offset: u32) {
+        if !self.obstacle_at(x_offset, y_offset) {
             self.move_player(x_offset, y_offset);
         }
     }
 
-    pub fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
+    pub fn neighbor_at(&self, x_offset: i32, y_offset: u32) -> Option<(Position, char)> {
         let (x, y) = self.player_position;
         let neighbor_x = (x as i32 + x_offset) as usize;
-        let neighbor_y = (y as i32 + y_offset) as usize;
+        let neighbor_y = (y + y_offset) as usize;
         if neighbor_x < self.dungeon[0].len() && neighbor_y < self.dungeon.len() {
             return Some(((neighbor_x as u32, neighbor_y as u32), self.dungeon[neighbor_y][neighbor_x]));
         }
         None
     }
 
-    pub fn move_player(&mut self, offset_x: i32, offset_y: u32) {
-        self.player_position.0 = (self.player_position.0 as i32 + offset_x) as u32;
-        self.player_position.1 += offset_y;
-    }
-
-    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
+    fn obstacle_at(&self, x_offset: i32, y_offset: u32) -> bool {
         match self.neighbor_at(x_offset, y_offset) {
             Some((_, tile)) => { return tile == '#' || tile == 'G'; }
             None => { return true; }
         }
+    }
+
+    fn move_player(&mut self, offset_x: i32, offset_y: u32) {
+        self.player_position.0 = (self.player_position.0 as i32 + offset_x) as u32;
+        self.player_position.1 += offset_y;
     }
 
 

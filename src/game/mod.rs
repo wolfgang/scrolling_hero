@@ -82,15 +82,15 @@ impl Game {
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
-                self.game_state.check_player_move(-1, 0);
+                self.game_state.attempt_player_move_to(-1, 0);
             }
             Key::ArrowRight => {
                 self.process_neighbor(1, 0);
-                self.game_state.check_player_move(1, 0);
+                self.game_state.attempt_player_move_to(1, 0);
             }
             Key::ArrowDown => {
                 self.process_neighbor(0, 1);
-                self.game_state.check_player_move(0, 1);
+                self.game_state.attempt_player_move_to(0, 1);
             }
             Key::Escape => {
                 self.is_running = false;
@@ -110,7 +110,7 @@ impl Game {
         self.game_state.neighbor_at(0, 0).unwrap().1
     }
 
-    fn process_neighbor(&mut self, x_offset: i32, y_offset: i32) {
+    fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
