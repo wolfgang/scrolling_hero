@@ -67,8 +67,6 @@ impl GameState {
 
         self.check_guard_state(pos);
         (damage_to_guard, damage_to_player)
-
-
     }
 
     pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) {
@@ -94,10 +92,9 @@ impl GameState {
         self.guards.get(&pos).unwrap().clone()
     }
 
-    pub fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        match self.neighbor_at(x_offset, y_offset) {
-            Some((_, tile)) => { return tile == '#' || tile == 'G'; }
-            None => { return true; }
+    pub fn check_player_move(&mut self, x_offset: i32, y_offset: u32) {
+        if !self.obstacle_at(x_offset, y_offset as i32) {
+            self.move_player(x_offset, y_offset);
         }
     }
 
@@ -114,6 +111,13 @@ impl GameState {
     pub fn move_player(&mut self, offset_x: i32, offset_y: u32) {
         self.player_position.0 = (self.player_position.0 as i32 + offset_x) as u32;
         self.player_position.1 += offset_y;
+    }
+
+    fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((_, tile)) => { return tile == '#' || tile == 'G'; }
+            None => { return true; }
+        }
     }
 
 
