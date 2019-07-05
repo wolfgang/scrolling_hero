@@ -8,7 +8,7 @@ use state::GameState;
 
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::{DungeonProviderRef, Position};
+use crate::types::DungeonProviderRef;
 
 pub mod renderer;
 pub mod state;
@@ -113,11 +113,11 @@ impl Game {
     }
 
     fn under_player(&self) -> char {
-        self.neighbor_at(0, 0).unwrap().1
+        self.game_state.neighbor_at(0, 0).unwrap().1
     }
 
     fn process_neighbor(&mut self, x_offset: i32, y_offset: i32) {
-        match self.neighbor_at(x_offset, y_offset) {
+        match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
@@ -165,22 +165,11 @@ impl Game {
 
 
     fn obstacle_at(&self, x_offset: i32, y_offset: i32) -> bool {
-        match self.neighbor_at(x_offset, y_offset) {
+        match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((_, tile)) => { return tile == '#' || tile == 'G'; }
             None => { return true; }
         }
     }
-
-    fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
-        let (x, y) = self.game_state.player_position;
-        let neighbor_x = (x as i32 + x_offset) as usize;
-        let neighbor_y = (y as i32 + y_offset) as usize;
-        if neighbor_x < self.game_state.dungeon[0].len() && neighbor_y < self.game_state.dungeon.len() {
-            return Some(((neighbor_x as u32, neighbor_y as u32), self.game_state.dungeon[neighbor_y][neighbor_x]));
-        }
-        None
-    }
-
 
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {

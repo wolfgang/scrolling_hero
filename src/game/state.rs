@@ -94,6 +94,17 @@ impl GameState {
         self.guards.get(&pos).unwrap().clone()
     }
 
+    pub(crate) fn neighbor_at(&self, x_offset: i32, y_offset: i32) -> Option<(Position, char)> {
+        let (x, y) = self.player_position;
+        let neighbor_x = (x as i32 + x_offset) as usize;
+        let neighbor_y = (y as i32 + y_offset) as usize;
+        if neighbor_x < self.dungeon[0].len() && neighbor_y < self.dungeon.len() {
+            return Some(((neighbor_x as u32, neighbor_y as u32), self.dungeon[neighbor_y][neighbor_x]));
+        }
+        None
+    }
+
+
     fn check_guard_state(&mut self, pos: Position) {
         if self.borrow_guard_at(pos).hp <= 0 {
             self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
