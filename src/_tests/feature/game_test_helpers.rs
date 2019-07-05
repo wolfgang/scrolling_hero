@@ -53,7 +53,7 @@ pub fn render(game: &mut Game) -> LineBuffer {
 
 pub fn assert_lines_start_with(buffer: &LineBuffer, expected_lines: Lines) {
     let rendered_lines = lines_from(buffer);
-    assert_eq!(rendered_lines.len(), expected_lines.len());
+    assert_eq!(rendered_lines.len(), expected_lines.len(), "Nubmer of rendered lines not as expected");
 
     let line_length = expected_lines[0].len();
     let actual_lines: Vec<String> = rendered_lines[0..expected_lines.len()]
