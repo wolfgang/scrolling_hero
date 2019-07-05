@@ -61,7 +61,7 @@ impl Game {
             config: (*config).clone(),
         };
 
-        game.show_player_hp();
+        game.reset_hud();
 
         game
     }
@@ -106,7 +106,7 @@ impl Game {
 
         if self.under_player() == 'H' {
             self.game_state.heal_player(&mut *self.dice_roller);
-            self.show_player_hp();
+            self.reset_hud();
         }
 
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
@@ -121,11 +121,11 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    self.show_player_hp();
+                    self.reset_hud();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
-                    self.show_player_hp();
+                    self.reset_hud();
                 }
             }
 
@@ -133,7 +133,7 @@ impl Game {
         }
     }
 
-    fn show_player_hp(&mut self) {
+    fn reset_hud(&mut self) {
         self.hud.clear();
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
