@@ -83,19 +83,19 @@ impl Game {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
                 if !self.game_state.obstacle_at(-1, 0) {
-                    self.game_state.player_position.0 -= 1;
+                    self.game_state.move_player(-1, 0);
                 }
             }
             Key::ArrowRight => {
                 self.process_neighbor(1, 0);
                 if !self.game_state.obstacle_at(1, 0) {
-                    self.game_state.player_position.0 += 1;
+                    self.game_state.move_player(1, 0);
                 }
             }
             Key::ArrowDown => {
                 self.process_neighbor(0, 1);
                 if !self.game_state.obstacle_at(0, 1) {
-                    self.game_state.player_position.1 += 1;
+                    self.game_state.move_player(0, 1);
                 }
             }
             Key::Escape => {

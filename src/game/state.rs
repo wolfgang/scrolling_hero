@@ -111,6 +111,11 @@ impl GameState {
         None
     }
 
+    pub fn move_player(&mut self, offset_x: i32, offset_y: u32) {
+        self.player_position.0 = (self.player_position.0 as i32 + offset_x) as u32;
+        self.player_position.1 += offset_y;
+    }
+
 
     fn check_guard_state(&mut self, pos: Position) {
         if self.borrow_guard_at(pos).hp <= 0 {
