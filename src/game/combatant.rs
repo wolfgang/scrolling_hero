@@ -45,6 +45,9 @@ impl Combatant {
             let attack_base_roll = dice_roller.roll(20);
             if target.borrow().is_hit(attack_base_roll + self.attack) {
                 damage = dice_roller.roll(10);
+                if attack_base_roll == 20 {
+                    damage += dice_roller.roll(10)
+                };
                 target.borrow_mut().apply_damage(damage)
             }
         }
@@ -56,7 +59,7 @@ impl Combatant {
     }
 
     pub fn is_hit(&self, attack_roll: u8) -> bool {
-        return attack_roll > self.defense
+        return attack_roll > self.defense;
     }
 
     pub fn apply_damage(&mut self, damage: u8) {

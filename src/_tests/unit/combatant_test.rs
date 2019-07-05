@@ -36,6 +36,22 @@ fn attacker_misses_first_then_hits() {
 }
 
 #[test]
+fn if_attacker_rolls_20_damage_is_rolled_twice() {
+    let mut dice_roller = FixedDiceRoller::new();
+
+    let attacker = Combatant::with_config(&CombatantConfig { initial_hp: 100, attack: 5, defense: 0 });
+    let target = Combatant::with_config(&CombatantConfig { initial_hp: 20, attack: 0, defense: 10 });
+    let target_ref = Rc::new(RefCell::new(target));
+
+    dice_roller.next_roll(20, 20);
+    dice_roller.next_roll(10, 3); // Damage roll 1
+    dice_roller.next_roll(10, 2); // Damage roll 2
+
+    attacker.attack(&target_ref, &mut dice_roller);
+    assert_eq!(target_ref.borrow().hp, 15);
+}
+
+#[test]
 fn attacker_does_not_attack_if_they_are_dead() {
     let attacker = combatant_with_initial_hp(0);
     let target_ref = combatant_with_initial_hp(10).into_ref();
@@ -52,7 +68,7 @@ fn attack_returns_damage_dealt() {
     let target_ref = combatant_with_initial_hp(20).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
-    dice_roller.next_roll(20, 20);
+    dice_roller.next_roll(20, 15);
     dice_roller.next_roll(10, 7);
 
     let damage = attacker.attack(&target_ref, &mut dice_roller);
