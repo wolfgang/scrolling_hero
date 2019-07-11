@@ -69,10 +69,11 @@ impl GameState {
         ((damage_to_guard, player_crit), (damage_to_player, guard_crit))
     }
 
-    pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) {
-        self.player.borrow_mut().heal(dice_roller);
+    pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) -> u8 {
+        let heal = self.player.borrow_mut().heal(dice_roller);
         let (x, y) = self.player_position;
         self.dungeon[y as usize][x as usize] = '.';
+        heal
     }
 
 

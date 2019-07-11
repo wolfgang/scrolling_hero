@@ -17,8 +17,14 @@ fn stepping_on_health_potion_increases_player_health() {
 
     game.on_key(Key::ArrowRight);
 
-    assert!(player_ref.borrow().hp > 80);
-    verify_player_hp_rendered(&mut game, player_ref.borrow().hp);
+    let player_hp = player_ref.borrow().hp;
+
+    assert!(player_hp > 80);
+
+    verify_lines_rendered_match(&mut game, vec![
+        &format!(r"\s+HP: {}$", player_hp),
+        &format!(r"\s+Player regains {} HP", player_hp - 80),
+    ]);
 }
 
 #[test]

@@ -101,10 +101,13 @@ fn heal_heals_with_d10_roll() {
     dice_roller.next_roll(10, 2);
     dice_roller.next_roll(10, 7);
 
-    combatant.heal(&mut dice_roller);
+    let result1 = combatant.heal(&mut dice_roller);
     assert_eq!(combatant.hp, 12);
-    combatant.heal(&mut dice_roller);
+    let result2 = combatant.heal(&mut dice_roller);
     assert_eq!(combatant.hp, 19);
+
+    assert_eq!(result1, 2);
+    assert_eq!(result2, 7);
 }
 
 #[test]
@@ -115,9 +118,11 @@ fn heal_caps_at_max_hp() {
     dice_roller.next_roll(10, 5);
     dice_roller.next_roll(10, 7);
 
-    combatant.heal(&mut dice_roller);
-    combatant.heal(&mut dice_roller);
+    let result1 = combatant.heal(&mut dice_roller);
+    let result2 = combatant.heal(&mut dice_roller);
     assert_eq!(combatant.hp, 50);
+    assert_eq!(result1, 3);
+    assert_eq!(result2, 0);
 }
 
 

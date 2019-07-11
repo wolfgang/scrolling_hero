@@ -56,8 +56,12 @@ impl Combatant {
         (damage, is_crit)
     }
 
-    pub fn heal(&mut self, dice_roller: &mut DiceRoller) {
-        self.hp = min(self.max_hp, self.hp + dice_roller.roll(10) as i16);
+    pub fn heal(&mut self, dice_roller: &mut DiceRoller) -> u8 {
+        let roll = dice_roller.roll(10);
+        let hp_before_heal = self.hp;
+        self.hp = min(self.max_hp, self.hp + roll as i16);
+        (self.hp - hp_before_heal) as u8
+
     }
 
     pub fn is_hit(&self, attack_roll: u8) -> bool {

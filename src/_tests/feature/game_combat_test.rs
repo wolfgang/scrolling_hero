@@ -95,8 +95,8 @@ fn when_player_hits_guard_print_damage_dealt() {
 
     verify_lines_rendered_match(&mut game, vec![
         r".*",
-        &format!(r"\s+Player hits Guard for {}", damage_to_guard),
-        &format!(r"\s+Guard hits Player for {}", damage_to_player)
+        &format!(r"\s+Player hits|CRITS Guard for {}", damage_to_guard),
+        &format!(r"\s+Guard hits|CRITS Player for {}", damage_to_player)
     ]);
 }
 

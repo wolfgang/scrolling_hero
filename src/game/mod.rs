@@ -103,8 +103,9 @@ impl Game {
         }
 
         if self.under_player() == 'H' {
-            self.game_state.heal_player(&mut *self.dice_roller);
+            let heal = self.game_state.heal_player(&mut *self.dice_roller);
             self.reset_hud();
+            self.hud.push(String::from(format!("Player regains {} HP", heal)));
         }
 
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
