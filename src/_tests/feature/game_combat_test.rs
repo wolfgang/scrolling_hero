@@ -88,15 +88,23 @@ fn when_player_hits_guard_print_damage_dealt() {
         "#...#"
     ]);
 
-    game.on_key(Key::ArrowLeft);
 
-    let damage_to_guard = config.guard_hp as i16 - game.game_state.borrow_guard_at((1, 1)).hp;
-    let damage_to_player = config.player_hp as i16 - game.game_state.borrow_player().hp;
+    let mut dice_roller = FixedDiceRoller::new();
+    // Attack rolls for player and guard
+    dice_roller.next_roll(20, 10);
+    dice_roller.next_roll(20, 10);
+    // Damage rolls for player and guard
+    dice_roller.next_roll(10, 1);
+    dice_roller.next_roll(10, 2);
+
+    game.override_dice_roller(Box::from(dice_roller));
+
+    game.on_key(Key::ArrowLeft);
 
     verify_lines_rendered_match(&mut game, vec![
         r".*",
-        &format!(r"\s+Player hits|CRITS Guard for {}", damage_to_guard),
-        &format!(r"\s+Guard hits|CRITS Player for {}", damage_to_player)
+        r"\s+Player hits Guard for 1",
+        r"\s+Guard hits Player for 2"
     ]);
 }
 
