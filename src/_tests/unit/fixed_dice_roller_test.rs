@@ -47,3 +47,10 @@ fn can_pass_trait_ref_to_function() {
     user.use_roll(&mut roller);
     assert_eq!(user.roll, 15);
 }
+
+#[test]
+fn if_no_roll_configured_return_1() {
+    let mut roller = FixedDiceRoller::new();
+    assert_eq!(roller.roll(10), 1);
+    assert_eq!(roller.roll(20), 1);
+}

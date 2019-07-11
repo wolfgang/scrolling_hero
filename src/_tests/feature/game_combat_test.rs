@@ -155,10 +155,7 @@ fn when_player_crits_guard_indicate_this_in_message() {
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(20, 20);
     dice_roller.next_roll(20, 20);
-    dice_roller.next_roll(10, 1);
-    dice_roller.next_roll(10, 2);
-    dice_roller.next_roll(10, 3);
-    dice_roller.next_roll(10, 4);
+    // Don't care about damage rolls, will default to 1
 
     game.override_dice_roller(Box::from(dice_roller));
 
@@ -166,8 +163,8 @@ fn when_player_crits_guard_indicate_this_in_message() {
 
     verify_lines_rendered_match(&mut game, vec![
         r".*",
-        r"\s+Player CRITS Guard for 3",
-        r"\s+Guard CRITS Player for 7"
+        r"\s+Player CRITS Guard for",
+        r"\s+Guard CRITS Player for"
     ]);
 }
 
