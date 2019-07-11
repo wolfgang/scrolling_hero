@@ -147,13 +147,16 @@ impl Game {
         self.game_state.borrow_player().hp
     }
 
-    fn attack_message(attacker: &str, target: &str, damage: (u8, bool), attacker_hp: i16) -> String {
+    fn attack_message(attacker: &str, target: &str, combat_result: (u8, bool), attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
             return String::from(format!("{} dies!", attacker));
         }
-        if damage.0 > 0 {
-            let action = if damage.1 { "CRITS" } else { "hits" };
-            return String::from(format!("{} {} {} for {}", attacker, action, target, damage.0));
+
+        let (damage, is_crit) = combat_result;
+
+        if damage > 0 {
+            let action = if is_crit { "CRITS" } else { "hits" };
+            return String::from(format!("{} {} {} for {}", attacker, action, target, damage));
         }
         String::from(format!("{} misses {}!", attacker, target))
     }
