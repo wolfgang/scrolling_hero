@@ -1,5 +1,6 @@
 use console::Key;
 
+use crate::_tests::unit::fixed_dice_roller::FixedDiceRoller;
 use crate::game::GameConfig;
 
 use super::game_test_helpers::*;
@@ -139,6 +140,38 @@ fn display_guard_dies_if_guard_drops_below_zero() {
         r"\s+Guard dies!"
     ]);
 }
+
+
+#[ignore]
+#[test]
+fn when_player_crits_guard_indicate_this_in_message() {
+    let config = game_with_strong_guards();
+
+    let mut game = make_game_with_config(&config, vec![
+        "#...#",
+        "#G@.#",
+        "#...#"
+    ]);
+
+    let mut dice_roller = FixedDiceRoller::new();
+    dice_roller.next_roll(20, 20);
+    dice_roller.next_roll(20, 20);
+    dice_roller.next_roll(10, 1);
+    dice_roller.next_roll(10, 2);
+    dice_roller.next_roll(10, 3);
+    dice_roller.next_roll(10, 4);
+
+    game.override_dice_roller(Box::from(dice_roller));
+
+    game.on_key(Key::ArrowLeft);
+
+    verify_lines_rendered_match(&mut game, vec![
+        r".*",
+        r"\s+Player CRITS Guard for 3",
+        r"\s+Guard CRITS Player for 7"
+    ]);
+}
+
 
 
 #[test]

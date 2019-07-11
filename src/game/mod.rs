@@ -66,6 +66,10 @@ impl Game {
         game
     }
 
+    pub fn override_dice_roller(&mut self, dice_roller: Box<dyn DiceRoller>) {
+        self.dice_roller = dice_roller;
+    }
+
     pub fn is_running(&self) -> bool {
         self.is_running
     }

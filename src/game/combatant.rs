@@ -39,19 +39,21 @@ impl Combatant {
         }
     }
 
-    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) -> u8 {
+    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) -> (u8, bool) {
         let mut damage = 0;
+        let mut is_crit = false;
         if self.hp > 0 {
             let attack_base_roll = dice_roller.roll(20);
             if target.borrow().is_hit(attack_base_roll + self.attack) {
                 damage = dice_roller.roll(10);
                 if attack_base_roll == 20 {
+                    is_crit = true;
                     damage += dice_roller.roll(10)
                 };
                 target.borrow_mut().apply_damage(damage)
             }
         }
-        damage
+        (damage, is_crit)
     }
 
     pub fn heal(&mut self, dice_roller: &mut DiceRoller) {

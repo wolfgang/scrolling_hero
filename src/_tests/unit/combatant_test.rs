@@ -63,16 +63,22 @@ fn attacker_does_not_attack_if_they_are_dead() {
 }
 
 #[test]
-fn attack_returns_damage_dealt() {
+fn attack_returns_damage_dealt_and_if_it_was_a_crit() {
     let attacker = combatant_with_initial_hp(10);
     let target_ref = combatant_with_initial_hp(20).into_ref();
 
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(20, 15);
+    dice_roller.next_roll(20, 20); // crit roll
     dice_roller.next_roll(10, 7);
+    dice_roller.next_roll(10, 8); // double damage from crit roll
+    dice_roller.next_roll(10, 9);
 
-    let damage = attacker.attack(&target_ref, &mut dice_roller);
-    assert_eq!(damage, 7);
+    let normal_result = attacker.attack(&target_ref, &mut dice_roller);
+    assert_eq!(normal_result, (7, false));
+
+    let crit_result = attacker.attack(&target_ref, &mut dice_roller);
+    assert_eq!(crit_result, (17, true));
 }
 
 #[test]
@@ -83,7 +89,7 @@ fn attack_returns_zero_if_it_does_not_hit() {
     let mut dice_roller = FixedDiceRoller::new();
     dice_roller.next_roll(20, 1);
 
-    let damage = attacker.attack(&target_ref, &mut dice_roller);
+    let (damage, _) = attacker.attack(&target_ref, &mut dice_roller);
     assert_eq!(damage, 0);
 }
 
