@@ -13,17 +13,18 @@ fn stepping_on_health_potion_increases_player_health() {
 
     let player_ref = game.game_state.player_ref();
     player_ref.borrow_mut().apply_damage(20);
-    assert_eq!(player_ref.borrow().hp, 80);
+    let player_hp_before_heal = 80;
+    assert_eq!(player_ref.borrow().hp, player_hp_before_heal);
 
     game.on_key(Key::ArrowRight);
 
-    let player_hp = player_ref.borrow().hp;
+    let player_hp_after_heal = player_ref.borrow().hp;
 
-    assert!(player_hp > 80);
+    assert!(player_hp_after_heal > player_hp_before_heal);
 
     verify_lines_rendered_match(&mut game, vec![
-        &format!(r"\s+HP: {}$", player_hp),
-        &format!(r"\s+Player regains {} HP", player_hp - 80),
+        &format!(r"\s+HP: {}$", player_hp_after_heal),
+        &format!(r"\s+Player regains {} HP", player_hp_after_heal - player_hp_before_heal),
     ]);
 }
 
