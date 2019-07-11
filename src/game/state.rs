@@ -58,15 +58,15 @@ impl GameState {
         guards
     }
 
-    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> (u8, u8) {
+    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> ((u8, bool), (u8, bool)) {
         let guard_ref = self.guard_ref_at(pos);
         let player_ref = self.player_ref();
 
-        let (damage_to_guard, _) = player_ref.borrow().attack(&guard_ref, dice_roller);
-        let (damage_to_player, _) = guard_ref.borrow().attack(&player_ref, dice_roller);
+        let (damage_to_guard, player_crit) = player_ref.borrow().attack(&guard_ref, dice_roller);
+        let (damage_to_player, guard_crit) = guard_ref.borrow().attack(&player_ref, dice_roller);
 
         self.check_guard_state(pos);
-        (damage_to_guard, damage_to_player)
+        ((damage_to_guard, player_crit), (damage_to_player, guard_crit))
     }
 
     pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) {

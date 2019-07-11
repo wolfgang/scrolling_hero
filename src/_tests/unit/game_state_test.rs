@@ -49,7 +49,7 @@ fn resolve_combat_damages_both_combatants_and_returns_damages() {
     assert_eq!(guard_ref.borrow().hp, 20);
 
     let mut dice_roller = RandomizedDiceRoller::new();
-    let (damage_to_guard, damage_to_player) = game_state.resolve_combat((1, 0), &mut dice_roller);
+    let ((damage_to_guard, _), (damage_to_player, _)) = game_state.resolve_combat((1, 0), &mut dice_roller);
 
     assert!(player_ref.borrow().hp < 100);
     assert!(guard_ref.borrow().hp < 20);

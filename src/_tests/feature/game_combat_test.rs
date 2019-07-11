@@ -142,7 +142,6 @@ fn display_guard_dies_if_guard_drops_below_zero() {
 }
 
 
-#[ignore]
 #[test]
 fn when_player_crits_guard_indicate_this_in_message() {
     let config = game_with_strong_guards();

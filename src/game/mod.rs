@@ -136,7 +136,7 @@ impl Game {
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
 
-    fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: u8, damage_to_player: u8) {
+    fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: (u8, bool), damage_to_player: (u8, bool)) {
         let guard_health = self.game_state.borrow_guard_at(guard_pos).hp;
         let player_health = self.player_hp();
         self.hud.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
@@ -147,12 +147,13 @@ impl Game {
         self.game_state.borrow_player().hp
     }
 
-    fn attack_message(attacker: &str, target: &str, damage: u8, attacker_hp: i16) -> String {
+    fn attack_message(attacker: &str, target: &str, damage: (u8, bool), attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
             return String::from(format!("{} dies!", attacker));
         }
-        if damage > 0 {
-            return String::from(format!("{} hits {} for {}", attacker, target, damage));
+        if damage.0 > 0 {
+            let action = if damage.1 { "CRITS" } else { "hits" };
+            return String::from(format!("{} {} {} for {}", attacker, action, target, damage.0));
         }
         String::from(format!("{} misses {}!", attacker, target))
     }
