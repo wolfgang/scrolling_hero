@@ -44,8 +44,7 @@ pub struct Game {
     hud: Vec<String>,
     config: GameConfig,
     combat_active: bool,
-    guard_in_combat: Option<Position>
-
+    guard_in_combat: Option<Position>,
 }
 
 impl Game {
@@ -63,7 +62,7 @@ impl Game {
             hud: Vec::with_capacity(10),
             config: (*config).clone(),
             combat_active: false,
-            guard_in_combat: None
+            guard_in_combat: None,
         };
 
         game.reset_hud();
@@ -129,6 +128,8 @@ impl Game {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
+                    let guard_hp = self.game_state.borrow_guard_at(pos).hp;
+                    if guard_hp <= 0 { self.combat_active = false; }
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();

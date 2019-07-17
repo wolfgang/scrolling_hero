@@ -198,6 +198,26 @@ fn when_player_moves_away_guard_gets_opportunity_attack() {
 }
 
 #[test]
+fn dead_guard_does_not_do_opportunity_attack() {
+    let mut game = make_game_with_config(
+        &game_with_weak_guards(),
+        vec![
+            "#...#",
+            "#G@.#",
+            "#...#"
+        ]);
+
+    game.on_key(Key::ArrowLeft);
+    game.on_key(Key::ArrowDown);
+
+    verify_lines_rendered_match(&mut game, vec![
+        r"#...#",
+        r"#...#$",
+        r"#@..#$"
+    ]);
+}
+
+#[test]
 fn game_is_over_if_player_dies() {
     let mut game = make_game_with_config(
         &game_with_weak_player(),
