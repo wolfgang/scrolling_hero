@@ -179,9 +179,9 @@ fn when_crits_occur_indicate_this_in_combat_messages() {
 
 
 #[test]
-fn when_player_moves_away_clear_combat_log() {
+fn when_player_moves_away_guard_gets_opportunity_attack() {
     let mut game = make_game_with_config(
-        &game_with_strong_guards(),
+        &game_with_always_hittable_player(),
         vec![
             "#...#",
             "#G@.#",
@@ -192,9 +192,8 @@ fn when_player_moves_away_clear_combat_log() {
     game.on_key(Key::ArrowRight);
 
     verify_lines_rendered_match(&mut game, vec![
-        r"#...#.*",
-        r"#G.@#$",
-        r"#...#$"
+        r".*",
+        r"\s+Guard hits|CRITS Player for"
     ]);
 }
 
@@ -264,11 +263,12 @@ fn player_hp_is_not_reset_in_next_dungeon() {
     // Hit guard once, take damage
     game.on_key(Key::ArrowLeft);
 
-    let player_hp_before_switch = game.game_state.borrow_player().hp;
-    assert!(player_hp_before_switch < 100);
 
     // Go to next dungeon
     game.on_key(Key::ArrowDown);
+
+    let player_hp_before_switch = game.game_state.borrow_player().hp;
+    assert!(player_hp_before_switch < 100);
 
     verify_dungeon_rendered(&mut game, vec![
         "#.@#",
@@ -314,6 +314,17 @@ fn game_with_weak_player() -> GameConfig {
         camera_offset: 100,
         guard_hp: 50,
         player_hp: 1,
+        ..Default::default()
+    }
+}
+
+fn game_with_always_hittable_player() -> GameConfig {
+    GameConfig {
+        camera_offset: 100,
+        guard_hp: 50,
+        player_hp: 100,
+        // guard and player can never be hit
+        guard_attack: 20,
         ..Default::default()
     }
 }

@@ -8,7 +8,7 @@ use state::GameState;
 
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::DungeonProviderRef;
+use crate::types::{DungeonProviderRef, Position};
 
 pub mod renderer;
 pub mod state;
@@ -43,6 +43,9 @@ pub struct Game {
     dice_roller: Box<dyn DiceRoller>,
     hud: Vec<String>,
     config: GameConfig,
+    combat_active: bool,
+    guard_in_combat: Option<Position>
+
 }
 
 impl Game {
@@ -59,6 +62,8 @@ impl Game {
             is_running: true,
             hud: Vec::with_capacity(10),
             config: (*config).clone(),
+            combat_active: false,
+            guard_in_combat: None
         };
 
         game.reset_hud();
@@ -119,12 +124,22 @@ impl Game {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
+                    self.combat_active = true;
+                    self.guard_in_combat = Some(pos);
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();
+                    if self.combat_active {
+                        let guard_pos = self.guard_in_combat.unwrap();
+                        let guard_ref = self.game_state.guard_ref_at(guard_pos);
+                        let player_ref = self.game_state.player_ref();
+                        let result = guard_ref.borrow().attack(&player_ref, &mut *self.dice_roller);
+                        self.hud.push(Game::attack_message("Guard", "Player", result, 100));
+                        self.combat_active = false;
+                    }
                 }
             }
 
@@ -137,11 +152,11 @@ impl Game {
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
 
-    fn show_combat_messages(&mut self, guard_pos: (u32, u32), damage_to_guard: (u8, bool), damage_to_player: (u8, bool)) {
+    fn show_combat_messages(&mut self, guard_pos: (u32, u32), guard_result: (u8, bool), player_result: (u8, bool)) {
         let guard_health = self.game_state.borrow_guard_at(guard_pos).hp;
         let player_health = self.player_hp();
-        self.hud.push(Game::attack_message("Player", "Guard", damage_to_guard, player_health));
-        self.hud.push(Game::attack_message("Guard", "Player", damage_to_player, guard_health));
+        self.hud.push(Game::attack_message("Player", "Guard", guard_result, player_health));
+        self.hud.push(Game::attack_message("Guard", "Player", player_result, guard_health));
     }
 
     fn player_hp(&self) -> i16 {
