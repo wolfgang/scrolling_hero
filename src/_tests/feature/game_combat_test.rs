@@ -180,8 +180,9 @@ fn when_crits_occur_indicate_this_in_combat_messages() {
 
 #[test]
 fn when_player_moves_away_guard_gets_opportunity_attack() {
+    let config = game_with_always_hittable_player();
     let mut game = make_game_with_config(
-        &game_with_always_hittable_player(),
+        &config,
         vec![
             "#...#",
             "#G@.#",
@@ -191,8 +192,11 @@ fn when_player_moves_away_guard_gets_opportunity_attack() {
     game.on_key(Key::ArrowLeft);
     game.on_key(Key::ArrowRight);
 
+    let new_player_hp = game.game_state.borrow_player().hp;
+    assert!(new_player_hp < config.player_hp as i16);
+
     verify_lines_rendered_match(&mut game, vec![
-        r".*",
+        &format!(r"\s+HP: {}$", new_player_hp),
         r"\s+Guard hits|CRITS Player for"
     ]);
 }

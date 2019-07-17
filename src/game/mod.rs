@@ -118,15 +118,16 @@ impl Game {
     fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
+                self.reset_hud();
                 if tile == 'G' {
                     let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(player_result, guard_result);
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
-                    self.reset_hud();
                     if self.game_state.is_combat_active() {
                         let result = self.game_state.attack_player(&mut *self.dice_roller);
+                        self.reset_hud();
                         self.show_guard_combat_message(result);
                         self.game_state.end_combat();
                     }
