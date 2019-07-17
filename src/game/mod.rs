@@ -118,20 +118,23 @@ impl Game {
     fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
-                self.reset_hud();
+                let mut combat_log: Vec<String> = Vec::with_capacity(2);
                 if tile == 'G' {
                     let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    self.reset_hud();
-                    self.show_combat_messages(player_result, guard_result);
+                    combat_log.push(self.player_combat_message(player_result));
+                    combat_log.push(self.guard_combat_message(guard_result));
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     if self.game_state.is_combat_active() {
                         let result = self.game_state.attack_player(&mut *self.dice_roller);
-                        self.reset_hud();
-                        self.show_guard_combat_message(result);
+                        combat_log.push(self.guard_combat_message(result));
                         self.game_state.end_combat();
                     }
                 }
+
+                self.reset_hud();
+                self.hud.append(&mut combat_log);
+
             }
 
             None => {}
@@ -143,17 +146,12 @@ impl Game {
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
 
-    fn show_combat_messages(&mut self, guard_result: (u8, bool), player_result: (u8, bool)) {
-        self.show_player_combat_message(guard_result);
-        self.show_guard_combat_message(player_result);
+    fn player_combat_message(&mut self, combat_result: (u8, bool)) -> String {
+        Game::attack_message("Player", "Guard", combat_result, self.player_hp())
     }
 
-    fn show_player_combat_message(&mut self, combat_result: (u8, bool)) {
-        self.hud.push(Game::attack_message("Player", "Guard", combat_result, self.player_hp()));
-    }
-
-    fn show_guard_combat_message(&mut self, combat_result: (u8, bool)) {
-        self.hud.push(Game::attack_message("Guard", "Player", combat_result, self.game_state.hp_of_guard_in_combat()));
+    fn guard_combat_message(&mut self, combat_result: (u8, bool)) -> String {
+        Game::attack_message("Guard", "Player", combat_result, self.game_state.hp_of_guard_in_combat())
     }
 
     fn player_hp(&self) -> i16 {
