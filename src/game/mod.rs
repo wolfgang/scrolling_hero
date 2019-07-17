@@ -122,17 +122,17 @@ impl Game {
             Some((pos, tile)) => {
                 if tile == 'G' {
                     self.guard_in_combat = Some(pos);
-                    let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
+                    let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
-                    self.show_combat_messages(damage_to_guard, damage_to_player);
+                    self.show_combat_messages(player_result, guard_result);
                     if self.hp_of_guard_in_combat() <= 0 { self.guard_in_combat = None; }
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();
                     if self.guard_in_combat != None {
-                        let guard_ref = self.game_state.guard_ref_at(self.guard_in_combat.unwrap());
-                        let player_ref = self.game_state.player_ref();
-                        let result = guard_ref.borrow().attack(&player_ref, &mut *self.dice_roller);
+                        let result = self.game_state.attack_player_with_guard_at(
+                            self.guard_in_combat.unwrap(),
+                            &mut *self.dice_roller);
                         self.show_guard_combat_message(result);
                         self.guard_in_combat = None;
                     }

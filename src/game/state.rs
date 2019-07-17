@@ -59,14 +59,11 @@ impl GameState {
     }
 
     pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> ((u8, bool), (u8, bool)) {
-        let guard_ref = self.guard_ref_at(pos);
-        let player_ref = self.player_ref();
-
-        let (damage_to_guard, player_crit) = player_ref.borrow().attack(&guard_ref, dice_roller);
-        let (damage_to_player, guard_crit) = guard_ref.borrow().attack(&player_ref, dice_roller);
+        let player_result = self.attack_guard_at(pos, dice_roller);
+        let guard_result = self.attack_player_with_guard_at(pos, dice_roller);
 
         self.check_guard_state(pos);
-        ((damage_to_guard, player_crit), (damage_to_player, guard_crit))
+        (player_result, guard_result)
     }
 
     pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) -> u8 {
@@ -74,6 +71,14 @@ impl GameState {
         let (x, y) = self.player_position;
         self.dungeon[y as usize][x as usize] = '.';
         heal
+    }
+
+    fn attack_guard_at(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> (u8, bool) {
+        self.player_ref().borrow().attack(&self.guard_ref_at(pos), dice_roller)
+    }
+
+    pub fn attack_player_with_guard_at(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> (u8, bool) {
+        self.borrow_guard_at(pos).attack(&self.player_ref(), dice_roller)
     }
 
 
