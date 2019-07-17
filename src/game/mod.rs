@@ -125,8 +125,7 @@ impl Game {
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(damage_to_guard, damage_to_player);
-                    let guard_hp = self.game_state.borrow_guard_at(pos).hp;
-                    if guard_hp <= 0 { self.guard_in_combat = None; }
+                    if self.hp_of_guard_in_combat() <= 0 { self.guard_in_combat = None; }
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();
@@ -155,19 +154,20 @@ impl Game {
     }
 
     fn show_player_combat_message(&mut self, combat_result: (u8, bool)) {
-        let player_health = self.player_hp();
-        self.hud.push(Game::attack_message("Player", "Guard", combat_result, player_health));
+        self.hud.push(Game::attack_message("Player", "Guard", combat_result, self.player_hp()));
     }
 
     fn show_guard_combat_message(&mut self, combat_result: (u8, bool)) {
-        let guard_health = self.game_state.borrow_guard_at(self.guard_in_combat.unwrap()).hp;
-        self.hud.push(Game::attack_message("Guard", "Player", combat_result, guard_health));
+        self.hud.push(Game::attack_message("Guard", "Player", combat_result, self.hp_of_guard_in_combat()));
     }
 
     fn player_hp(&self) -> i16 {
         self.game_state.borrow_player().hp
     }
 
+    fn hp_of_guard_in_combat(&self) -> i16 {
+        self.game_state.borrow_guard_at(self.guard_in_combat.unwrap()).hp
+    }
     fn attack_message(attacker: &str, target: &str, combat_result: (u8, bool), attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
             return String::from(format!("{} dies!", attacker));
