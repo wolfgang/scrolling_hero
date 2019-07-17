@@ -4,7 +4,7 @@ use crate::_tests::feature::game_test_helpers::*;
 use crate::game::{Game, GameConfig};
 
 #[test]
-fn stepping_on_health_potion_increases_player_health() {
+fn stepping_on_health_potion_displays_new_hp_and_how_much_was_gained() {
     let mut game = make_game_with_healthy_player(vec![
         "#...#",
         "#.@H#",
