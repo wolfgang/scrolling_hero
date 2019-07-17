@@ -8,7 +8,7 @@ use state::GameState;
 
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::{DungeonProviderRef, Position};
+use crate::types::DungeonProviderRef;
 
 pub mod renderer;
 pub mod state;
@@ -42,8 +42,7 @@ pub struct Game {
     game_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
     hud: Vec<String>,
-    config: GameConfig,
-    guard_in_combat: Option<Position>,
+    config: GameConfig
 }
 
 impl Game {
@@ -59,8 +58,7 @@ impl Game {
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
             hud: Vec::with_capacity(10),
-            config: (*config).clone(),
-            guard_in_combat: None,
+            config: (*config).clone()
         };
 
         game.reset_hud();
@@ -121,20 +119,16 @@ impl Game {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    self.guard_in_combat = Some(pos);
                     let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(player_result, guard_result);
-                    if self.hp_of_guard_in_combat() <= 0 { self.guard_in_combat = None; }
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();
-                    if self.guard_in_combat != None {
-                        let result = self.game_state.attack_player_with_guard_at(
-                            self.guard_in_combat.unwrap(),
-                            &mut *self.dice_roller);
+                    if self.game_state.is_combat_active() {
+                        let result = self.game_state.attack_player_with_guard_at(&mut *self.dice_roller);
                         self.show_guard_combat_message(result);
-                        self.guard_in_combat = None;
+                        self.game_state.end_combat();
                     }
                 }
             }
@@ -158,16 +152,13 @@ impl Game {
     }
 
     fn show_guard_combat_message(&mut self, combat_result: (u8, bool)) {
-        self.hud.push(Game::attack_message("Guard", "Player", combat_result, self.hp_of_guard_in_combat()));
+        self.hud.push(Game::attack_message("Guard", "Player", combat_result, self.game_state.hp_of_guard_in_combat()));
     }
 
     fn player_hp(&self) -> i16 {
         self.game_state.borrow_player().hp
     }
 
-    fn hp_of_guard_in_combat(&self) -> i16 {
-        self.game_state.borrow_guard_at(self.guard_in_combat.unwrap()).hp
-    }
     fn attack_message(attacker: &str, target: &str, combat_result: (u8, bool), attacker_hp: i16) -> String {
         if attacker_hp <= 0 {
             return String::from(format!("{} dies!", attacker));
