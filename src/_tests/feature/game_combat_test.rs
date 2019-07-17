@@ -79,7 +79,7 @@ fn render_current_player_hp_after_non_combat_move() {
 }
 
 #[test]
-fn when_player_hits_guard_print_damage_dealt() {
+fn when_combat_occurs_display_damage_dealt() {
     let config = game_with_strong_guards();
 
     let mut game = make_game_with_config(&config, vec![
@@ -151,7 +151,7 @@ fn display_guard_dies_if_guard_drops_below_zero() {
 
 
 #[test]
-fn when_player_crits_guard_indicate_this_in_message() {
+fn when_crits_occur_indicate_this_in_combat_messages() {
     let config = game_with_strong_guards();
 
     let mut game = make_game_with_config(&config, vec![
