@@ -43,7 +43,6 @@ pub struct Game {
     dice_roller: Box<dyn DiceRoller>,
     hud: Vec<String>,
     config: GameConfig,
-    combat_active: bool,
     guard_in_combat: Option<Position>,
 }
 
@@ -61,7 +60,6 @@ impl Game {
             is_running: true,
             hud: Vec::with_capacity(10),
             config: (*config).clone(),
-            combat_active: false,
             guard_in_combat: None,
         };
 
@@ -123,23 +121,22 @@ impl Game {
         match self.game_state.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    self.combat_active = true;
                     self.guard_in_combat = Some(pos);
                     let (damage_to_guard, damage_to_player) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     self.reset_hud();
                     self.show_combat_messages(pos, damage_to_guard, damage_to_player);
                     let guard_hp = self.game_state.borrow_guard_at(pos).hp;
-                    if guard_hp <= 0 { self.combat_active = false; }
+                    if guard_hp <= 0 { self.guard_in_combat = None; }
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     self.reset_hud();
-                    if self.combat_active {
+                    if self.guard_in_combat != None {
                         let guard_pos = self.guard_in_combat.unwrap();
                         let guard_ref = self.game_state.guard_ref_at(guard_pos);
                         let player_ref = self.game_state.player_ref();
                         let result = guard_ref.borrow().attack(&player_ref, &mut *self.dice_roller);
                         self.hud.push(Game::attack_message("Guard", "Player", result, 100));
-                        self.combat_active = false;
+                        self.guard_in_combat = None;
                     }
                 }
             }
