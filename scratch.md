@@ -23,7 +23,7 @@
     [X] If player HP goes to zero, game is over
   
   
-[ ] Health potions (consumed on walking-over)  
+[X] Health potions (consumed on walking-over)  
     
 [ ] Constrain movement and penalties
 
