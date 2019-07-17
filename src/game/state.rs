@@ -62,8 +62,8 @@ impl GameState {
 
     pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> ((u8, bool), (u8, bool)) {
         self.guard_in_combat = Some(pos);
-        let player_result = self.attack_guard_at(pos, dice_roller);
-        let guard_result = self.attack_player_with_guard_at(dice_roller);
+        let player_result = self.attack_guard(dice_roller);
+        let guard_result = self.attack_player(dice_roller);
 
         self.check_guard_state(pos);
         (player_result, guard_result)
@@ -76,12 +76,12 @@ impl GameState {
         heal
     }
 
-    fn attack_guard_at(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> (u8, bool) {
-        self.player_ref().borrow().attack(&self.guard_ref_at(pos), dice_roller)
+    fn attack_guard(&mut self, dice_roller: &mut DiceRoller) -> (u8, bool) {
+        self.player_ref().borrow().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
     }
 
-    pub fn attack_player_with_guard_at(&mut self, dice_roller: &mut DiceRoller) -> (u8, bool) {
-        self.borrow_guard_at(self.guard_in_combat.unwrap()).attack(&self.player_ref(), dice_roller)
+    pub fn attack_player(&mut self, dice_roller: &mut DiceRoller) -> (u8, bool) {
+        self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
     }
 
 
@@ -130,6 +130,10 @@ impl GameState {
             Some(pos) => { return self.borrow_guard_at(pos).hp }
             None => 0
         }
+    }
+
+    fn guard_in_combat(&self) -> Position {
+        self.guard_in_combat.unwrap()
     }
 
     fn obstacle_at(&self, x_offset: i32, y_offset: u32) -> bool {

@@ -126,7 +126,7 @@ impl Game {
                 } else {
                     self.reset_hud();
                     if self.game_state.is_combat_active() {
-                        let result = self.game_state.attack_player_with_guard_at(&mut *self.dice_roller);
+                        let result = self.game_state.attack_player(&mut *self.dice_roller);
                         self.show_guard_combat_message(result);
                         self.game_state.end_combat();
                     }
