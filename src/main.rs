@@ -149,6 +149,15 @@ impl Write for RaylibWriter<'_> {
                     self.render_tile(0, 5, &self.player_textures);
                 }
 
+                'G' => {
+                    self.render_tile(0, 5, &self.dungeon_textures);
+                    self.render_tile(0, 2, &self.monster_textures);
+                }
+
+                'H' => {
+                    self.render_tile(0, 5, &self.dungeon_textures);
+                    self.render_tile(0, 2, &self.potion_textures);
+                }
 
                 _ => {
                 }
