@@ -22,7 +22,7 @@ fn main() -> std::io::Result<()> {
     let mut dungeons = Vec::new();
 
     for _ in 1..50 {
-        dungeons.push(generate_dungeon(60, 40, &mut rng));
+        dungeons.push(generate_dungeon(40, 40, &mut rng));
     }
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
     let rl = raylib::init()
-        .size(800, 450)
+        .size(1024, 768)
         .title("Texture Test")
         .build();
 
@@ -87,18 +87,19 @@ struct RaylibWriter<'a> {
     player_textures: Texture2D,
     dungeon_textures: Texture2D,
     monster_textures: Texture2D,
+    potion_textures: Texture2D,
     current_x: i32,
     current_y: i32,
 }
 
 impl<'a> RaylibWriter<'a> {
     pub fn new(rl: &'a RaylibHandle) -> RaylibWriter {
-
         RaylibWriter {
             rl,
             player_textures: rl.load_texture("resources/players.png"),
             monster_textures: rl.load_texture("resources/monsters.png"),
             dungeon_textures: rl.load_texture("resources/stone_walls.png"),
+            potion_textures: rl.load_texture("resources/fireball.png"),
             current_x: 0,
             current_y: 0,
         }
@@ -116,22 +117,29 @@ impl<'a> RaylibWriter<'a> {
 
 impl Write for RaylibWriter<'_> {
     fn write(&mut self, buf: &[u8]) -> Result<usize, Error> {
-        let mut str = String::with_capacity(100);
-        let mut written = 0;
         for b in buf {
-            written += 1;
-            if *b == '\n' as u8 {
-                self.rl.draw_text(str.as_str(), 0, self.current_y * 16, 16, Color::GOLD);
-                self.current_x = 0;
-                self.current_y += 1;
-                str.clear();
-            } else {
-                str.push(*b as char);
+            let key = *b as char;
+            match key {
+                '\n' => {
+                    self.current_x = 0;
+                    self.current_y += 1;
+                }
+                '#' => {
+                    let rec = Rectangle { x: 0.0, y: 1.0 * 16.0, width: 16.0, height: 16.0 };
+                    let position = Vector2 {
+                        x: self.current_x as f32 * 16.0,
+                        y: self.current_y as f32 * 16.0,
+                    };
+                    self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
+                    self.current_x += 1;
+                }
+                _ => {
+                    self.current_x += 1;
+                }
             }
         }
 
-
-        Ok(written)
+        Ok(buf.len())
     }
 
     fn flush(&mut self) -> Result<(), Error> {
