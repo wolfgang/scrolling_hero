@@ -39,59 +39,66 @@ fn main() -> std::io::Result<()> {
 
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
-//    let rl = raylib::init()
-//        .size(800, 450)
-//        .title("Texture Test")
-//        .build();
-//
-//    let mut raylib_writer = RaylibWriter::new(&rl);
-//
-//    while game.is_running() && !rl.window_should_close() {
-//        rl.begin_drawing();
-//        rl.clear_background(Color::BLACK);
-//        raylib_writer.clear();
-//
-//        let num_lines = game.render(&mut raylib_writer)?;
-//
-//        if rl.is_key_pressed(KEY_RIGHT as i32) {
-//            game.on_key(Key::ArrowRight);
-//        }
-//        if rl.is_key_pressed(KEY_LEFT as i32) {
-//            game.on_key(Key::ArrowLeft);
-//        }
-//
-//        if rl.is_key_pressed(KEY_DOWN as i32) {
-//            game.on_key(Key::ArrowDown);
-//        }
-//
-//
-////        game.on_key(term.read_key().unwrap());
-////        term.clear_last_lines(num_lines as usize)?;
-//
-//        rl.end_drawing();
-//    }
+    let rl = raylib::init()
+        .size(800, 450)
+        .title("Texture Test")
+        .build();
 
-    while game.is_running() {
-        let num_lines = game.render(&mut term)?;
-        game.on_key(term.read_key().unwrap());
-        term.clear_last_lines(num_lines as usize)?;
+    let mut raylib_writer = RaylibWriter::new(&rl);
+
+    while game.is_running() && !rl.window_should_close() {
+        rl.begin_drawing();
+        rl.clear_background(Color::BLACK);
+        raylib_writer.clear();
+
+        let num_lines = game.render(&mut raylib_writer)?;
+
+        if rl.is_key_pressed(KEY_RIGHT as i32) {
+            game.on_key(Key::ArrowRight);
+        }
+        if rl.is_key_pressed(KEY_LEFT as i32) {
+            game.on_key(Key::ArrowLeft);
+        }
+
+        if rl.is_key_pressed(KEY_DOWN as i32) {
+            game.on_key(Key::ArrowDown);
+        }
+
+
+//        game.on_key(term.read_key().unwrap());
+//        term.clear_last_lines(num_lines as usize)?;
+
+        rl.end_drawing();
     }
 
-    term.write_line("Thanks for playing!")?;
+//    while game.is_running() {
+//        let num_lines = game.render(&mut term)?;
+//        game.on_key(term.read_key().unwrap());
+//        term.clear_last_lines(num_lines as usize)?;
+//    }
+//
+//    term.write_line("Thanks for playing!")?;
 
     Ok(())
 }
 
 struct RaylibWriter<'a> {
+    rl: &'a RaylibHandle,
+    player_textures: Texture2D,
+    dungeon_textures: Texture2D,
+    monster_textures: Texture2D,
     current_x: i32,
     current_y: i32,
-    rl: &'a RaylibHandle,
 }
 
 impl<'a> RaylibWriter<'a> {
     pub fn new(rl: &'a RaylibHandle) -> RaylibWriter {
+
         RaylibWriter {
             rl,
+            player_textures: rl.load_texture("resources/players.png"),
+            monster_textures: rl.load_texture("resources/monsters.png"),
+            dungeon_textures: rl.load_texture("resources/stone_walls.png"),
             current_x: 0,
             current_y: 0,
         }
@@ -99,6 +106,11 @@ impl<'a> RaylibWriter<'a> {
 
     pub fn clear(&mut self) {
         self.current_y = 0;
+        let rec = Rectangle { x: 0.0, y: 1.0 * 16.0, width: 16.0, height: 16.0 };
+        let position = Vector2 { x: 100.0, y: 100.0 };
+//        self.rl.draw_texture_rec(&self.player_textures, rec, position, Color::WHITE);
+//        self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
+        self.rl.draw_texture_rec(&self.monster_textures, rec, position, Color::WHITE);
     }
 }
 
