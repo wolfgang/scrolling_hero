@@ -1,10 +1,9 @@
+use std::env;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use console::Key;
 use console::Term;
 use rand::{Rng, SeedableRng};
 use rand::rngs::StdRng;
-use raylib::consts::{KEY_DOWN, KEY_LEFT, KEY_RIGHT};
 
 use sch::dungeon::decorator;
 use sch::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
@@ -14,7 +13,6 @@ use sch::raylib::run_game_in_raylib;
 use sch::types::DungeonDefinition;
 
 fn main() -> std::io::Result<()> {
-    let mut term = Term::stdout();
     let seed = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
     let mut rng = StdRng::seed_from_u64(seed);
 
@@ -40,17 +38,23 @@ fn main() -> std::io::Result<()> {
 
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
-    run_game_in_raylib(&mut game, dungeon_width)
+    let args: Vec<String> = env::args().collect();
 
+    if args.len() == 2 && &args[1] == "-g" {
+        return run_game_in_raylib(&mut game, dungeon_width);
+    }
 
-//    while game.is_running() {
-//        let num_lines = game.render(&mut term)?;
-//        game.on_key(term.read_key().unwrap());
-//        term.clear_last_lines(num_lines as usize)?;
-//    }
-//
-//    term.write_line("Thanks for playing!")?;
+    run_game_in_terminal(&mut game)
+}
 
+fn run_game_in_terminal(game: &mut Game) -> std::io::Result<()> {
+    let mut term = Term::stdout();
+    while game.is_running() {
+        let num_lines = game.render(&mut term)?;
+        game.on_key(term.read_key().unwrap());
+        term.clear_last_lines(num_lines as usize)?;
+    }
+    term.write_line("Thanks for playing!")
 }
 
 
