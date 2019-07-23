@@ -86,10 +86,10 @@ fn main() -> std::io::Result<()> {
 
 struct RaylibWriter<'a> {
     rl: &'a RaylibHandle,
-    player_textures: Rc<Texture2D>,
-    dungeon_textures: Rc<Texture2D>,
-    monster_textures: Rc<Texture2D>,
-    potion_textures: Rc<Texture2D>,
+    player_textures: Texture2D,
+    dungeon_textures: Texture2D,
+    monster_textures: Texture2D,
+    potion_textures: Texture2D,
     current_x: i32,
     current_y: i32,
 }
@@ -98,16 +98,16 @@ impl<'a> RaylibWriter<'a> {
     pub fn new(rl: &'a RaylibHandle) -> RaylibWriter {
         RaylibWriter {
             rl,
-            player_textures: Rc::new(rl.load_texture("resources/players.png")),
-            monster_textures: Rc::new(rl.load_texture("resources/monsters.png")),
-            dungeon_textures: Rc::new(rl.load_texture("resources/stone_walls.png")),
-            potion_textures: Rc::new(rl.load_texture("resources/fireball.png")),
+            player_textures: rl.load_texture("resources/players.png"),
+            monster_textures: rl.load_texture("resources/monsters.png"),
+            dungeon_textures: rl.load_texture("resources/stone_walls.png"),
+            potion_textures: rl.load_texture("resources/fireball.png"),
             current_x: 0,
             current_y: 0,
         }
     }
 
-    fn render_tile(&mut self, texture_x: u8, texture_y: u8, texture: Rc<Texture2D>) {
+    fn render_tile(&self, texture_x: u8, texture_y: u8, texture: &Texture2D) {
         let rec = Rectangle {
             x: texture_x as f32,
             y: texture_y as f32 * 16.0,
@@ -118,8 +118,7 @@ impl<'a> RaylibWriter<'a> {
             x: self.current_x as f32 * 16.0,
             y: self.current_y as f32 * 16.0,
         };
-        self.rl.draw_texture_rec(texture.borrow(), rec, position, Color::WHITE);
-        self.current_x += 1;
+        self.rl.draw_texture_rec(texture, rec, position, Color::WHITE);
     }
 
     pub fn clear(&mut self) {
@@ -137,18 +136,26 @@ impl Write for RaylibWriter<'_> {
                     self.current_y += 1;
                 }
                 '#' => {
-                    self.render_tile(0, 1, self.dungeon_textures.clone());
+                    self.render_tile(0, 1, &self.dungeon_textures);
 
                 }
 
                 '.' => {
-                    self.render_tile(0, 5, self.dungeon_textures.clone());
+                    self.render_tile(0, 5, &self.dungeon_textures);
                 }
 
+                '@' => {
+                    self.render_tile(0, 5, &self.dungeon_textures);
+                    self.render_tile(0, 5, &self.player_textures);
+                }
+
+
                 _ => {
-                    self.current_x += 1;
                 }
             }
+
+            self.current_x += 1;
+
         }
 
         Ok(buf.len())
