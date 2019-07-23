@@ -111,9 +111,16 @@ impl<'a> RaylibWriter<'a> {
         }
     }
 
+    fn render_on_floor(&self, texture_x: u8, texture_y: u8, texture: &Texture2D) {
+        if self.current_x < self.dungeon_width as i32 {
+            self.render_tile(0, 5, &self.dungeon_textures);
+            self.render_tile(texture_x, texture_y, texture);
+        }
+    }
+
     fn render_tile(&self, texture_x: u8, texture_y: u8, texture: &Texture2D) {
         let rec = Rectangle {
-            x: texture_x as f32,
+            x: texture_x as f32 * 16.0,
             y: texture_y as f32 * 16.0,
             width: 16.0,
             height: 16.0,
@@ -148,22 +155,19 @@ impl Write for RaylibWriter<'_> {
                 }
 
                 '@' => {
-                    self.render_tile(0, 5, &self.dungeon_textures);
-                    self.render_tile(0, 5, &self.player_textures);
+                    self.render_on_floor(0, 5, &self.player_textures);
                 }
 
                 'G' => {
-                    if self.current_x < self.dungeon_width as i32 {
-                        self.render_tile(0, 5, &self.dungeon_textures);
-                        self.render_tile(0, 2, &self.monster_textures);
-                    }
+                    self.render_on_floor(0, 2, &self.monster_textures);
                 }
 
                 'H' => {
-                    if self.current_x < self.dungeon_width as i32 {
-                        self.render_tile(0, 5, &self.dungeon_textures);
-                        self.render_tile(0, 2, &self.potion_textures);
-                    }
+                    self.render_on_floor(0, 2, &self.potion_textures);
+                }
+
+                'E' => {
+                    self.render_on_floor(2, 4, &self.dungeon_textures);
                 }
 
                 _ => {}
