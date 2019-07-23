@@ -16,18 +16,11 @@ fn main() -> std::io::Result<()> {
     let seed = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
     let mut rng = StdRng::seed_from_u64(seed);
 
-    let mut dungeons = Vec::new();
-
-    let dungeon_width = 40;
-
-    for _ in 1..50 {
-        dungeons.push(generate_dungeon(dungeon_width, 40, &mut rng));
-    }
-
-    let dungeon_provider = MultiDungeonProvider::shared(dungeons);
+    let args: Vec<String> = env::args().collect();
+    let graphic_mode = args.len() == 2 && &args[1] == "-g";
 
     let game_config = GameConfig {
-        camera_offset: 2,
+        camera_offset: if graphic_mode { 5 } else { 2 },
         guard_hp: 20,
         guard_attack: 2,
         guard_defense: 10,
@@ -36,11 +29,17 @@ fn main() -> std::io::Result<()> {
         player_defense: 15,
     };
 
+    let dungeon_width = if graphic_mode { 40 } else { 60 };
+    let mut dungeons = Vec::new();
+
+    for _ in 1..50 {
+        dungeons.push(generate_dungeon(dungeon_width, 40, &mut rng));
+    }
+
+    let dungeon_provider = MultiDungeonProvider::shared(dungeons);
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() == 2 && &args[1] == "-g" {
+    if graphic_mode {
         return run_game_in_raylib(&mut game, dungeon_width);
     }
 

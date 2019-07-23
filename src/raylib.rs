@@ -18,7 +18,7 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
         rl.begin_drawing();
         raylib_writer.clear();
 
-        let num_lines = game.render(&mut raylib_writer)?;
+        game.render(&mut raylib_writer)?;
 
         if rl.is_key_pressed(KEY_RIGHT as i32) {
             game.on_key(Key::ArrowRight);
