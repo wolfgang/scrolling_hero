@@ -10,7 +10,7 @@ use sch::dungeon::decorator;
 use sch::dungeon::generator::{dungeon_with_num_paths, DungeonGenOpts};
 use sch::dungeon::provider::MultiDungeonProvider;
 use sch::game::{Game, GameConfig};
-use sch::raylib::RaylibWriter;
+use sch::raylib::run_game_in_raylib;
 use sch::types::DungeonDefinition;
 
 fn main() -> std::io::Result<()> {
@@ -40,36 +40,8 @@ fn main() -> std::io::Result<()> {
 
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
-    let rl = raylib::init()
-        .size(1200, 768)
-        .title("Texture Test")
-        .build();
+    run_game_in_raylib(&mut game, dungeon_width)
 
-    let mut raylib_writer = RaylibWriter::new(&rl, dungeon_width);
-
-    while game.is_running() && !rl.window_should_close() {
-        rl.begin_drawing();
-        raylib_writer.clear();
-
-        let num_lines = game.render(&mut raylib_writer)?;
-
-        if rl.is_key_pressed(KEY_RIGHT as i32) {
-            game.on_key(Key::ArrowRight);
-        }
-        if rl.is_key_pressed(KEY_LEFT as i32) {
-            game.on_key(Key::ArrowLeft);
-        }
-
-        if rl.is_key_pressed(KEY_DOWN as i32) {
-            game.on_key(Key::ArrowDown);
-        }
-
-
-//        game.on_key(term.read_key().unwrap());
-//        term.clear_last_lines(num_lines as usize)?;
-
-        rl.end_drawing();
-    }
 
 //    while game.is_running() {
 //        let num_lines = game.render(&mut term)?;
@@ -79,7 +51,6 @@ fn main() -> std::io::Result<()> {
 //
 //    term.write_line("Thanks for playing!")?;
 
-    Ok(())
 }
 
 

@@ -1,8 +1,43 @@
 use std::io::{Error, Write};
 
-pub use raylib::*;
+use console::Key;
+use raylib::*;
+use raylib::consts::*;
 
-pub struct RaylibWriter<'a> {
+use crate::game::Game;
+
+pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Result<()> {
+    let rl = raylib::init()
+        .size(1200, 768)
+        .title("Texture Test")
+        .build();
+
+    let mut raylib_writer = RaylibWriter::new(&rl, dungeon_width);
+
+    while game.is_running() && !rl.window_should_close() {
+        rl.begin_drawing();
+        raylib_writer.clear();
+
+        let num_lines = game.render(&mut raylib_writer)?;
+
+        if rl.is_key_pressed(KEY_RIGHT as i32) {
+            game.on_key(Key::ArrowRight);
+        }
+        if rl.is_key_pressed(KEY_LEFT as i32) {
+            game.on_key(Key::ArrowLeft);
+        }
+
+        if rl.is_key_pressed(KEY_DOWN as i32) {
+            game.on_key(Key::ArrowDown);
+        }
+
+        rl.end_drawing();
+    }
+
+    Ok(())
+}
+
+struct RaylibWriter<'a> {
     rl: &'a RaylibHandle,
     dungeon_width: usize,
     player_textures: Texture2D,
