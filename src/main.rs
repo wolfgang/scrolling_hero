@@ -107,11 +107,6 @@ impl<'a> RaylibWriter<'a> {
 
     pub fn clear(&mut self) {
         self.current_y = 0;
-        let rec = Rectangle { x: 0.0, y: 1.0 * 16.0, width: 16.0, height: 16.0 };
-        let position = Vector2 { x: 100.0, y: 100.0 };
-//        self.rl.draw_texture_rec(&self.player_textures, rec, position, Color::WHITE);
-//        self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
-        self.rl.draw_texture_rec(&self.monster_textures, rec, position, Color::WHITE);
     }
 }
 
@@ -133,6 +128,17 @@ impl Write for RaylibWriter<'_> {
                     self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
                     self.current_x += 1;
                 }
+
+                '.' => {
+                    let rec = Rectangle { x: 0.0, y: 5.0 * 16.0, width: 16.0, height: 16.0 };
+                    let position = Vector2 {
+                        x: self.current_x as f32 * 16.0,
+                        y: self.current_y as f32 * 16.0,
+                    };
+                    self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
+                    self.current_x += 1;
+                }
+
                 _ => {
                     self.current_x += 1;
                 }
