@@ -23,8 +23,10 @@ fn main() -> std::io::Result<()> {
 
     let mut dungeons = Vec::new();
 
+    let dungeon_width = 40;
+
     for _ in 1..50 {
-        dungeons.push(generate_dungeon(40, 40, &mut rng));
+        dungeons.push(generate_dungeon(dungeon_width, 40, &mut rng));
     }
 
     let dungeon_provider = MultiDungeonProvider::shared(dungeons);
@@ -46,7 +48,7 @@ fn main() -> std::io::Result<()> {
         .title("Texture Test")
         .build();
 
-    let mut raylib_writer = RaylibWriter::new(&rl);
+    let mut raylib_writer = RaylibWriter::new(&rl, dungeon_width);
 
     while game.is_running() && !rl.window_should_close() {
         rl.begin_drawing();
@@ -86,6 +88,7 @@ fn main() -> std::io::Result<()> {
 
 struct RaylibWriter<'a> {
     rl: &'a RaylibHandle,
+    dungeon_width: usize,
     player_textures: Texture2D,
     dungeon_textures: Texture2D,
     monster_textures: Texture2D,
@@ -95,9 +98,10 @@ struct RaylibWriter<'a> {
 }
 
 impl<'a> RaylibWriter<'a> {
-    pub fn new(rl: &'a RaylibHandle) -> RaylibWriter {
+    pub fn new(rl: &'a RaylibHandle, dungeon_width: usize) -> RaylibWriter {
         RaylibWriter {
             rl,
+            dungeon_width,
             player_textures: rl.load_texture("resources/players.png"),
             monster_textures: rl.load_texture("resources/monsters.png"),
             dungeon_textures: rl.load_texture("resources/stone_walls.png"),
@@ -137,7 +141,6 @@ impl Write for RaylibWriter<'_> {
                 }
                 '#' => {
                     self.render_tile(0, 1, &self.dungeon_textures);
-
                 }
 
                 '.' => {
@@ -150,21 +153,23 @@ impl Write for RaylibWriter<'_> {
                 }
 
                 'G' => {
-                    self.render_tile(0, 5, &self.dungeon_textures);
-                    self.render_tile(0, 2, &self.monster_textures);
+                    if self.current_x < self.dungeon_width as i32 {
+                        self.render_tile(0, 5, &self.dungeon_textures);
+                        self.render_tile(0, 2, &self.monster_textures);
+                    }
                 }
 
                 'H' => {
-                    self.render_tile(0, 5, &self.dungeon_textures);
-                    self.render_tile(0, 2, &self.potion_textures);
+                    if self.current_x < self.dungeon_width as i32 {
+                        self.render_tile(0, 5, &self.dungeon_textures);
+                        self.render_tile(0, 2, &self.potion_textures);
+                    }
                 }
 
-                _ => {
-                }
+                _ => {}
             }
 
             self.current_x += 1;
-
         }
 
         Ok(buf.len())
