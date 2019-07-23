@@ -36,16 +36,17 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
             current_key = Some(Key::ArrowDown);
         }
 
-        if rl.is_key_released(KEY_RIGHT as i32) {
-            last_action_millis = 0;
-            current_key = None;
-        }
-        if rl.is_key_released(KEY_LEFT as i32) {
+        if rl.is_key_released(KEY_RIGHT as i32) && current_key == Some(Key::ArrowRight) {
             last_action_millis = 0;
             current_key = None;
         }
 
-        if rl.is_key_released(KEY_DOWN as i32) {
+        if rl.is_key_released(KEY_LEFT as i32) && current_key == Some(Key::ArrowLeft) {
+            last_action_millis = 0;
+            current_key = None;
+        }
+
+        if rl.is_key_released(KEY_DOWN as i32) && current_key == Some(Key::ArrowDown) {
             last_action_millis = 0;
             current_key = None;
         }
@@ -55,7 +56,6 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
             last_action_millis = now;
             game.on_key(current_key.unwrap());
         }
-
 
         rl.begin_drawing();
         raylib_writer.clear();
