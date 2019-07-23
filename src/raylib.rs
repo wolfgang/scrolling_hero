@@ -9,7 +9,7 @@ use crate::game::Game;
 pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Result<()> {
     let rl = raylib::init()
         .size(1200, 768)
-        .title("Texture Test")
+        .title("Scrolling Hero")
         .build();
 
     let mut raylib_writer = RaylibWriter::new(&rl, dungeon_width);
