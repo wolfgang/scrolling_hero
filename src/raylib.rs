@@ -20,32 +20,11 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
 
 
     while game.is_running() && !rl.window_should_close() {
-        if rl.get_key_pressed() != -1 {
-            println!("{}", rl.get_key_pressed());
-        }
+        current_key = get_current_key_down(&rl, current_key);
 
-        if rl.is_key_pressed(KEY_RIGHT as i32) {
-            current_key = Some(Key::ArrowRight);
-        }
-        if rl.is_key_pressed(KEY_LEFT as i32) {
-            current_key = Some(Key::ArrowLeft);
-        }
-
-        if rl.is_key_pressed(KEY_DOWN as i32) {
-            current_key = Some(Key::ArrowDown);
-        }
-
-        if rl.is_key_released(KEY_RIGHT as i32) && current_key == Some(Key::ArrowRight) {
-            last_action_millis = 0.0;
-            current_key = None;
-        }
-
-        if rl.is_key_released(KEY_LEFT as i32) && current_key == Some(Key::ArrowLeft) {
-            last_action_millis = 0.0;
-            current_key = None;
-        }
-
-        if rl.is_key_released(KEY_DOWN as i32) && current_key == Some(Key::ArrowDown) {
+        if is_key_released(&rl, KEY_RIGHT, current_key) ||
+            is_key_released(&rl, KEY_LEFT, current_key) ||
+            is_key_released(&rl, KEY_DOWN, current_key) {
             last_action_millis = 0.0;
             current_key = None;
         }
@@ -66,6 +45,35 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
 
     Ok(())
 }
+
+fn get_current_key_down(rl: &RaylibHandle, current_key: Option<Key>) -> Option<Key> {
+    if rl.is_key_down(KEY_RIGHT as i32) {
+        return rl_to_term_key(KEY_RIGHT);
+    }
+    if rl.is_key_down(KEY_LEFT as i32) {
+        return rl_to_term_key(KEY_LEFT);
+    }
+
+    if rl.is_key_down(KEY_DOWN as i32) {
+        return rl_to_term_key(KEY_DOWN);
+    }
+
+    current_key
+}
+
+fn is_key_released(rl: &RaylibHandle, rl_key: u32, current_key: Option<Key>) -> bool {
+    rl.is_key_released(rl_key as i32) && current_key == rl_to_term_key(rl_key)
+}
+
+fn rl_to_term_key(rl_key: u32) -> Option<Key> {
+    match rl_key {
+        KEY_RIGHT => { Some(Key::ArrowRight) }
+        KEY_LEFT => { Some(Key::ArrowLeft) }
+        KEY_DOWN => { Some(Key::ArrowDown) }
+        _ => { None }
+    }
+}
+
 
 struct RaylibWriter<'a> {
     rl: &'a RaylibHandle,
