@@ -1,4 +1,6 @@
+use std::borrow::Borrow;
 use std::io::{Error, Write};
+use std::rc::Rc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use console::Key;
@@ -84,10 +86,10 @@ fn main() -> std::io::Result<()> {
 
 struct RaylibWriter<'a> {
     rl: &'a RaylibHandle,
-    player_textures: Texture2D,
-    dungeon_textures: Texture2D,
-    monster_textures: Texture2D,
-    potion_textures: Texture2D,
+    player_textures: Rc<Texture2D>,
+    dungeon_textures: Rc<Texture2D>,
+    monster_textures: Rc<Texture2D>,
+    potion_textures: Rc<Texture2D>,
     current_x: i32,
     current_y: i32,
 }
@@ -96,13 +98,28 @@ impl<'a> RaylibWriter<'a> {
     pub fn new(rl: &'a RaylibHandle) -> RaylibWriter {
         RaylibWriter {
             rl,
-            player_textures: rl.load_texture("resources/players.png"),
-            monster_textures: rl.load_texture("resources/monsters.png"),
-            dungeon_textures: rl.load_texture("resources/stone_walls.png"),
-            potion_textures: rl.load_texture("resources/fireball.png"),
+            player_textures: Rc::new(rl.load_texture("resources/players.png")),
+            monster_textures: Rc::new(rl.load_texture("resources/monsters.png")),
+            dungeon_textures: Rc::new(rl.load_texture("resources/stone_walls.png")),
+            potion_textures: Rc::new(rl.load_texture("resources/fireball.png")),
             current_x: 0,
             current_y: 0,
         }
+    }
+
+    fn render_tile(&mut self, texture_x: u8, texture_y: u8, texture: Rc<Texture2D>) {
+        let rec = Rectangle {
+            x: texture_x as f32,
+            y: texture_y as f32 * 16.0,
+            width: 16.0,
+            height: 16.0,
+        };
+        let position = Vector2 {
+            x: self.current_x as f32 * 16.0,
+            y: self.current_y as f32 * 16.0,
+        };
+        self.rl.draw_texture_rec(texture.borrow(), rec, position, Color::WHITE);
+        self.current_x += 1;
     }
 
     pub fn clear(&mut self) {
@@ -120,23 +137,12 @@ impl Write for RaylibWriter<'_> {
                     self.current_y += 1;
                 }
                 '#' => {
-                    let rec = Rectangle { x: 0.0, y: 1.0 * 16.0, width: 16.0, height: 16.0 };
-                    let position = Vector2 {
-                        x: self.current_x as f32 * 16.0,
-                        y: self.current_y as f32 * 16.0,
-                    };
-                    self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
-                    self.current_x += 1;
+                    self.render_tile(0, 1, self.dungeon_textures.clone());
+
                 }
 
                 '.' => {
-                    let rec = Rectangle { x: 0.0, y: 5.0 * 16.0, width: 16.0, height: 16.0 };
-                    let position = Vector2 {
-                        x: self.current_x as f32 * 16.0,
-                        y: self.current_y as f32 * 16.0,
-                    };
-                    self.rl.draw_texture_rec(&self.dungeon_textures, rec, position, Color::WHITE);
-                    self.current_x += 1;
+                    self.render_tile(0, 5, self.dungeon_textures.clone());
                 }
 
                 _ => {
