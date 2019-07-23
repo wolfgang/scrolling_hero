@@ -44,7 +44,7 @@ fn main() -> std::io::Result<()> {
     let mut game = Game::with_config(&game_config, &dungeon_provider);
 
     let rl = raylib::init()
-        .size(1024, 768)
+        .size(1200, 768)
         .title("Texture Test")
         .build();
 
@@ -111,10 +111,12 @@ impl<'a> RaylibWriter<'a> {
         }
     }
 
-    fn render_on_floor(&self, texture_x: u8, texture_y: u8, texture: &Texture2D) {
+    fn render_on_floor(&self, texture_x: u8, texture_y: u8, texture: &Texture2D, key: u8) {
         if self.current_x < self.dungeon_width as i32 {
             self.render_tile(0, 5, &self.dungeon_textures);
             self.render_tile(texture_x, texture_y, texture);
+        } else {
+            self.render_char(key);
         }
     }
 
@@ -130,6 +132,11 @@ impl<'a> RaylibWriter<'a> {
             y: self.current_y as f32 * 16.0,
         };
         self.rl.draw_texture_rec(texture, rec, position, Color::WHITE);
+    }
+
+    fn render_char(&self, b: u8) {
+        let str = String::from_utf8(vec![b]).unwrap();
+        self.rl.draw_text(str.as_str(), self.current_x * 16, self.current_y * 16, 12, Color::GREEN);
     }
 
     pub fn clear(&mut self) {
@@ -155,22 +162,24 @@ impl Write for RaylibWriter<'_> {
                 }
 
                 '@' => {
-                    self.render_on_floor(0, 5, &self.player_textures);
+                    self.render_on_floor(0, 5, &self.player_textures, *b);
                 }
 
                 'G' => {
-                    self.render_on_floor(0, 2, &self.monster_textures);
+                    self.render_on_floor(0, 2, &self.monster_textures, *b);
                 }
 
                 'H' => {
-                    self.render_on_floor(0, 2, &self.potion_textures);
+                    self.render_on_floor(0, 2, &self.potion_textures, *b);
                 }
 
                 'E' => {
-                    self.render_on_floor(2, 4, &self.dungeon_textures);
+                    self.render_on_floor(2, 4, &self.dungeon_textures, *b);
                 }
 
-                _ => {}
+                c => {
+                    self.render_char(*b);
+                }
             }
 
             self.current_x += 1;
