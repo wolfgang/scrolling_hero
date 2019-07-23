@@ -1,5 +1,4 @@
 use std::io::{Error, Write};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 use console::Key;
 use raylib::*;
@@ -17,7 +16,7 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
 
     let mut current_key: Option<Key> = None;
 
-    let mut last_action_millis = 0;
+    let mut last_action_millis = 0.0;
 
 
     while game.is_running() && !rl.window_should_close() {
@@ -37,22 +36,22 @@ pub fn run_game_in_raylib(game: &mut Game, dungeon_width: usize) -> std::io::Res
         }
 
         if rl.is_key_released(KEY_RIGHT as i32) && current_key == Some(Key::ArrowRight) {
-            last_action_millis = 0;
+            last_action_millis = 0.0;
             current_key = None;
         }
 
         if rl.is_key_released(KEY_LEFT as i32) && current_key == Some(Key::ArrowLeft) {
-            last_action_millis = 0;
+            last_action_millis = 0.0;
             current_key = None;
         }
 
         if rl.is_key_released(KEY_DOWN as i32) && current_key == Some(Key::ArrowDown) {
-            last_action_millis = 0;
+            last_action_millis = 0.0;
             current_key = None;
         }
 
-        let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis();
-        if current_key != None && now - last_action_millis > 200 {
+        let now = rl.get_time();
+        if current_key != None && now - last_action_millis > 0.2 {
             last_action_millis = now;
             game.on_key(current_key.unwrap());
         }
