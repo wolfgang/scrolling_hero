@@ -19,7 +19,7 @@ pub struct Combatant {
     pub defense: u8,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Default)]
 pub struct CombatResult {
     pub damage_done: u8,
     pub is_crit: bool,

@@ -121,7 +121,7 @@ impl Game {
             Some((pos, tile)) => {
                 let mut combat_log: Vec<String> = Vec::with_capacity(2);
                 if tile == 'G' {
-                    self.game_state.resolve_combat2(
+                    self.game_state.resolve_combat(
                         pos,
                         &mut *self.dice_roller,
                         |player_result, guard_result| {
@@ -130,7 +130,7 @@ impl Game {
                         });
                 } else {
                     if self.game_state.is_combat_active() {
-                        self.game_state.opportunity_attack_player(&mut *self.dice_roller, |result| {
+                        self.game_state.resolve_opportunity_attack(&mut *self.dice_roller, |result| {
                             combat_log.push(Game::guard_combat_message(result));
                         });
                         self.game_state.end_combat();

@@ -1,4 +1,5 @@
 use crate::dungeon::helpers::make_dungeon;
+use crate::game::combatant::CombatResult;
 use crate::game::GameConfig;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::game::state::GameState;
@@ -35,7 +36,7 @@ fn from_game_config_inits_player_and_guards() {
 }
 
 #[test]
-fn resolve_combat_damages_both_combatants_and_returns_damages() {
+fn resolve_combat_damages_both_combatants_and_calls_back_with_results() {
     let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
 
     // Both player and guard have 0 attack and 0 defense, so every roll is a hit
@@ -49,7 +50,14 @@ fn resolve_combat_damages_both_combatants_and_returns_damages() {
     assert_eq!(guard_ref.borrow().hp, 20);
 
     let mut dice_roller = RandomizedDiceRoller::new();
-    let (player_result, guard_result) = game_state.resolve_combat((1, 0), &mut dice_roller);
+
+    let mut player_result = CombatResult::default();
+    let mut guard_result = CombatResult::default();
+
+    game_state.resolve_combat((1, 0), &mut dice_roller, |pr, gr| {
+        player_result = pr;
+        guard_result = gr;
+    });
 
     assert!(player_ref.borrow().hp < 100);
     assert!(guard_ref.borrow().hp < 20);

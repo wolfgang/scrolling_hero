@@ -60,17 +60,7 @@ impl GameState {
         guards
     }
 
-    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> (CombatResult, CombatResult) {
-        self.guard_in_combat = Some(pos);
-        let player_result = self.attack_guard(dice_roller);
-        let guard_result = self.attack_player(dice_roller);
-
-        self.check_guard_state(pos);
-        (player_result, guard_result)
-    }
-
-
-    pub fn resolve_combat2<F>(
+    pub fn resolve_combat<F>(
         &mut self, pos:
         Position, dice_roller:
         &mut dyn DiceRoller,
@@ -84,7 +74,7 @@ impl GameState {
     }
 
 
-    pub fn opportunity_attack_player<F>(
+    pub fn resolve_opportunity_attack<F>(
         &mut self,
         dice_roller:
         &mut dyn DiceRoller,
