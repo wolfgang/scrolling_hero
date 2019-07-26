@@ -53,7 +53,7 @@ impl Game {
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
 
         let mut game = Game {
-            game_state: RefCell::new(GameState::from_game_config(config, dungeon, player_position)),
+            game_state: GameState::from_config_as_ref(config, dungeon, player_position),
             dungeon_provider,
             game_renderer: GameRenderer::new(config.camera_offset),
             is_running: true,
@@ -178,7 +178,7 @@ impl Game {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
                 let current_player_hp = self.get_player_hp();
-                self.game_state = RefCell::new(GameState::from_game_config(&self.config, next_dungeon, next_player_pos));
+                self.game_state = GameState::from_config_as_ref(&self.config, next_dungeon, next_player_pos);
                 self.game_state.borrow_mut().reset_player_hp(current_player_hp);
             }
             None => { self.is_running = false; }

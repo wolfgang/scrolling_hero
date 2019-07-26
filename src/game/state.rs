@@ -35,6 +35,14 @@ impl GameState {
         }
     }
 
+    pub fn from_config_as_ref(
+        game_config: &GameConfig,
+        dungeon: DungeonLayout,
+        player_position: Position) -> RefCell<GameState>
+    {
+        RefCell::new(GameState::from_game_config(game_config, dungeon, player_position))
+    }
+
     pub fn process_move_to<F1, F2>(
         &mut self,
         x_offset: i32,
