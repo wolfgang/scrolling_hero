@@ -1,6 +1,9 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
+use crate::types::DiceRollerRef;
 
 pub struct FixedDiceRoller {
     next_rolls: HashMap<u8, Vec<u8>>,
@@ -13,6 +16,10 @@ impl FixedDiceRoller {
             next_rolls: HashMap::new(),
             index: HashMap::new(),
         }
+    }
+
+    pub fn shared() -> Rc<RefCell<FixedDiceRoller>> {
+        Rc::new(RefCell::new(FixedDiceRoller::new()))
     }
 
     pub fn next_roll(&mut self, dice: u8, value: u8) {

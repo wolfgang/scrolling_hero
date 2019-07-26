@@ -114,8 +114,8 @@ impl GameState {
         on_results: F) where F: FnOnce(CombatResult, CombatResult)
     {
         self.guard_in_combat = Some(pos);
-        let player_result = self.attack_guard(dice_roller);
-        let guard_result = self.attack_player(dice_roller);
+        let player_result = self.attack_guard();
+        let guard_result = self.attack_player();
 
         self.process_guard_state(pos);
         on_results(player_result, guard_result);
@@ -127,14 +127,14 @@ impl GameState {
         &mut dyn DiceRoller,
         on_result: F) where F: FnOnce(CombatResult)
     {
-        on_result(self.attack_player(dice_roller));
+        on_result(self.attack_player());
     }
 
-    fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+    fn attack_guard(&mut self) -> CombatResult {
         self.borrow_player().attack2(&self.guard_ref_at(self.guard_in_combat()), self.dice_roller.clone())
     }
 
-    fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+    fn attack_player(&mut self) -> CombatResult {
         self.borrow_guard_at(self.guard_in_combat()).attack2(&self.player_ref(), self.dice_roller.clone())
     }
 
