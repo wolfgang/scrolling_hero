@@ -10,7 +10,7 @@ use state::GameState;
 use crate::game::combatant::CombatResult;
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::{CombatantRef, DungeonProviderRef};
+use crate::types::{CombatantRef, DiceRollerRef, DungeonProviderRef};
 
 pub mod renderer;
 pub mod state;
@@ -68,8 +68,9 @@ impl Game {
         game
     }
 
-    pub fn override_dice_roller(&mut self, dice_roller: Box<dyn DiceRoller>) {
-        self.dice_roller = dice_roller;
+    pub fn override_dice_roller(&mut self, dice_roller: DiceRollerRef) {
+//        self.dice_roller = dice_roller;
+        self.game_state.override_dice_roller(dice_roller)
     }
 
     pub fn is_running(&self) -> bool {

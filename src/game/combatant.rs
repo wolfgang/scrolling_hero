@@ -3,7 +3,7 @@ use std::cmp::min;
 use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
-use crate::types::CombatantRef;
+use crate::types::{CombatantRef, DiceRollerRef};
 
 #[derive(Default)]
 pub struct CombatantConfig {
@@ -50,6 +50,27 @@ impl Combatant {
                 if attack_base_roll == 20 {
                     is_crit = true;
                     damage += dice_roller.roll(10)
+                };
+                target.borrow_mut().apply_damage(damage)
+            }
+        }
+        CombatResult {
+            damage_done: damage,
+            is_crit,
+            attacker_dead: self.hp <= 0,
+        }
+    }
+
+    pub fn attack2(&self, target: &CombatantRef, dice_roller: DiceRollerRef) -> CombatResult {
+        let mut damage = 0;
+        let mut is_crit = false;
+        if self.hp > 0 {
+            let attack_base_roll = dice_roller.borrow_mut().roll(20);
+            if target.borrow().is_hit(attack_base_roll + self.attack) {
+                damage = dice_roller.borrow_mut().roll(10);
+                if attack_base_roll == 20 {
+                    is_crit = true;
+                    damage += dice_roller.borrow_mut().roll(10)
                 };
                 target.borrow_mut().apply_damage(damage)
             }

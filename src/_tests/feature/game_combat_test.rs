@@ -1,3 +1,6 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use console::Key;
 
 use crate::_tests::unit::fixed_dice_roller::FixedDiceRoller;
@@ -97,7 +100,7 @@ fn when_combat_occurs_display_damage_dealt() {
     dice_roller.next_roll(10, 1);
     dice_roller.next_roll(10, 2);
 
-    game.override_dice_roller(Box::from(dice_roller));
+    game.override_dice_roller(Rc::new(RefCell::new(dice_roller)));
 
     game.on_key(Key::ArrowLeft);
 
@@ -165,7 +168,7 @@ fn when_crits_occur_indicate_this_in_combat_messages() {
     dice_roller.next_roll(20, 20);
     // Don't care about damage rolls, will default to 1
 
-    game.override_dice_roller(Box::from(dice_roller));
+    game.override_dice_roller(Rc::new(RefCell::new(dice_roller)));
 
     game.on_key(Key::ArrowLeft);
 

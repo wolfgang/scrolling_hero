@@ -20,18 +20,20 @@ fn with_config_takes_values_from_given_config() {
 fn attacker_misses_first_then_hits() {
     let mut dice_roller = FixedDiceRoller::new();
 
+    let dice_roller2 = Rc::new(RefCell::new(FixedDiceRoller::new()));
+
     let attacker = Combatant::with_config(&CombatantConfig { initial_hp: 100, attack: 5, defense: 0 });
     let target = Combatant::with_config(&CombatantConfig { initial_hp: 20, attack: 0, defense: 10 });
     let target_ref = Rc::new(RefCell::new(target));
 
-    dice_roller.next_roll(20, 4); // 4 + attack (5) < target defense (10)
-    dice_roller.next_roll(20, 6); // 4 + attack > target defense
-    dice_roller.next_roll(10, 3); // Damage roll
+    dice_roller2.borrow_mut().next_roll(20, 4); // 4 + attack (5) < target defense (10)
+    dice_roller2.borrow_mut().next_roll(20, 6); // 4 + attack > target defense
+    dice_roller2.borrow_mut().next_roll(10, 3); // Damage roll
 
-    attacker.attack(&target_ref, &mut dice_roller);
+    attacker.attack2(&target_ref, dice_roller2.clone());
     assert_eq!(target_ref.borrow().hp, 20);
 
-    attacker.attack(&target_ref, &mut dice_roller);
+    attacker.attack2(&target_ref, dice_roller2.clone());
     assert_eq!(target_ref.borrow().hp, 17);
 }
 

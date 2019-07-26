@@ -1,10 +1,12 @@
-use std::cell::Ref;
+use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use crate::game::combatant::{CombatantConfig, CombatResult};
 use crate::game::dice_roller::DiceRoller;
 use crate::game::GameConfig;
-use crate::types::{CombatantRef, DungeonLayout, Position};
+use crate::game::randomized_dice_roller::RandomizedDiceRoller;
+use crate::types::{CombatantRef, DiceRollerRef, DungeonLayout, Position};
 
 use super::combatant::Combatant;
 
@@ -14,6 +16,7 @@ pub struct GameState {
     guards: HashMap<Position, CombatantRef>,
     player: CombatantRef,
     guard_in_combat: Option<Position>,
+    dice_roller: DiceRollerRef
 }
 
 impl GameState {
@@ -28,6 +31,7 @@ impl GameState {
             player_position,
             dungeon,
             guard_in_combat: None,
+            dice_roller: Rc::new(RefCell::new(RandomizedDiceRoller::new()))
         }
     }
 
@@ -67,6 +71,11 @@ impl GameState {
     pub fn reset_player_hp(&self, hp: i16) {
         self.player_ref().borrow_mut().hp = hp;
     }
+
+    pub fn override_dice_roller(&mut self, dice_roller: DiceRollerRef) {
+        self.dice_roller = dice_roller.clone();
+    }
+
 
     fn create_player(game_config: &GameConfig) -> CombatantRef {
         let player_config = CombatantConfig {
@@ -122,11 +131,11 @@ impl GameState {
     }
 
     fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
-        self.borrow_player().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
+        self.borrow_player().attack2(&self.guard_ref_at(self.guard_in_combat()), self.dice_roller.clone())
     }
 
     fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
-        self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
+        self.borrow_guard_at(self.guard_in_combat()).attack2(&self.player_ref(), self.dice_roller.clone())
     }
 
 
