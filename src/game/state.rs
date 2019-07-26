@@ -67,14 +67,6 @@ impl GameState {
         heal
     }
 
-    pub fn heal_player2(&mut self) -> u8 {
-        let heal = self.player.borrow_mut().heal(self.dice_roller.clone());
-        let (x, y) = self.player_position;
-        self.dungeon[y as usize][x as usize] = '.';
-        heal
-    }
-
-
     pub fn reset_player_hp(&self, hp: i16) {
         self.player_ref().borrow_mut().hp = hp;
     }
@@ -82,7 +74,6 @@ impl GameState {
     pub fn override_dice_roller(&mut self, dice_roller: DiceRollerRef) {
         self.dice_roller = dice_roller.clone();
     }
-
 
     fn create_player(game_config: &GameConfig) -> CombatantRef {
         let player_config = CombatantConfig {
@@ -128,11 +119,11 @@ impl GameState {
     }
 
     fn attack_guard(&mut self) -> CombatResult {
-        self.borrow_player().attack2(&self.guard_ref_at(self.guard_in_combat()), self.dice_roller.clone())
+        self.borrow_player().attack(&self.guard_ref_at(self.guard_in_combat()), self.dice_roller.clone())
     }
 
     fn attack_player(&mut self) -> CombatResult {
-        self.borrow_guard_at(self.guard_in_combat()).attack2(&self.player_ref(), self.dice_roller.clone())
+        self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), self.dice_roller.clone())
     }
 
 

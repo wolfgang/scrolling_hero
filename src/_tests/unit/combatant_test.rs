@@ -28,10 +28,10 @@ fn attacker_misses_first_then_hits() {
     dice_roller.borrow_mut().next_roll(20, 6); // 4 + attack > target defense
     dice_roller.borrow_mut().next_roll(10, 3); // Damage roll
 
-    attacker.attack2(&target_ref, dice_roller.clone());
+    attacker.attack(&target_ref, dice_roller.clone());
     assert_eq!(target_ref.borrow().hp, 20);
 
-    attacker.attack2(&target_ref, dice_roller.clone());
+    attacker.attack(&target_ref, dice_roller.clone());
     assert_eq!(target_ref.borrow().hp, 17);
 }
 
@@ -47,7 +47,7 @@ fn if_attacker_rolls_20_damage_is_rolled_twice() {
     dice_roller.borrow_mut().next_roll(10, 3); // Damage roll 1
     dice_roller.borrow_mut().next_roll(10, 2); // Damage roll 2
 
-    attacker.attack2(&target_ref, dice_roller);
+    attacker.attack(&target_ref, dice_roller);
     assert_eq!(target_ref.borrow().hp, 15);
 }
 
@@ -63,10 +63,10 @@ fn attack_returns_combat_result() {
     dice_roller.borrow_mut().next_roll(10, 8); // double damage from crit roll
     dice_roller.borrow_mut().next_roll(10, 9);
 
-    let normal_result = attacker.attack2(&target_ref, dice_roller.clone());
+    let normal_result = attacker.attack(&target_ref, dice_roller.clone());
     assert_eq!(normal_result, CombatResult { damage_done: 7, is_crit: false, attacker_dead: false });
 
-    let crit_result = attacker.attack2(&target_ref, dice_roller.clone());
+    let crit_result = attacker.attack(&target_ref, dice_roller.clone());
     assert_eq!(crit_result, CombatResult { damage_done: 17, is_crit: true, attacker_dead: false });
 }
 
@@ -78,7 +78,7 @@ fn attack_returns_zero_damage_if_it_does_not_hit() {
     let dice_roller = FixedDiceRoller::shared();
     dice_roller.borrow_mut().next_roll(20, 1);
 
-    let result = attacker.attack2(&target_ref, dice_roller);
+    let result = attacker.attack(&target_ref, dice_roller);
     assert_eq!(result.damage_done, 0);
 }
 
@@ -89,7 +89,7 @@ fn attack_does_not_attack_if_attacker_is_dead_and_returns_attacker_dead_true_in_
 
     let dice_roller = FixedDiceRoller::shared();
 
-    let result = attacker.attack2(&target_ref, dice_roller);
+    let result = attacker.attack(&target_ref, dice_roller);
     assert_eq!(result.attacker_dead, true);
     assert_eq!(target_ref.borrow().hp, 10);
 }
