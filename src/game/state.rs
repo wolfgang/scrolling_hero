@@ -31,6 +31,43 @@ impl GameState {
         }
     }
 
+    pub fn process_move_to<F1, F2>(
+        &mut self,
+        x_offset: i32,
+        y_offset: u32,
+        dice_roller: &mut dyn DiceRoller,
+        on_combat_results: F1,
+        on_oppy_result: F2) where F1: FnOnce(CombatResult, CombatResult), F2: FnOnce(CombatResult)
+    {
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((pos, tile)) => {
+                if tile == 'G' {
+                    self.resolve_combat(pos, dice_roller, on_combat_results);
+                } else {
+                    if self.is_combat_active() {
+                        self.resolve_opportunity_attack(dice_roller, on_oppy_result);
+                        self.end_combat();
+                    }
+                }
+            }
+
+            None => {}
+        }
+
+        self.attempt_move_to(x_offset, y_offset);
+    }
+
+    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
+        let heal = self.player.borrow_mut().heal(dice_roller);
+        let (x, y) = self.player_position;
+        self.dungeon[y as usize][x as usize] = '.';
+        heal
+    }
+
+    pub fn reset_player_hp(&self, hp: i16) {
+        self.player_ref().borrow_mut().hp = hp;
+    }
+
     fn create_player(game_config: &GameConfig) -> CombatantRef {
         let player_config = CombatantConfig {
             initial_hp: game_config.player_hp,
@@ -58,41 +95,6 @@ impl GameState {
             }
         }
         guards
-    }
-
-
-    pub fn process_move_to<F1, F2>(
-        &mut self,
-        x_offset: i32,
-        y_offset: u32,
-        dice_roller: &mut dyn DiceRoller,
-        on_combat_results: F1,
-        on_oppy_result: F2) where F1: FnOnce(CombatResult, CombatResult), F2: FnOnce(CombatResult)
-    {
-        match self.neighbor_at(x_offset, y_offset) {
-            Some((pos, tile)) => {
-                if tile == 'G' {
-                    self.resolve_combat(pos, dice_roller, on_combat_results);
-                } else {
-                    if self.is_combat_active() {
-                        self.resolve_opportunity_attack(dice_roller, on_oppy_result);
-                        self.end_combat();
-                    }
-                }
-            }
-
-            None => {}
-        }
-
-        self.attempt_move_to(x_offset, y_offset);
-
-    }
-
-    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
-        let heal = self.player.borrow_mut().heal(dice_roller);
-        let (x, y) = self.player_position;
-        self.dungeon[y as usize][x as usize] = '.';
-        heal
     }
 
 

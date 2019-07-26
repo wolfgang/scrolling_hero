@@ -56,7 +56,7 @@ fn render_current_player_hp() {
 
     game.on_key(Key::ArrowLeft);
 
-    let new_player_hp = game.player_hp();
+    let new_player_hp = game.get_player_hp();
     assert!(new_player_hp < config.player_hp as i16);
     verify_player_hp_rendered(&mut game, new_player_hp);
 }
@@ -192,7 +192,7 @@ fn when_player_moves_away_guard_gets_opportunity_attack() {
     game.on_key(Key::ArrowLeft);
     game.on_key(Key::ArrowRight);
 
-    let new_player_hp = game.player_hp();
+    let new_player_hp = game.get_player_hp();
     assert!(new_player_hp < config.player_hp as i16);
 
     verify_lines_rendered_match(&mut game, vec![
@@ -253,7 +253,7 @@ fn game_is_over_if_player_dies() {
         ]);
 
     game.on_key(Key::ArrowLeft);
-    assert!(game.player_hp() <= 0);
+    assert!(game.get_player_hp() <= 0);
     assert!(!game.is_running());
 }
 
@@ -313,7 +313,7 @@ fn player_hp_is_not_reset_in_next_dungeon() {
     // Go to next dungeon
     game.on_key(Key::ArrowDown);
 
-    let player_hp_before_switch = game.player_hp();
+    let player_hp_before_switch = game.get_player_hp();
     assert!(player_hp_before_switch < 100);
 
     verify_dungeon_rendered(&mut game, vec![
@@ -321,7 +321,7 @@ fn player_hp_is_not_reset_in_next_dungeon() {
         "####"
     ]);
 
-    assert_eq!(game.player_hp(), player_hp_before_switch);
+    assert_eq!(game.get_player_hp(), player_hp_before_switch);
 }
 
 

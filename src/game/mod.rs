@@ -114,6 +114,10 @@ impl Game {
         self.hud.append(hud_messages.borrow_mut().as_mut());
     }
 
+    pub fn get_player_hp(&self) -> i16 {
+        self.game_state.borrow_player().hp
+    }
+
     fn under_player(&self) -> char {
         self.game_state.neighbor_at(0, 0).unwrap().1
     }
@@ -132,12 +136,12 @@ impl Game {
                 hud_messages.borrow_mut().push(Game::guard_combat_message(result));
             });
 
-        if self.player_hp() <= 0 { self.is_running = false; }
+        if self.get_player_hp() <= 0 { self.is_running = false; }
     }
 
     fn reset_hud(&mut self) {
         self.hud.clear();
-        self.hud.push(Game::player_health_message(self.player_hp()));
+        self.hud.push(Game::player_health_message(self.get_player_hp()));
     }
 
     fn player_combat_message(combat_result: CombatResult) -> String {
@@ -162,10 +166,6 @@ impl Game {
         String::from(format!("{} misses {}!", attacker, target))
     }
 
-    pub fn player_hp(&self) -> i16 {
-        self.game_state.borrow_player().hp
-    }
-
     fn player_health_message(player_hp: i16) -> String {
         format!("HP: {}", player_hp)
     }
@@ -173,9 +173,9 @@ impl Game {
     fn goto_next_dungeon(&mut self) {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
-                let player_hp = self.player_hp();
+                let current_player_hp = self.get_player_hp();
                 self.game_state = GameState::from_game_config(&self.config, next_dungeon, next_player_pos);
-                self.game_state.player_ref().borrow_mut().hp = player_hp;
+                self.game_state.reset_player_hp(current_player_hp);
             }
             None => { self.is_running = false; }
         }
