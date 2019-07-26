@@ -8,7 +8,7 @@ use hud::Hud;
 use renderer::GameRenderer;
 use state::GameState;
 
-use crate::types::{CombatantRef, DiceRollerRef, DungeonProviderRef};
+use crate::types::{DiceRollerRef, DungeonProviderRef};
 
 pub mod renderer;
 pub mod hud;
@@ -109,10 +109,6 @@ impl Game {
 
     pub fn get_player_hp(&self) -> i16 {
         self.game_state.borrow().borrow_player().hp
-    }
-
-    pub fn get_player_ref(&self) -> CombatantRef {
-        self.game_state.borrow().player_ref()
     }
 
     fn under_player(&self) -> char {
