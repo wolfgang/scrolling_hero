@@ -20,7 +20,7 @@ impl GameRenderer {
 
     pub fn render(
         &mut self,
-        writer: &mut Write,
+        writer: &mut dyn Write,
         game_state: &GameState,
         messages: &Vec<String>,
     ) -> std::io::Result<(u32)>

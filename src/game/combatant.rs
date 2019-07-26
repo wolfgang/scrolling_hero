@@ -39,7 +39,7 @@ impl Combatant {
         }
     }
 
-    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut DiceRoller) -> (u8, bool) {
+    pub fn attack(&self, target: &CombatantRef, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
         let mut damage = 0;
         let mut is_crit = false;
         if self.hp > 0 {
@@ -56,7 +56,7 @@ impl Combatant {
         (damage, is_crit)
     }
 
-    pub fn heal(&mut self, dice_roller: &mut DiceRoller) -> u8 {
+    pub fn heal(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
         let roll = dice_roller.roll(10);
         let hp_before_heal = self.hp;
         self.hp = min(self.max_hp, self.hp + roll as i16);

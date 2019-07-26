@@ -74,7 +74,7 @@ impl Game {
         self.is_running
     }
 
-    pub fn render(&mut self, writer: &mut Write) -> std::io::Result<(u32)> {
+    pub fn render(&mut self, writer: &mut dyn Write) -> std::io::Result<(u32)> {
         self.game_renderer.render(
             writer,
             &self.game_state,

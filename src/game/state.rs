@@ -60,7 +60,7 @@ impl GameState {
         guards
     }
 
-    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut DiceRoller) -> ((u8, bool), (u8, bool)) {
+    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> ((u8, bool), (u8, bool)) {
         self.guard_in_combat = Some(pos);
         let player_result = self.attack_guard(dice_roller);
         let guard_result = self.attack_player(dice_roller);
@@ -69,18 +69,18 @@ impl GameState {
         (player_result, guard_result)
     }
 
-    pub fn heal_player(&mut self, dice_roller: &mut DiceRoller) -> u8 {
+    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
         let heal = self.player.borrow_mut().heal(dice_roller);
         let (x, y) = self.player_position;
         self.dungeon[y as usize][x as usize] = '.';
         heal
     }
 
-    fn attack_guard(&mut self, dice_roller: &mut DiceRoller) -> (u8, bool) {
+    fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
         self.player_ref().borrow().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
     }
 
-    pub fn attack_player(&mut self, dice_roller: &mut DiceRoller) -> (u8, bool) {
+    pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
         self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
     }
 
