@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use crate::game::combatant::{CombatantConfig, CombatResult};
-use crate::game::dice_roller::DiceRoller;
 use crate::game::GameConfig;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::types::{CombatantRef, DiceRollerRef, DungeonLayout, Position};
@@ -18,6 +17,7 @@ pub struct GameState {
     guard_in_combat: Option<Position>,
     dice_roller: DiceRollerRef,
 }
+
 
 impl GameState {
     pub fn from_game_config(

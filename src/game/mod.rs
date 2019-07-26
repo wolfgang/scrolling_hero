@@ -8,8 +8,6 @@ use renderer::GameRenderer;
 use state::GameState;
 
 use crate::game::combatant::CombatResult;
-use crate::game::dice_roller::DiceRoller;
-use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::types::{CombatantRef, DiceRollerRef, DungeonProviderRef};
 
 pub mod renderer;
@@ -42,7 +40,6 @@ pub struct Game {
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     game_renderer: GameRenderer,
-    dice_roller: Box<dyn DiceRoller>,
     hud: Vec<String>,
     config: GameConfig,
 }
@@ -57,7 +54,6 @@ impl Game {
             game_state: GameState::from_game_config(config, dungeon, player_position),
             dungeon_provider,
             game_renderer: GameRenderer::new(config.camera_offset),
-            dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
             hud: Vec::with_capacity(10),
             config: (*config).clone(),
