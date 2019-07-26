@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use std::io::Write;
 use std::rc::Rc;
 
@@ -117,33 +118,24 @@ impl Game {
     }
 
     fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
-        match self.game_state.neighbor_at(x_offset, y_offset) {
-            Some((pos, tile)) => {
-                let mut combat_log: Vec<String> = Vec::with_capacity(2);
-                if tile == 'G' {
-                    self.game_state.resolve_combat(
-                        pos,
-                        &mut *self.dice_roller,
-                        |player_result, guard_result| {
-                            combat_log.push(Game::player_combat_message(player_result));
-                            combat_log.push(Game::guard_combat_message(guard_result));
-                        });
-                } else {
-                    if self.game_state.is_combat_active() {
-                        self.game_state.resolve_opportunity_attack(&mut *self.dice_roller, |result| {
-                            combat_log.push(Game::guard_combat_message(result));
-                        });
-                        self.game_state.end_combat();
-                    }
-                }
+        let combat_log: RefCell<Vec<String>> = RefCell::new(Vec::with_capacity(2));
 
-                self.reset_hud();
-                self.hud.append(&mut combat_log);
-                if self.player_hp() <= 0 { self.is_running = false; }
-            }
+        self.game_state.process_combat_at(
+            x_offset,
+            y_offset,
+            &mut *self.dice_roller,
+            |player_result, guard_result| {
+                combat_log.borrow_mut().push(Game::player_combat_message(player_result));
+                combat_log.borrow_mut().push(Game::guard_combat_message(guard_result));
+            },
+            |result| {
+                combat_log.borrow_mut().push(Game::guard_combat_message(result));
+            });
 
-            None => {}
-        }
+        self.reset_hud();
+        self.hud.append(combat_log.borrow_mut().as_mut());
+
+        if self.player_hp() <= 0 { self.is_running = false; }
     }
 
     fn reset_hud(&mut self) {
@@ -159,10 +151,6 @@ impl Game {
         Game::attack_message("Guard", "Player", combat_result)
     }
 
-    fn player_hp(&self) -> i16 {
-        self.game_state.borrow_player().hp
-    }
-
     fn attack_message(attacker: &str, target: &str, combat_result: CombatResult) -> String {
         if combat_result.attacker_dead {
             return String::from(format!("{} dies!", attacker));
@@ -175,6 +163,10 @@ impl Game {
             );
         }
         String::from(format!("{} misses {}!", attacker, target))
+    }
+
+    fn player_hp(&self) -> i16 {
+        self.game_state.borrow_player().hp
     }
 
     fn player_health_message(player_hp: i16) -> String {

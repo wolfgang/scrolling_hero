@@ -60,11 +60,37 @@ impl GameState {
         guards
     }
 
+
+    pub fn process_combat_at<F1, F2>(
+        &mut self,
+        x_offset: i32,
+        y_offset: u32,
+        dice_roller: &mut dyn DiceRoller,
+        on_combat_results: F1,
+        on_oppy_result: F2) where F1: FnOnce(CombatResult, CombatResult), F2: FnOnce(CombatResult)
+    {
+        match self.neighbor_at(x_offset, y_offset) {
+            Some((pos, tile)) => {
+                if tile == 'G' {
+                    return self.resolve_combat(pos, dice_roller, on_combat_results);
+                }
+
+                if self.is_combat_active() {
+                    self.resolve_opportunity_attack(dice_roller, on_oppy_result);
+                    self.end_combat();
+                }
+            }
+
+            None => {}
+        }
+    }
+
     pub fn resolve_combat<F>(
-        &mut self, pos:
-        Position, dice_roller:
-        &mut dyn DiceRoller,
-        on_results: F) where F: FnOnce(CombatResult, CombatResult) {
+        &mut self,
+        pos: Position,
+        dice_roller: &mut dyn DiceRoller,
+        on_results: F) where F: FnOnce(CombatResult, CombatResult)
+    {
         self.guard_in_combat = Some(pos);
         let player_result = self.attack_guard(dice_roller);
         let guard_result = self.attack_player(dice_roller);
