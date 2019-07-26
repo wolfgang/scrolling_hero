@@ -16,7 +16,7 @@ pub struct GameState {
     guards: HashMap<Position, CombatantRef>,
     player: CombatantRef,
     guard_in_combat: Option<Position>,
-    dice_roller: DiceRollerRef
+    dice_roller: DiceRollerRef,
 }
 
 impl GameState {
@@ -31,7 +31,7 @@ impl GameState {
             player_position,
             dungeon,
             guard_in_combat: None,
-            dice_roller: Rc::new(RefCell::new(RandomizedDiceRoller::new()))
+            dice_roller: Rc::new(RefCell::new(RandomizedDiceRoller::new())),
         }
     }
 
@@ -39,17 +39,16 @@ impl GameState {
         &mut self,
         x_offset: i32,
         y_offset: u32,
-        dice_roller: &mut dyn DiceRoller,
         on_combat_results: F1,
         on_oppy_result: F2) where F1: FnOnce(CombatResult, CombatResult), F2: FnOnce(CombatResult)
     {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    self.resolve_combat(pos, dice_roller, on_combat_results);
+                    self.resolve_combat(pos, on_combat_results);
                 } else {
                     if self.is_combat_active() {
-                        self.resolve_opportunity_attack(dice_roller, on_oppy_result);
+                        self.resolve_opportunity_attack(on_oppy_result);
                         self.end_combat();
                     }
                 }
@@ -61,12 +60,20 @@ impl GameState {
         self.attempt_move_to(x_offset, y_offset);
     }
 
-    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
-        let heal = self.player.borrow_mut().heal(dice_roller);
+    pub fn heal_player(&mut self) -> u8 {
+        let heal = self.player.borrow_mut().heal(self.dice_roller.clone());
         let (x, y) = self.player_position;
         self.dungeon[y as usize][x as usize] = '.';
         heal
     }
+
+    pub fn heal_player2(&mut self) -> u8 {
+        let heal = self.player.borrow_mut().heal(self.dice_roller.clone());
+        let (x, y) = self.player_position;
+        self.dungeon[y as usize][x as usize] = '.';
+        heal
+    }
+
 
     pub fn reset_player_hp(&self, hp: i16) {
         self.player_ref().borrow_mut().hp = hp;
@@ -107,12 +114,7 @@ impl GameState {
     }
 
 
-    fn resolve_combat<F>(
-        &mut self,
-        pos: Position,
-        dice_roller: &mut dyn DiceRoller,
-        on_results: F) where F: FnOnce(CombatResult, CombatResult)
-    {
+    fn resolve_combat<F>(&mut self, pos: Position, on_results: F) where F: FnOnce(CombatResult, CombatResult) {
         self.guard_in_combat = Some(pos);
         let player_result = self.attack_guard();
         let guard_result = self.attack_player();
@@ -121,12 +123,7 @@ impl GameState {
         on_results(player_result, guard_result);
     }
 
-    fn resolve_opportunity_attack<F>(
-        &mut self,
-        dice_roller:
-        &mut dyn DiceRoller,
-        on_result: F) where F: FnOnce(CombatResult)
-    {
+    fn resolve_opportunity_attack<F>(&mut self, on_result: F) where F: FnOnce(CombatResult) {
         on_result(self.attack_player());
     }
 

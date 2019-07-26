@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use crate::game::dice_roller::DiceRoller;
-use crate::types::DiceRollerRef;
 
 pub struct FixedDiceRoller {
     next_rolls: HashMap<u8, Vec<u8>>,

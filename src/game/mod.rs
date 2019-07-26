@@ -69,7 +69,6 @@ impl Game {
     }
 
     pub fn override_dice_roller(&mut self, dice_roller: DiceRollerRef) {
-//        self.dice_roller = dice_roller;
         self.game_state.override_dice_roller(dice_roller)
     }
 
@@ -105,7 +104,7 @@ impl Game {
         }
 
         if self.under_player() == 'H' {
-            let heal = self.game_state.heal_player(&mut *self.dice_roller);
+            let heal = self.game_state.heal_player();
             hud_messages.borrow_mut().push(String::from(format!("Player regains {} HP", heal)));
         }
 
@@ -128,11 +127,9 @@ impl Game {
     }
 
     fn process_neighbor(&mut self, x_offset: i32, y_offset: u32, hud_messages: &RefCell<Vec<String>>) {
-
         self.game_state.process_move_to(
             x_offset,
             y_offset,
-            &mut *self.dice_roller,
             |player_result, guard_result| {
                 hud_messages.borrow_mut().push(Game::player_combat_message(player_result));
                 hud_messages.borrow_mut().push(Game::guard_combat_message(guard_result));

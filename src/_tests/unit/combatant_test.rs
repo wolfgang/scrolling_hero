@@ -99,13 +99,13 @@ fn attack_does_not_attack_if_attacker_is_dead_and_returns_attacker_dead_true_in_
 fn heal_heals_with_d10_roll() {
     let mut combatant = combatant_with_initial_hp(20);
     combatant.apply_damage(10);
-    let mut dice_roller = FixedDiceRoller::new();
-    dice_roller.next_roll(10, 2);
-    dice_roller.next_roll(10, 7);
+    let dice_roller = FixedDiceRoller::shared();
+    dice_roller.borrow_mut().next_roll(10, 2);
+    dice_roller.borrow_mut().next_roll(10, 7);
 
-    let result1 = combatant.heal(&mut dice_roller);
+    let result1 = combatant.heal(dice_roller.clone());
     assert_eq!(combatant.hp, 12);
-    let result2 = combatant.heal(&mut dice_roller);
+    let result2 = combatant.heal(dice_roller.clone());
     assert_eq!(combatant.hp, 19);
 
     assert_eq!(result1, 2);
@@ -116,12 +116,12 @@ fn heal_heals_with_d10_roll() {
 fn heal_caps_at_max_hp() {
     let mut combatant = combatant_with_initial_hp(50);
     combatant.apply_damage(3);
-    let mut dice_roller = FixedDiceRoller::new();
-    dice_roller.next_roll(10, 5);
-    dice_roller.next_roll(10, 7);
+    let dice_roller = FixedDiceRoller::shared();
+    dice_roller.borrow_mut().next_roll(10, 5);
+    dice_roller.borrow_mut().next_roll(10, 7);
 
-    let result1 = combatant.heal(&mut dice_roller);
-    let result2 = combatant.heal(&mut dice_roller);
+    let result1 = combatant.heal(dice_roller.clone());
+    let result2 = combatant.heal(dice_roller.clone());
     assert_eq!(combatant.hp, 50);
     assert_eq!(result1, 3);
     assert_eq!(result2, 0);
