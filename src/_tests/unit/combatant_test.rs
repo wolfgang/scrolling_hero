@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::combatant::{Combatant, CombatantConfig};
+use crate::game::combatant::{Combatant, CombatantConfig, CombatResult};
 
 use super::fixed_dice_roller::FixedDiceRoller;
 
@@ -81,6 +81,25 @@ fn attack_returns_damage_dealt_and_if_it_was_a_crit() {
     assert_eq!(crit_result, (17, true));
 }
 
+
+#[test]
+fn attack2_returns_combat_result() {
+    let attacker = combatant_with_initial_hp(10);
+    let target_ref = combatant_with_initial_hp(20).into_ref();
+
+    let mut dice_roller = FixedDiceRoller::new();
+    dice_roller.next_roll(20, 15);
+    dice_roller.next_roll(20, 20); // crit roll
+    dice_roller.next_roll(10, 7);
+    dice_roller.next_roll(10, 8); // double damage from crit roll
+    dice_roller.next_roll(10, 9);
+
+    let normal_result = attacker.attack2(&target_ref, &mut dice_roller);
+    assert_eq!(normal_result, CombatResult { damage: 7, is_crit: false, attacker_dead: false });
+
+    let crit_result = attacker.attack2(&target_ref, &mut dice_roller);
+    assert_eq!(crit_result, CombatResult { damage: 17, is_crit: true, attacker_dead: false });
+}
 #[test]
 fn attack_returns_zero_if_it_does_not_hit() {
     let attacker = combatant_with_initial_hp(10);
