@@ -77,7 +77,7 @@ impl GameState {
     }
 
     fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
-        self.player_ref().borrow().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
+        self.borrow_player().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
     }
 
     pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
