@@ -62,7 +62,7 @@ impl Game {
             config: (*config).clone(),
         };
 
-        game.reset_hud();
+        game.refresh_hud();
 
         game
     }
@@ -103,13 +103,12 @@ impl Game {
 
         if self.under_player() == 'H' {
             let heal = self.game_state.borrow_mut().heal_player();
-            self.combat_log.borrow_mut().push(String::from(format!("Player regains {} HP", heal)));
+            self.add_combat_log(String::from(format!("Player regains {} HP", heal)));
         }
 
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
 
-        self.reset_hud();
-        self.hud.append(self.combat_log.borrow_mut().as_mut());
+        self.refresh_hud();
     }
 
     pub fn get_player_hp(&self) -> i16 {
@@ -129,19 +128,24 @@ impl Game {
             x_offset,
             y_offset,
             |player_result, guard_result| {
-                self.combat_log.borrow_mut().push(Game::player_combat_message(player_result));
-                self.combat_log.borrow_mut().push(Game::guard_combat_message(guard_result));
+                self.add_combat_log(Game::player_combat_message(player_result));
+                self.add_combat_log(Game::guard_combat_message(guard_result));
             },
             |result| {
-                self.combat_log.borrow_mut().push(Game::guard_combat_message(result));
+                self.add_combat_log(Game::guard_combat_message(result));
             });
 
         if self.get_player_hp() <= 0 { self.is_running = false; }
     }
 
-    fn reset_hud(&mut self) {
+    fn refresh_hud(&mut self) {
         self.hud.clear();
         self.hud.push(Game::player_health_message(self.get_player_hp()));
+        self.hud.append(self.combat_log.borrow_mut().as_mut());
+    }
+
+    fn add_combat_log(&self, message: String) {
+        self.combat_log.borrow_mut().push(message);
     }
 
     fn player_combat_message(combat_result: CombatResult) -> String {
