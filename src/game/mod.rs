@@ -40,7 +40,7 @@ pub struct Game {
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     game_renderer: GameRenderer,
-    hud: Vec<String>,
+    hud_lines: Vec<String>,
     config: GameConfig,
     combat_log: RefCell<Vec<String>>
 
@@ -57,7 +57,7 @@ impl Game {
             dungeon_provider,
             game_renderer: GameRenderer::new(config.camera_offset),
             is_running: true,
-            hud: Vec::with_capacity(10),
+            hud_lines: Vec::with_capacity(10),
             combat_log: RefCell::new(Vec::with_capacity(2)),
             config: (*config).clone(),
         };
@@ -79,7 +79,7 @@ impl Game {
         self.game_renderer.render(
             writer,
             &self.game_state.borrow(),
-            &self.hud,
+            &self.hud_lines,
         )
     }
 
@@ -139,9 +139,9 @@ impl Game {
     }
 
     fn refresh_hud(&mut self) {
-        self.hud.clear();
-        self.hud.push(Game::player_health_message(self.get_player_hp()));
-        self.hud.append(self.combat_log.borrow_mut().as_mut());
+        self.hud_lines.clear();
+        self.hud_lines.push(Game::player_health_message(self.get_player_hp()));
+        self.hud_lines.append(self.combat_log.borrow_mut().as_mut());
     }
 
     fn add_combat_log(&self, message: String) {
