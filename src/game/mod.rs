@@ -6,6 +6,7 @@ use console::Key;
 use renderer::GameRenderer;
 use state::GameState;
 
+use crate::game::combatant::CombatResult;
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::types::DungeonProviderRef;
@@ -31,7 +32,7 @@ pub struct GameConfig {
 
 impl GameConfig {
     pub fn with_defaults() -> GameConfig {
-        GameConfig { camera_offset: 1, ..Default::default() }
+        GameConfig { camera_offset: 1, player_hp: 100, ..Default::default() }
     }
 }
 
@@ -121,19 +122,19 @@ impl Game {
                 let mut combat_log: Vec<String> = Vec::with_capacity(2);
                 if tile == 'G' {
                     let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    combat_log.push(self.player_combat_message((player_result.damage_done, player_result.is_crit)));
-                    combat_log.push(self.guard_combat_message((guard_result.damage_done, guard_result.is_crit)));
-                    if self.player_hp() <= 0 { self.is_running = false; }
+                    combat_log.push(self.player_combat_message(player_result));
+                    combat_log.push(self.guard_combat_message(guard_result));
                 } else {
                     if self.game_state.is_combat_active() {
                         let result = self.game_state.attack_player(&mut *self.dice_roller);
-                        combat_log.push(self.guard_combat_message((result.damage_done, result.is_crit)));
+                        combat_log.push(self.guard_combat_message(result));
                         self.game_state.end_combat();
                     }
                 }
 
                 self.reset_hud();
                 self.hud.append(&mut combat_log);
+                if self.player_hp() <= 0 { self.is_running = false; }
 
             }
 
@@ -146,28 +147,28 @@ impl Game {
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
 
-    fn player_combat_message(&mut self, combat_result: (u8, bool)) -> String {
-        Game::attack_message("Player", "Guard", combat_result, self.player_hp())
+    fn player_combat_message(&mut self, combat_result: CombatResult) -> String {
+        Game::attack_message("Player", "Guard", combat_result)
     }
 
-    fn guard_combat_message(&mut self, combat_result: (u8, bool)) -> String {
-        Game::attack_message("Guard", "Player", combat_result, self.game_state.hp_of_guard_in_combat())
+    fn guard_combat_message(&mut self, combat_result: CombatResult) -> String {
+        Game::attack_message("Guard", "Player", combat_result)
     }
 
     fn player_hp(&self) -> i16 {
         self.game_state.borrow_player().hp
     }
 
-    fn attack_message(attacker: &str, target: &str, combat_result: (u8, bool), attacker_hp: i16) -> String {
-        if attacker_hp <= 0 {
+    fn attack_message(attacker: &str, target: &str, combat_result: CombatResult) -> String {
+        if combat_result.attacker_dead {
             return String::from(format!("{} dies!", attacker));
         }
 
-        let (damage, is_crit) = combat_result;
-
-        if damage > 0 {
-            let action = if is_crit { "CRITS" } else { "hits" };
-            return String::from(format!("{} {} {} for {}", attacker, action, target, damage));
+        if combat_result.damage_done > 0 {
+            let action = if combat_result.is_crit { "CRITS" } else { "hits" };
+            return String::from(
+                format!("{} {} {} for {}", attacker, action, target, combat_result.damage_done)
+            );
         }
         String::from(format!("{} misses {}!", attacker, target))
     }
