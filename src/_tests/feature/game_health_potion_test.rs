@@ -14,11 +14,11 @@ fn stepping_on_health_potion_displays_new_hp_and_how_much_was_gained() {
     let player_ref = game.game_state.player_ref();
     player_ref.borrow_mut().apply_damage(20);
     let player_hp_before_heal = 80;
-    assert_eq!(player_ref.borrow().hp, player_hp_before_heal);
+    assert_eq!(game.player_hp(), player_hp_before_heal);
 
     game.on_key(Key::ArrowRight);
 
-    let player_hp_after_heal = player_ref.borrow().hp;
+    let player_hp_after_heal = game.player_hp();
 
     assert!(player_hp_after_heal > player_hp_before_heal);
 

@@ -162,7 +162,7 @@ impl Game {
         String::from(format!("{} misses {}!", attacker, target))
     }
 
-    fn player_hp(&self) -> i16 {
+    pub fn player_hp(&self) -> i16 {
         self.game_state.borrow_player().hp
     }
 
