@@ -1,7 +1,9 @@
+use std::cell::RefCell;
+
 use crate::game::combatant::CombatResult;
 
 pub struct Hud {
-    lines: Vec<String>
+    pub lines: Vec<String>
 }
 
 impl Hud {
@@ -10,6 +12,13 @@ impl Hud {
             lines: Vec::with_capacity(10)
         }
     }
+
+    pub fn refresh(&mut self, player_hp: i16, combat_log: &RefCell<Vec<String>>) {
+        self.lines.clear();
+        self.lines.push(Hud::player_health_message(player_hp));
+        self.lines.append(combat_log.borrow_mut().as_mut());
+    }
+
 
     pub fn player_combat_message(combat_result: CombatResult) -> String {
         Hud::attack_message("Player", "Guard", combat_result)

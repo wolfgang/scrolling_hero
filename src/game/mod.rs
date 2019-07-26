@@ -83,7 +83,7 @@ impl Game {
         self.game_renderer.render(
             writer,
             &self.game_state.borrow(),
-            &self.hud_lines,
+            &self.hud.lines,
         )
     }
 
@@ -143,9 +143,7 @@ impl Game {
     }
 
     fn refresh_hud(&mut self) {
-        self.hud_lines.clear();
-        self.hud_lines.push(Hud::player_health_message(self.get_player_hp()));
-        self.hud_lines.append(self.combat_log.borrow_mut().as_mut());
+        self.hud.refresh(self.get_player_hp(), &self.combat_log);
     }
 
     fn add_combat_log(&self, message: String) {
