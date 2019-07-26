@@ -88,15 +88,12 @@ impl Game {
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
-                self.game_state.attempt_player_move_to(-1, 0);
             }
             Key::ArrowRight => {
                 self.process_neighbor(1, 0);
-                self.game_state.attempt_player_move_to(1, 0);
             }
             Key::ArrowDown => {
                 self.process_neighbor(0, 1);
-                self.game_state.attempt_player_move_to(0, 1);
             }
             Key::Escape => {
                 self.is_running = false;
@@ -120,7 +117,7 @@ impl Game {
     fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
         let combat_log: RefCell<Vec<String>> = RefCell::new(Vec::with_capacity(2));
 
-        self.game_state.process_combat_at(
+        self.game_state.process_move_to(
             x_offset,
             y_offset,
             &mut *self.dice_roller,
@@ -134,6 +131,7 @@ impl Game {
 
         self.reset_hud();
         self.hud.append(combat_log.borrow_mut().as_mut());
+
 
         if self.player_hp() <= 0 { self.is_running = false; }
     }

@@ -61,7 +61,7 @@ impl GameState {
     }
 
 
-    pub fn process_combat_at<F1, F2>(
+    pub fn process_move_to<F1, F2>(
         &mut self,
         x_offset: i32,
         y_offset: u32,
@@ -72,17 +72,20 @@ impl GameState {
         match self.neighbor_at(x_offset, y_offset) {
             Some((pos, tile)) => {
                 if tile == 'G' {
-                    return self.resolve_combat(pos, dice_roller, on_combat_results);
-                }
-
-                if self.is_combat_active() {
-                    self.resolve_opportunity_attack(dice_roller, on_oppy_result);
-                    self.end_combat();
+                    self.resolve_combat(pos, dice_roller, on_combat_results);
+                } else {
+                    if self.is_combat_active() {
+                        self.resolve_opportunity_attack(dice_roller, on_oppy_result);
+                        self.end_combat();
+                    }
                 }
             }
 
             None => {}
         }
+
+        self.attempt_move_to(x_offset, y_offset);
+
     }
 
     pub fn resolve_combat<F>(
@@ -95,7 +98,7 @@ impl GameState {
         let player_result = self.attack_guard(dice_roller);
         let guard_result = self.attack_player(dice_roller);
 
-        self.check_guard_state(pos);
+        self.process_guard_state(pos);
         on_results(player_result, guard_result);
     }
 
@@ -141,7 +144,7 @@ impl GameState {
         self.guards.get(&pos).unwrap().clone()
     }
 
-    pub fn attempt_player_move_to(&mut self, x_offset: i32, y_offset: u32) {
+    pub fn attempt_move_to(&mut self, x_offset: i32, y_offset: u32) {
         if !self.obstacle_at(x_offset, y_offset) {
             self.move_player(x_offset, y_offset);
         }
@@ -189,7 +192,7 @@ impl GameState {
     }
 
 
-    fn check_guard_state(&mut self, pos: Position) {
+    fn process_guard_state(&mut self, pos: Position) {
         if self.borrow_guard_at(pos).hp <= 0 {
             self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
             self.end_combat();
