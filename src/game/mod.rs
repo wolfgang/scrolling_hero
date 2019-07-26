@@ -36,12 +36,14 @@ impl GameConfig {
 }
 
 pub struct Game {
-    game_state: GameState,
+    game_state: RefCell<GameState>,
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     game_renderer: GameRenderer,
     hud: Vec<String>,
     config: GameConfig,
+    combat_log: RefCell<Vec<String>>
+
 }
 
 impl Game {
@@ -51,11 +53,12 @@ impl Game {
         let (dungeon, player_position) = dungeon_provider.borrow_mut().next().unwrap();
 
         let mut game = Game {
-            game_state: GameState::from_game_config(config, dungeon, player_position),
+            game_state: RefCell::new(GameState::from_game_config(config, dungeon, player_position)),
             dungeon_provider,
             game_renderer: GameRenderer::new(config.camera_offset),
             is_running: true,
             hud: Vec::with_capacity(10),
+            combat_log: RefCell::new(Vec::with_capacity(2)),
             config: (*config).clone(),
         };
 
@@ -65,7 +68,7 @@ impl Game {
     }
 
     pub fn override_dice_roller(&mut self, dice_roller: DiceRollerRef) {
-        self.game_state.override_dice_roller(dice_roller)
+        self.game_state.borrow_mut().override_dice_roller(dice_roller)
     }
 
     pub fn is_running(&self) -> bool {
@@ -75,23 +78,22 @@ impl Game {
     pub fn render(&mut self, writer: &mut dyn Write) -> std::io::Result<(u32)> {
         self.game_renderer.render(
             writer,
-            &self.game_state,
+            &self.game_state.borrow(),
             &self.hud,
         )
     }
 
     pub fn on_key(&mut self, key: Key) {
-        let hud_messages: RefCell<Vec<String>> = RefCell::new(Vec::with_capacity(2));
 
         match key {
             Key::ArrowLeft => {
-                self.process_neighbor(-1, 0, &hud_messages);
+                self.process_neighbor(-1, 0);
             }
             Key::ArrowRight => {
-                self.process_neighbor(1, 0, &hud_messages);
+                self.process_neighbor(1, 0);
             }
             Key::ArrowDown => {
-                self.process_neighbor(0, 1, &hud_messages);
+                self.process_neighbor(0, 1);
             }
             Key::Escape => {
                 self.is_running = false;
@@ -100,38 +102,38 @@ impl Game {
         }
 
         if self.under_player() == 'H' {
-            let heal = self.game_state.heal_player();
-            hud_messages.borrow_mut().push(String::from(format!("Player regains {} HP", heal)));
+            let heal = self.game_state.borrow_mut().heal_player();
+            self.combat_log.borrow_mut().push(String::from(format!("Player regains {} HP", heal)));
         }
 
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
 
         self.reset_hud();
-        self.hud.append(hud_messages.borrow_mut().as_mut());
+        self.hud.append(self.combat_log.borrow_mut().as_mut());
     }
 
     pub fn get_player_hp(&self) -> i16 {
-        self.game_state.borrow_player().hp
+        self.game_state.borrow().borrow_player().hp
     }
 
     pub fn get_player_ref(&self) -> CombatantRef {
-        self.game_state.player_ref()
+        self.game_state.borrow().player_ref()
     }
 
     fn under_player(&self) -> char {
-        self.game_state.neighbor_at(0, 0).unwrap().1
+        self.game_state.borrow().neighbor_at(0, 0).unwrap().1
     }
 
-    fn process_neighbor(&mut self, x_offset: i32, y_offset: u32, hud_messages: &RefCell<Vec<String>>) {
-        self.game_state.process_move_to(
+    fn process_neighbor(&mut self, x_offset: i32, y_offset: u32) {
+        self.game_state.borrow_mut().process_move_to(
             x_offset,
             y_offset,
             |player_result, guard_result| {
-                hud_messages.borrow_mut().push(Game::player_combat_message(player_result));
-                hud_messages.borrow_mut().push(Game::guard_combat_message(guard_result));
+                self.combat_log.borrow_mut().push(Game::player_combat_message(player_result));
+                self.combat_log.borrow_mut().push(Game::guard_combat_message(guard_result));
             },
             |result| {
-                hud_messages.borrow_mut().push(Game::guard_combat_message(result));
+                self.combat_log.borrow_mut().push(Game::guard_combat_message(result));
             });
 
         if self.get_player_hp() <= 0 { self.is_running = false; }
@@ -172,8 +174,8 @@ impl Game {
         match self.dungeon_provider.borrow_mut().next() {
             Some((next_dungeon, next_player_pos)) => {
                 let current_player_hp = self.get_player_hp();
-                self.game_state = GameState::from_game_config(&self.config, next_dungeon, next_player_pos);
-                self.game_state.reset_player_hp(current_player_hp);
+                self.game_state = RefCell::new(GameState::from_game_config(&self.config, next_dungeon, next_player_pos));
+                self.game_state.borrow_mut().reset_player_hp(current_player_hp);
             }
             None => { self.is_running = false; }
         }
