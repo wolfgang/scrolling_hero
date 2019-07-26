@@ -88,7 +88,15 @@ impl GameState {
 
     }
 
-    pub fn resolve_combat<F>(
+    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
+        let heal = self.player.borrow_mut().heal(dice_roller);
+        let (x, y) = self.player_position;
+        self.dungeon[y as usize][x as usize] = '.';
+        heal
+    }
+
+
+    fn resolve_combat<F>(
         &mut self,
         pos: Position,
         dice_roller: &mut dyn DiceRoller,
@@ -102,21 +110,13 @@ impl GameState {
         on_results(player_result, guard_result);
     }
 
-
-    pub fn resolve_opportunity_attack<F>(
+    fn resolve_opportunity_attack<F>(
         &mut self,
         dice_roller:
         &mut dyn DiceRoller,
         on_result: F) where F: FnOnce(CombatResult)
     {
         on_result(self.attack_player(dice_roller));
-    }
-
-    pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
-        let heal = self.player.borrow_mut().heal(dice_roller);
-        let (x, y) = self.player_position;
-        self.dungeon[y as usize][x as usize] = '.';
-        heal
     }
 
     fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {

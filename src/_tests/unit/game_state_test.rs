@@ -1,7 +1,5 @@
 use crate::dungeon::helpers::make_dungeon;
-use crate::game::combatant::CombatResult;
 use crate::game::GameConfig;
-use crate::game::randomized_dice_roller::RandomizedDiceRoller;
 use crate::game::state::GameState;
 
 #[test]
@@ -35,34 +33,3 @@ fn from_game_config_inits_player_and_guards() {
     assert_eq!(12, guard_ref_4_0.defense);
 }
 
-#[test]
-fn resolve_combat_damages_both_combatants_and_calls_back_with_results() {
-    let (dungeon, player_pos) = make_dungeon(vec!["#G@#"]);
-
-    // Both player and guard have 0 attack and 0 defense, so every roll is a hit
-    let game_config = GameConfig { guard_hp: 20, player_hp: 100, ..Default::default() };
-    let mut game_state = GameState::from_game_config(&game_config, dungeon.clone(), player_pos);
-
-    let player_ref = game_state.player_ref();
-    let guard_ref = game_state.guard_ref_at((1, 0));
-
-    assert_eq!(player_ref.borrow().hp, 100);
-    assert_eq!(guard_ref.borrow().hp, 20);
-
-    let mut dice_roller = RandomizedDiceRoller::new();
-
-    let mut player_result = CombatResult::default();
-    let mut guard_result = CombatResult::default();
-
-    game_state.resolve_combat((1, 0), &mut dice_roller, |pr, gr| {
-        player_result = pr;
-        guard_result = gr;
-    });
-
-    assert!(player_ref.borrow().hp < 100);
-    assert!(guard_ref.borrow().hp < 20);
-
-    assert_eq!(guard_result.damage_done, 100 - player_ref.borrow().hp as u8);
-    assert_eq!(player_result.damage_done, 20 - guard_ref.borrow().hp as u8);
-
-}
