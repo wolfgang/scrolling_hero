@@ -1,6 +1,8 @@
 use std::cmp::{max, min};
 use std::io::{Cursor, Seek, SeekFrom, Write};
 
+use crate::game::hud::Hud;
+
 use super::state::GameState;
 
 pub struct GameRenderer {
@@ -22,7 +24,7 @@ impl GameRenderer {
         &mut self,
         writer: &mut dyn Write,
         game_state: &GameState,
-        messages: &Vec<String>,
+        hud: &Hud,
     ) -> std::io::Result<(u32)>
     {
         let player_y = game_state.player_position.1;
@@ -43,7 +45,7 @@ impl GameRenderer {
 
             self.render_buffer.write(row_str.as_bytes())?;
 
-            self.render_message_at(y, &messages);
+            self.render_message_at(y, &hud.lines);
             self.render_buffer.write(b"\n")?;
         }
 

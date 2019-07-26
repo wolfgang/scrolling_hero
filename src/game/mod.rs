@@ -8,7 +8,6 @@ use hud::Hud;
 use renderer::GameRenderer;
 use state::GameState;
 
-use crate::game::combatant::CombatResult;
 use crate::types::{CombatantRef, DiceRollerRef, DungeonProviderRef};
 
 pub mod renderer;
@@ -42,11 +41,8 @@ pub struct Game {
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     game_renderer: GameRenderer,
-    hud_lines: Vec<String>,
     hud: Hud,
     config: GameConfig,
-    combat_log: RefCell<Vec<String>>
-
 }
 
 impl Game {
@@ -60,14 +56,11 @@ impl Game {
             dungeon_provider,
             game_renderer: GameRenderer::new(config.camera_offset),
             is_running: true,
-            hud_lines: Vec::with_capacity(10),
             hud: Hud::new(),
-            combat_log: RefCell::new(Vec::with_capacity(2)),
             config: (*config).clone(),
         };
 
         game.refresh_hud();
-
         game
     }
 
@@ -83,12 +76,11 @@ impl Game {
         self.game_renderer.render(
             writer,
             &self.game_state.borrow(),
-            &self.hud.lines,
+            &self.hud,
         )
     }
 
     pub fn on_key(&mut self, key: Key) {
-
         match key {
             Key::ArrowLeft => {
                 self.process_neighbor(-1, 0);
@@ -107,7 +99,7 @@ impl Game {
 
         if self.under_player() == 'H' {
             let heal = self.game_state.borrow_mut().heal_player();
-            self.add_combat_log(String::from(format!("Player regains {} HP", heal)));
+            self.hud.add_combat_log(String::from(format!("Player regains {} HP", heal)));
         }
 
         if self.under_player() == 'E' { self.goto_next_dungeon(); }
@@ -132,22 +124,18 @@ impl Game {
             x_offset,
             y_offset,
             |player_result, guard_result| {
-                self.add_combat_log(Hud::player_combat_message(player_result));
-                self.add_combat_log(Hud::guard_combat_message(guard_result));
+                self.hud.add_combat_log(Hud::player_combat_message(player_result));
+                self.hud.add_combat_log(Hud::guard_combat_message(guard_result));
             },
             |result| {
-                self.add_combat_log(Hud::guard_combat_message(result));
+                self.hud.add_combat_log(Hud::guard_combat_message(result));
             });
 
         if self.get_player_hp() <= 0 { self.is_running = false; }
     }
 
     fn refresh_hud(&mut self) {
-        self.hud.refresh(self.get_player_hp(), &self.combat_log);
-    }
-
-    fn add_combat_log(&self, message: String) {
-        self.combat_log.borrow_mut().push(message);
+        self.hud.refresh(self.get_player_hp());
     }
 
     fn goto_next_dungeon(&mut self) {
