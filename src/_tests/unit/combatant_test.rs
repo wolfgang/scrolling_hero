@@ -100,6 +100,33 @@ fn attack2_returns_combat_result() {
     let crit_result = attacker.attack2(&target_ref, &mut dice_roller);
     assert_eq!(crit_result, CombatResult { damage: 17, is_crit: true, attacker_dead: false });
 }
+
+#[test]
+fn attack2_returns_zero_damage_if_it_does_not_hit() {
+    let attacker = combatant_with_initial_hp(10);
+    let target_ref = Combatant::with_config(&CombatantConfig { initial_hp: 20, defense: 10, attack: 0 }).into_ref();
+
+    let mut dice_roller = FixedDiceRoller::new();
+    dice_roller.next_roll(20, 1);
+
+    let result = attacker.attack2(&target_ref, &mut dice_roller);
+    assert_eq!(result.damage, 0);
+}
+
+#[test]
+fn attack2_does_not_attack_if_attacker_is_dead() {
+    let attacker = combatant_with_initial_hp(0);
+    let target_ref = combatant_with_initial_hp(10).into_ref();
+
+    let mut dice_roller = FixedDiceRoller::new();
+
+    let result = attacker.attack2(&target_ref, &mut dice_roller);
+    assert_eq!(result.attacker_dead, true);
+    assert_eq!(target_ref.borrow().hp, 10);
+}
+
+
+
 #[test]
 fn attack_returns_zero_if_it_does_not_hit() {
     let attacker = combatant_with_initial_hp(10);

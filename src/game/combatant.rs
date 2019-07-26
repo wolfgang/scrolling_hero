@@ -80,7 +80,7 @@ impl Combatant {
         CombatResult {
             damage,
             is_crit,
-            attacker_dead: false,
+            attacker_dead: self.hp <= 0,
         }
     }
 
