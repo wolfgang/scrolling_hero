@@ -1,7 +1,7 @@
 use std::cell::Ref;
 use std::collections::HashMap;
 
-use crate::game::combatant::CombatantConfig;
+use crate::game::combatant::{CombatantConfig, CombatResult};
 use crate::game::dice_roller::DiceRoller;
 use crate::game::GameConfig;
 use crate::types::{CombatantRef, DungeonLayout, Position};
@@ -69,6 +69,17 @@ impl GameState {
         (player_result, guard_result)
     }
 
+
+    pub fn resolve_combat2(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> (CombatResult, CombatResult) {
+        self.guard_in_combat = Some(pos);
+        let player_result = self.attack_guard2(dice_roller);
+        let guard_result = self.attack_player2(dice_roller);
+
+        self.check_guard_state(pos);
+        (player_result, guard_result)
+    }
+
+
     pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
         let heal = self.player.borrow_mut().heal(dice_roller);
         let (x, y) = self.player_position;
@@ -82,6 +93,14 @@ impl GameState {
 
     pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
         self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
+    }
+
+    fn attack_guard2(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+        self.borrow_player().attack2(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
+    }
+
+    pub fn attack_player2(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+        self.borrow_guard_at(self.guard_in_combat()).attack2(&self.player_ref(), dice_roller)
     }
 
 

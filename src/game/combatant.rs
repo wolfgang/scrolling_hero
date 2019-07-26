@@ -21,7 +21,7 @@ pub struct Combatant {
 
 #[derive(PartialEq, Debug)]
 pub struct CombatResult {
-    pub damage: u8,
+    pub damage_done: u8,
     pub is_crit: bool,
     pub attacker_dead: bool,
 }
@@ -78,7 +78,7 @@ impl Combatant {
             }
         }
         CombatResult {
-            damage,
+            damage_done: damage,
             is_crit,
             attacker_dead: self.hp <= 0,
         }

@@ -95,10 +95,10 @@ fn attack2_returns_combat_result() {
     dice_roller.next_roll(10, 9);
 
     let normal_result = attacker.attack2(&target_ref, &mut dice_roller);
-    assert_eq!(normal_result, CombatResult { damage: 7, is_crit: false, attacker_dead: false });
+    assert_eq!(normal_result, CombatResult { damage_done: 7, is_crit: false, attacker_dead: false });
 
     let crit_result = attacker.attack2(&target_ref, &mut dice_roller);
-    assert_eq!(crit_result, CombatResult { damage: 17, is_crit: true, attacker_dead: false });
+    assert_eq!(crit_result, CombatResult { damage_done: 17, is_crit: true, attacker_dead: false });
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn attack2_returns_zero_damage_if_it_does_not_hit() {
     dice_roller.next_roll(20, 1);
 
     let result = attacker.attack2(&target_ref, &mut dice_roller);
-    assert_eq!(result.damage, 0);
+    assert_eq!(result.damage_done, 0);
 }
 
 #[test]
