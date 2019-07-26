@@ -60,20 +60,10 @@ impl GameState {
         guards
     }
 
-    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> ((u8, bool), (u8, bool)) {
+    pub fn resolve_combat(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> (CombatResult, CombatResult) {
         self.guard_in_combat = Some(pos);
         let player_result = self.attack_guard(dice_roller);
         let guard_result = self.attack_player(dice_roller);
-
-        self.check_guard_state(pos);
-        (player_result, guard_result)
-    }
-
-
-    pub fn resolve_combat2(&mut self, pos: Position, dice_roller: &mut dyn DiceRoller) -> (CombatResult, CombatResult) {
-        self.guard_in_combat = Some(pos);
-        let player_result = self.attack_guard2(dice_roller);
-        let guard_result = self.attack_player2(dice_roller);
 
         self.check_guard_state(pos);
         (player_result, guard_result)
@@ -87,19 +77,11 @@ impl GameState {
         heal
     }
 
-    fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
-        self.borrow_player().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
-    }
-
-    pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
-        self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
-    }
-
-    fn attack_guard2(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+    fn attack_guard(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
         self.borrow_player().attack2(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
     }
 
-    pub fn attack_player2(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+    pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
         self.borrow_guard_at(self.guard_in_combat()).attack2(&self.player_ref(), dice_roller)
     }
 

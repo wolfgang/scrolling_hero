@@ -120,13 +120,13 @@ impl Game {
             Some((pos, tile)) => {
                 let mut combat_log: Vec<String> = Vec::with_capacity(2);
                 if tile == 'G' {
-                    let (player_result, guard_result) = self.game_state.resolve_combat2(pos, &mut *self.dice_roller);
+                    let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
                     combat_log.push(self.player_combat_message((player_result.damage_done, player_result.is_crit)));
                     combat_log.push(self.guard_combat_message((guard_result.damage_done, guard_result.is_crit)));
                     if self.player_hp() <= 0 { self.is_running = false; }
                 } else {
                     if self.game_state.is_combat_active() {
-                        let result = self.game_state.attack_player2(&mut *self.dice_roller);
+                        let result = self.game_state.attack_player(&mut *self.dice_roller);
                         combat_log.push(self.guard_combat_message((result.damage_done, result.is_crit)));
                         self.game_state.end_combat();
                     }

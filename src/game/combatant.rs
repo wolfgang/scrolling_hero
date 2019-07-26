@@ -40,12 +40,6 @@ impl Combatant {
         Rc::new(RefCell::new(self))
     }
 
-    pub fn attack_simple(&self, target: &CombatantRef, damage: i16) {
-        if self.hp > 0 {
-            target.borrow_mut().hp -= damage;
-        }
-    }
-
     pub fn attack(&self, target: &CombatantRef, dice_roller: &mut dyn DiceRoller) -> (u8, bool) {
         let mut damage = 0;
         let mut is_crit = false;
