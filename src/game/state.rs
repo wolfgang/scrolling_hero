@@ -13,7 +13,7 @@ pub struct GameState {
     pub player_position: Position,
     guards: HashMap<Position, CombatantRef>,
     player: CombatantRef,
-    guard_in_combat: Option<Position>
+    guard_in_combat: Option<Position>,
 }
 
 impl GameState {
@@ -27,7 +27,7 @@ impl GameState {
             guards: GameState::create_guards(game_config, &dungeon),
             player_position,
             dungeon,
-            guard_in_combat: None
+            guard_in_combat: None,
         }
     }
 
@@ -70,6 +70,29 @@ impl GameState {
     }
 
 
+    pub fn resolve_combat2<F>(
+        &mut self, pos:
+        Position, dice_roller:
+        &mut dyn DiceRoller,
+        on_results: F) where F: FnOnce(CombatResult, CombatResult) {
+        self.guard_in_combat = Some(pos);
+        let player_result = self.attack_guard(dice_roller);
+        let guard_result = self.attack_player(dice_roller);
+
+        self.check_guard_state(pos);
+        on_results(player_result, guard_result);
+    }
+
+
+    pub fn opportunity_attack_player<F>(
+        &mut self,
+        dice_roller:
+        &mut dyn DiceRoller,
+        on_result: F) where F: FnOnce(CombatResult)
+    {
+        on_result(self.attack_player(dice_roller));
+    }
+
     pub fn heal_player(&mut self, dice_roller: &mut dyn DiceRoller) -> u8 {
         let heal = self.player.borrow_mut().heal(dice_roller);
         let (x, y) = self.player_position;
@@ -81,7 +104,7 @@ impl GameState {
         self.borrow_player().attack(&self.guard_ref_at(self.guard_in_combat()), dice_roller)
     }
 
-    pub fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
+    fn attack_player(&mut self, dice_roller: &mut dyn DiceRoller) -> CombatResult {
         self.borrow_guard_at(self.guard_in_combat()).attack(&self.player_ref(), dice_roller)
     }
 
@@ -128,7 +151,7 @@ impl GameState {
 
     pub fn hp_of_guard_in_combat(&self) -> i16 {
         match self.guard_in_combat {
-            Some(pos) => { return self.borrow_guard_at(pos).hp }
+            Some(pos) => { return self.borrow_guard_at(pos).hp; }
             None => 0
         }
     }
@@ -154,7 +177,6 @@ impl GameState {
         if self.borrow_guard_at(pos).hp <= 0 {
             self.dungeon[pos.1 as usize][pos.0 as usize] = '.';
             self.end_combat();
-
         }
     }
 }

@@ -43,7 +43,7 @@ pub struct Game {
     game_renderer: GameRenderer,
     dice_roller: Box<dyn DiceRoller>,
     hud: Vec<String>,
-    config: GameConfig
+    config: GameConfig,
 }
 
 impl Game {
@@ -59,7 +59,7 @@ impl Game {
             dice_roller: Box::from(RandomizedDiceRoller::new()),
             is_running: true,
             hud: Vec::with_capacity(10),
-            config: (*config).clone()
+            config: (*config).clone(),
         };
 
         game.reset_hud();
@@ -121,13 +121,18 @@ impl Game {
             Some((pos, tile)) => {
                 let mut combat_log: Vec<String> = Vec::with_capacity(2);
                 if tile == 'G' {
-                    let (player_result, guard_result) = self.game_state.resolve_combat(pos, &mut *self.dice_roller);
-                    combat_log.push(self.player_combat_message(player_result));
-                    combat_log.push(self.guard_combat_message(guard_result));
+                    self.game_state.resolve_combat2(
+                        pos,
+                        &mut *self.dice_roller,
+                        |player_result, guard_result| {
+                            combat_log.push(Game::player_combat_message(player_result));
+                            combat_log.push(Game::guard_combat_message(guard_result));
+                        });
                 } else {
                     if self.game_state.is_combat_active() {
-                        let result = self.game_state.attack_player(&mut *self.dice_roller);
-                        combat_log.push(self.guard_combat_message(result));
+                        self.game_state.opportunity_attack_player(&mut *self.dice_roller, |result| {
+                            combat_log.push(Game::guard_combat_message(result));
+                        });
                         self.game_state.end_combat();
                     }
                 }
@@ -135,7 +140,6 @@ impl Game {
                 self.reset_hud();
                 self.hud.append(&mut combat_log);
                 if self.player_hp() <= 0 { self.is_running = false; }
-
             }
 
             None => {}
@@ -147,11 +151,11 @@ impl Game {
         self.hud.push(Game::player_health_message(self.player_hp()));
     }
 
-    fn player_combat_message(&mut self, combat_result: CombatResult) -> String {
+    fn player_combat_message(combat_result: CombatResult) -> String {
         Game::attack_message("Player", "Guard", combat_result)
     }
 
-    fn guard_combat_message(&mut self, combat_result: CombatResult) -> String {
+    fn guard_combat_message(combat_result: CombatResult) -> String {
         Game::attack_message("Guard", "Player", combat_result)
     }
 
