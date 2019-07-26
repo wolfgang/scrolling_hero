@@ -10,7 +10,7 @@ use state::GameState;
 use crate::game::combatant::CombatResult;
 use crate::game::dice_roller::DiceRoller;
 use crate::game::randomized_dice_roller::RandomizedDiceRoller;
-use crate::types::DungeonProviderRef;
+use crate::types::{CombatantRef, DungeonProviderRef};
 
 pub mod renderer;
 pub mod state;
@@ -38,7 +38,7 @@ impl GameConfig {
 }
 
 pub struct Game {
-    pub game_state: GameState,
+    game_state: GameState,
     dungeon_provider: DungeonProviderRef,
     is_running: bool,
     game_renderer: GameRenderer,
@@ -116,6 +116,10 @@ impl Game {
 
     pub fn get_player_hp(&self) -> i16 {
         self.game_state.borrow_player().hp
+    }
+
+    pub fn get_player_ref(&self) -> CombatantRef {
+        self.game_state.player_ref()
     }
 
     fn under_player(&self) -> char {

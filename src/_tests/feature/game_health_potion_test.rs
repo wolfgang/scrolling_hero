@@ -11,8 +11,7 @@ fn stepping_on_health_potion_displays_new_hp_and_how_much_was_gained() {
         "#...#",
     ]);
 
-    let player_ref = game.game_state.player_ref();
-    player_ref.borrow_mut().apply_damage(20);
+    game.get_player_ref().borrow_mut().apply_damage(20);
     let player_hp_before_heal = 80;
     assert_eq!(game.get_player_hp(), player_hp_before_heal);
 
