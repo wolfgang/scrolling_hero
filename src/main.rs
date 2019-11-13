@@ -29,7 +29,7 @@ fn main() -> std::io::Result<()> {
         player_defense: 15,
     };
 
-    let dungeon_width = if graphic_mode { 40 } else { 60 };
+    let dungeon_width = if graphic_mode { 20 } else { 60 };
     let mut dungeons = Vec::new();
 
     for _ in 1..50 {

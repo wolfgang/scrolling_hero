@@ -110,17 +110,28 @@ impl<'a> RaylibWriter<'a> {
     }
 
     fn render_tile(&self, texture_x: u8, texture_y: u8, texture: &Texture2D) {
-        let rec = Rectangle {
+        let source_rec = Rectangle {
             x: texture_x as f32 * 16.0,
             y: texture_y as f32 * 16.0,
             width: 16.0,
             height: 16.0,
         };
+
+        let scale = 3.0;
         let position = Vector2 {
             x: self.current_x as f32 * 16.0,
             y: self.current_y as f32 * 16.0,
         };
-        self.rl.draw_texture_rec(texture, rec, position, Color::WHITE);
+
+        let dest_rec = Rectangle {
+            x: self.current_x as f32 * 16.0*scale,
+            y: self.current_y as f32 * 16.0*scale,
+            width: 16.0*scale,
+            height: 16.0*scale
+        };
+
+        self.rl.draw_texture_pro(texture, source_rec, dest_rec, Vector2::zero(), 0.0, Color::WHITE);
+        //self.rl.draw_texture_rec(texture, rec, position, Color::WHITE);
     }
 
     fn render_char(&self, b: u8) {
