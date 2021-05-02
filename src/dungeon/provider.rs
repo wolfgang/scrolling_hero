@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use crate::types::{DungeonDefinition, DungeonLayout, DungeonProviderRef, Position};
 
-pub type DungeonProvider = Iterator<Item=DungeonDefinition>;
+pub type DungeonProvider = dyn Iterator<Item=DungeonDefinition>;
 
 pub struct SingleDungeonProvider {
     dungeon: DungeonLayout,

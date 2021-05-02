@@ -25,7 +25,7 @@ impl GameRenderer {
         writer: &mut dyn Write,
         game_state: &GameState,
         hud: &Hud,
-    ) -> std::io::Result<(u32)>
+    ) -> std::io::Result<u32>
     {
         let player_y = game_state.player_position.1;
         let start_y = max(0, player_y as i32 - self.camera_offset) as usize;

@@ -118,10 +118,6 @@ impl<'a> RaylibWriter<'a> {
         };
 
         let scale = 3.0;
-        let position = Vector2 {
-            x: self.current_x as f32 * 16.0,
-            y: self.current_y as f32 * 16.0,
-        };
 
         let dest_rec = Rectangle {
             x: self.current_x as f32 * 16.0*scale,

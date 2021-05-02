@@ -7,7 +7,7 @@ struct DiceUser {
 }
 
 impl DiceUser {
-    pub fn use_roll(&mut self, roller: &mut DiceRoller) {
+    pub fn use_roll(&mut self, roller: &mut dyn DiceRoller) {
         self.roll = roller.roll(20)
     }
 }
