@@ -132,7 +132,7 @@ impl<'a> RaylibWriter<'a> {
 
     fn render_char(&self, b: u8) {
         let str = String::from_utf8(vec![b]).unwrap();
-        self.rl.draw_text(str.as_str(), self.current_x * 16, self.current_y * 16, 12, Color::GREEN);
+        self.rl.draw_text(str.as_str(), self.current_x * 16, self.current_y * 16, 16, Color::WHITE);
     }
 
     pub fn clear(&mut self) {
