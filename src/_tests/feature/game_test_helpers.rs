@@ -75,7 +75,7 @@ pub fn assert_lines_match(buffer: &LineBuffer, expected_lines: Lines) {
         let re = Regex::new(line).unwrap();
         assert!(
             re.is_match(actual_lines[i]),
-            format!("Expected {} to match {}", actual_lines[i], line));
+            "Expected {} to match {}", actual_lines[i], line);
     }
 }
 
